@@ -21,11 +21,11 @@ function onSubmit() {
   <section id="collection" class="collection">
     <div class="w collection__inner">
       <div class="g2">
-        <div class="collection__heading">
+        <div v-reveal class="collection__heading">
           <p class="label collection__label">05 — Collection · Bientôt</p>
           <h2 class="section-title">Pièces de collection</h2>
         </div>
-        <div class="intro">
+        <div v-reveal="150" class="intro">
           <p class="lede collection__lede">
             Sweats, joggings et tapis aux couleurs de la team. Sobres, solides, faits pour durer.
           </p>
@@ -34,15 +34,21 @@ function onSubmit() {
       </div>
 
       <div class="items">
-        <article v-for="item in items" :key="item.num" class="item">
+        <article
+          v-for="(item, i) in items"
+          :key="item.num"
+          v-reveal="{ variant: 'slam', delay: i * 140 }"
+          class="item"
+        >
           <div class="item__photo">{{ item.photo }}</div>
           <div class="item__label">
-            <span>Objet {{ item.num }} — {{ item.name }}</span><span>[PRIX] €</span>
+            <span>Objet {{ item.num }} — {{ item.name }}</span
+            ><span>[PRIX] €</span>
           </div>
         </article>
       </div>
 
-      <form class="signup" @submit.prevent="onSubmit">
+      <form v-reveal class="signup" @submit.prevent="onSubmit">
         <label class="signup__label">
           Être prévenu du lancement
           <input

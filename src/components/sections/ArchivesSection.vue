@@ -13,11 +13,11 @@ const videos = [
   <section id="archives" class="archives">
     <div class="w archives__inner">
       <div class="g2">
-        <div class="archives__heading">
+        <div v-reveal class="archives__heading">
           <p class="label label--red">04 — Archives</p>
           <h2 class="section-title">Notes de terrain</h2>
         </div>
-        <div class="intro">
+        <div v-reveal="150" class="intro">
           <p class="lede intro__text">
             Des vidéos courtes pour comprendre ton entraînement, casser les idées reçues et en rire
             un peu. Sur Instagram, TikTok et YouTube.
@@ -27,7 +27,7 @@ const videos = [
       </div>
 
       <div class="rows">
-        <a v-for="v in videos" :key="v.num" href="#" class="row">
+        <a v-for="(v, i) in videos" :key="v.num" v-reveal="i * 100" href="#" class="row">
           <span class="row__thumb" aria-hidden="true">Vidéo</span>
           <span class="row__tag row-x">N°{{ v.num }} · {{ v.tag }}</span>
           <span class="row__title">{{ v.title }}</span>

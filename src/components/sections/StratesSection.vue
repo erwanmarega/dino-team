@@ -42,10 +42,14 @@ const strates = [
 
 <template>
   <section id="strates" class="strates">
-    <div class="w strates__heading">
+    <div v-reveal class="w strates__heading">
       <p class="label label--red">02 — Évolution</p>
       <h2 class="section-title">
-        Chaque niveau est une strate.<br /><em class="brush">On creuse, on construit, on monte.</em>
+        Chaque niveau est une strate.<br /><em
+          v-reveal="{ variant: 'wipe', delay: 350 }"
+          class="brush"
+          >On creuse, on construit, on monte.</em
+        >
       </h2>
     </div>
 
@@ -57,7 +61,7 @@ const strates = [
         :class="{ 'layer--last': s.last }"
         :style="{ background: s.bg }"
       >
-        <div class="w layer__grid">
+        <div v-reveal="{ variant: 'left' }" class="w layer__grid">
           <LifterFigure :level="s.figure" />
           <span class="layer__era">{{ s.era }}</span>
           <h3 class="layer__title">{{ s.title }}</h3>

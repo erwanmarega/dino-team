@@ -11,22 +11,24 @@ const coachPhoto = null
     <BrushSlashes corner="top-left" class="hero__slashes" />
     <div class="w hero__grid">
       <div class="hero__copy">
-        <p class="label label--red">Spécimen n°001 — [PRÉNOM], coach sportif</p>
+        <p v-reveal class="label label--red">Spécimen n°001 — [PRÉNOM], coach sportif</p>
         <div class="hero__titles">
-          <h1 class="hero__title">Évolue.</h1>
-          <p class="hero__sub brush-text">ou reste un fossile.</p>
+          <h1 v-reveal="{ variant: 'slam', delay: 100 }" class="hero__title">Évolue.</h1>
+          <p v-reveal="{ variant: 'fade', delay: 450 }" class="hero__sub brush-text">
+            ou reste un fossile.
+          </p>
         </div>
-        <p class="hero__text">
+        <p v-reveal="550" class="hero__text">
           Coaching personnalisé à domicile et en salle. Du premier squat aux charges lourdes, on
           fait évoluer ton entraînement étape par étape, avec méthode et un peu d'humour.
         </p>
-        <div class="hero__actions">
+        <div v-reveal="650" class="hero__actions">
           <a href="#contact" class="btn btn--red">Réserver une séance découverte</a>
           <a href="#strates" class="btn btn--outline">Trouver mon niveau</a>
         </div>
       </div>
 
-      <figure class="photo">
+      <figure v-reveal="{ variant: 'right', delay: 200 }" class="photo">
         <img
           v-if="coachPhoto"
           :src="coachPhoto"
@@ -35,7 +37,7 @@ const coachPhoto = null
         />
         <div v-else class="photo__placeholder">[PHOTO DU COACH]</div>
         <BrushSlashes corner="top-right" />
-        <figcaption class="specimen">
+        <figcaption v-reveal="800" class="specimen">
           <div class="specimen__head"><span>Spécimen 001</span><span>DT-0001</span></div>
           <div>Nom : [PRÉNOM NOM]</div>
           <div>Espèce : coach sportif</div>

@@ -1,13 +1,13 @@
 <template>
   <section id="apropos" class="about">
     <div class="w about__grid">
-      <figure class="portrait">
+      <figure v-reveal="{ variant: 'left' }" class="portrait">
         <div class="portrait__img">[PORTRAIT DU COACH]</div>
         <figcaption class="portrait__caption">
           <span>Le conservateur</span><span>[DIPLÔME]</span>
         </figcaption>
       </figure>
-      <div class="about__copy">
+      <div v-reveal="{ variant: 'right', delay: 150 }" class="about__copy">
         <p class="label label--red">À propos</p>
         <h2 class="section-title">Moi c'est [PRÉNOM].</h2>
         <p class="about__text">

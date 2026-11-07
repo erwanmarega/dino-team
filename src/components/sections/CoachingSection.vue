@@ -46,13 +46,15 @@ const fiches = [
   <section id="fiches" class="coaching">
     <div class="w coaching__inner">
       <div class="g2">
-        <div class="coaching__heading">
+        <div v-reveal class="coaching__heading">
           <p class="label label--red">01 — Coaching</p>
           <h2 class="section-title">
-            Trois façons de<br /><em class="brush">s'entraîner ensemble</em>
+            Trois façons de<br /><em v-reveal="{ variant: 'wipe', delay: 350 }" class="brush"
+              >s'entraîner ensemble</em
+            >
           </h2>
         </div>
-        <p class="lede">
+        <p v-reveal="150" class="lede">
           Chaque accompagnement commence par un bilan : ton niveau, ton objectif, ton temps
           disponible. Ensuite on construit, séance après séance.
         </p>
@@ -60,7 +62,8 @@ const fiches = [
 
       <div class="fiches">
         <article
-          v-for="fiche in fiches"
+          v-for="(fiche, i) in fiches"
+          v-reveal="i * 140"
           :key="fiche.num"
           class="fiche"
           :class="{ 'fiche--featured': fiche.featured }"

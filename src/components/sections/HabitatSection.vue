@@ -18,21 +18,32 @@ useThreeScene(canvas, buildSalle, { shadows: true })
   <section id="habitat" class="habitat">
     <div class="w habitat__grid">
       <div class="habitat__copy">
-        <p class="label label--red">03 — Habitat · Bientôt</p>
-        <h2 class="section-title">Le futur habitat<br /><em class="brush">de la team</em></h2>
-        <p class="habitat__text">
+        <p v-reveal class="label label--red">03 — Habitat · Bientôt</p>
+        <h2 v-reveal="80" class="section-title">
+          Le futur habitat<br /><em v-reveal="{ variant: 'wipe', delay: 400 }" class="brush"
+            >de la team</em
+          >
+        </h2>
+        <p v-reveal="160" class="habitat__text">
           Une salle privée entièrement équipée, réservée aux membres. Tu arrives, elle est à toi le
           temps de ta séance.
         </p>
         <ol class="features">
-          <li v-for="[letter, label] in features" :key="letter">
-            <span class="features__letter">{{ letter }}</span>{{ label }}
+          <li
+            v-for="([letter, label], i) in features"
+            :key="letter"
+            v-reveal="{ variant: 'left', delay: 200 + i * 90 }"
+          >
+            <span class="features__letter">{{ letter }}</span
+            >{{ label }}
           </li>
         </ol>
-        <a href="#contact" class="btn btn--outline-red">Être prévenu de l'ouverture</a>
+        <a v-reveal="500" href="#contact" class="btn btn--outline-red"
+          >Être prévenu de l'ouverture</a
+        >
       </div>
 
-      <div class="salle">
+      <div v-reveal="{ variant: 'right', delay: 150 }" class="salle">
         <canvas
           ref="canvas"
           class="salle__canvas"

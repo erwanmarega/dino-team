@@ -9,9 +9,13 @@ import DtLogo from '../DtLogo.vue'
     <BrushSlashes corner="top-right" class="contact__slashes" />
     <BrushSlashes corner="bottom-left" class="contact__slashes" />
     <div class="w contact__inner">
-      <CharacterScene name="walk" />
-      <h2 class="contact__title">Prêt à<br /><em class="brush">évoluer ?</em></h2>
-      <div class="contact__actions">
+      <div v-reveal="{ variant: 'left' }">
+        <CharacterScene name="walk" />
+      </div>
+      <h2 v-reveal="{ variant: 'slam', delay: 150 }" class="contact__title">
+        Prêt à<br /><em v-reveal="{ variant: 'wipe', delay: 550 }" class="brush">évoluer ?</em>
+      </h2>
+      <div v-reveal="300" class="contact__actions">
         <a href="#" class="btn btn--red">Réserver ma séance découverte</a>
         <a href="#" class="btn btn--outline">M'écrire sur Instagram</a>
       </div>
@@ -23,9 +27,7 @@ import DtLogo from '../DtLogo.vue'
         <span>[EMAIL] · [TÉLÉPHONE] · [VILLE]</span>
         <span>© 2026 · Mentions légales</span>
       </footer>
-      <p class="footer__roar">
-        Rejoignez la DinoTeam — <span class="brush-text">Roarrrrr</span>
-      </p>
+      <p class="footer__roar">Rejoignez la DinoTeam — <span class="brush-text">Roarrrrr</span></p>
     </div>
   </section>
 </template>
