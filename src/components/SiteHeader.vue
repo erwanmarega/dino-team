@@ -13,7 +13,7 @@ const links = [
 <template>
   <header class="header">
     <div class="w header__inner">
-      <a href="#top" class="brand">
+      <a href="/" class="brand">
         <DtLogo :size="48" />
         <span class="brand__text">
           <span class="brand__name">DinoTeam</span>

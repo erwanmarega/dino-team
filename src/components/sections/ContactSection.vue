@@ -2,6 +2,8 @@
 import BrushSlashes from '../BrushSlashes.vue'
 import CharacterScene from '../CharacterScene.vue'
 import DtLogo from '../DtLogo.vue'
+
+const year = new Date().getFullYear()
 </script>
 
 <template>
@@ -25,7 +27,7 @@ import DtLogo from '../DtLogo.vue'
           <span>DinoTeam</span>
         </div>
         <span>[EMAIL] · [TÉLÉPHONE] · [VILLE]</span>
-        <span>© 2026 · Mentions légales</span>
+        <span>© {{ year }} · Mentions légales</span>
       </footer>
       <p class="footer__roar">Rejoignez la DinoTeam — <span class="brush-text">Roarrrrr</span></p>
     </div>

@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex" />
+    <meta name="theme-color" content="#0B0B0B" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>Page introuvable – DinoTeam</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Oswald:wght@500;600&family=Permanent+Marker&family=Inter:wght@400&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --red: #e3261f;
+        --red-bright: #ff4a3d;
+        --bg: #0b0b0b;
+        --line: #2b2b2b;
+        --text: #f4f4f4;
+        --body: #c8c8c8;
+        --muted: #9b9b9b;
+        color-scheme: dark;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        padding: 40px 20px;
+        background: var(--bg);
+        color: var(--text);
+        font-family: 'Inter', system-ui, sans-serif;
+        line-height: 1.55;
+        text-align: center;
+      }
+      main {
+        max-width: 560px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 22px;
+      }
+      .label {
+        margin: 0;
+        font-family: 'Oswald', 'Arial Narrow', sans-serif;
+        font-weight: 500;
+        font-size: 13px;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: var(--red-bright);
+      }
+      h1 {
+        margin: 0;
+        font-family: 'Bebas Neue', 'Oswald', Impact, sans-serif;
+        font-weight: 400;
+        font-size: clamp(120px, 30vw, 200px);
+        line-height: 0.85;
+        letter-spacing: 2px;
+      }
+      .sub {
+        margin: 0;
+        display: inline-block;
+        padding: 4px 18px 0;
+        background: var(--red);
+        color: #fff;
+        font-family: 'Bebas Neue', 'Oswald', Impact, sans-serif;
+        font-size: 34px;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        transform: rotate(-1.5deg);
+      }
+      p.text {
+        margin: 0;
+        color: var(--body);
+        font-size: 17px;
+      }
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 48px;
+        padding: 14px 28px;
+        background: var(--red);
+        color: #fff;
+        font-family: 'Oswald', 'Arial Narrow', sans-serif;
+        font-size: 16px;
+        font-weight: 600;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        text-decoration: none;
+        transition:
+          background-color 0.2s,
+          color 0.2s;
+      }
+      .btn:hover {
+        background: #fff;
+        color: var(--bg);
+      }
+      .btn:focus-visible {
+        outline: 2px solid var(--red-bright);
+        outline-offset: 2px;
+      }
+      .roar {
+        margin: 12px 0 0;
+        font-family: 'Permanent Marker', cursive;
+        color: var(--red-bright);
+        text-transform: uppercase;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <p class="label">Spécimen introuvable</p>
+      <h1>404</h1>
+      <p class="sub">Cette page a disparu</p>
+      <p class="text">
+        Elle a peut-être été déplacée, ou l'adresse contient une faute de frappe. Pas de panique,
+        le reste de la team est toujours là.
+      </p>
+      <a href="/" class="btn">Retour à l'accueil</a>
+      <p class="roar">Roarrrrr</p>
+    </main>
+  </body>
+</html>
