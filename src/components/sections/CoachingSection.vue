@@ -65,6 +65,7 @@ const fiches = [
           v-for="(fiche, i) in fiches"
           v-reveal="i * 140"
           :key="fiche.num"
+          :id="`fiche-${fiche.num}`"
           class="fiche"
           :class="{ 'fiche--featured': fiche.featured }"
         >
@@ -122,6 +123,29 @@ const fiches = [
 }
 .fiche--featured {
   border-color: var(--red);
+}
+.fiche {
+  scroll-margin-top: 100px;
+}
+/* Fiche ciblée depuis une strate (#fiche-01…) */
+.fiche:target {
+  border-top-color: var(--red);
+  animation: fiche-ping 1.4s ease-out;
+}
+@keyframes fiche-ping {
+  0%,
+  30% {
+    box-shadow: 0 0 0 3px var(--red-bright);
+  }
+  100% {
+    box-shadow: 0 0 0 3px transparent;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .fiche:target {
+    animation: none;
+    box-shadow: 0 0 0 3px var(--red-bright);
+  }
 }
 .fiche__meta {
   display: flex;

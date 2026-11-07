@@ -15,7 +15,7 @@ const coachPhoto = null
         <div class="hero__titles">
           <h1 v-reveal="{ variant: 'slam', delay: 100 }" class="hero__title">Évolue.</h1>
           <p v-reveal="{ variant: 'fade', delay: 450 }" class="hero__sub brush-text">
-            ou reste un fossile.
+            à ton rythme.
           </p>
         </div>
         <p v-reveal="550" class="hero__text">

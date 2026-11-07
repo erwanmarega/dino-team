@@ -3,6 +3,7 @@ import LifterFigure from '../LifterFigure.vue'
 
 // Du plus avancé (en haut) au débutant (en bas), comme des couches géologiques :
 // le rouge s'intensifie à mesure qu'on monte.
+// offer : la fiche coaching conseillée pour ce niveau (#fiche-01, 02, 03).
 const strates = [
   {
     era: 'Ère IV',
@@ -11,6 +12,7 @@ const strates = [
     level: 'Confirmé',
     bg: 'var(--red)',
     figure: 4,
+    offer: { num: '03', label: 'Pack évolution' },
   },
   {
     era: 'Ère III',
@@ -19,6 +21,7 @@ const strates = [
     level: 'Intermédiaire',
     bg: '#a3161b',
     figure: 3,
+    offer: { num: '03', label: 'Pack évolution' },
   },
   {
     era: 'Ère II',
@@ -27,6 +30,7 @@ const strates = [
     level: 'Débutant +',
     bg: '#5c1013',
     figure: 2,
+    offer: { num: '02', label: 'En salle' },
   },
   {
     era: 'Ère I',
@@ -35,6 +39,7 @@ const strates = [
     level: 'Débutant',
     bg: '#2a1213',
     figure: 1,
+    offer: { num: '01', label: 'À domicile' },
     last: true,
   },
 ]
@@ -66,7 +71,12 @@ const strates = [
           <span class="layer__era">{{ s.era }}</span>
           <h3 class="layer__title">{{ s.title }}</h3>
           <p class="layer__text">{{ s.text }}</p>
-          <span class="layer__level">{{ s.level }}</span>
+          <div class="layer__side">
+            <span class="layer__level">{{ s.level }}</span>
+            <a :href="`#fiche-${s.offer.num}`" class="layer__offer">
+              {{ s.offer.label }} <span aria-hidden="true">→</span>
+            </a>
+          </div>
         </div>
       </div>
     </div>
@@ -123,9 +133,33 @@ const strates = [
 .layer__text {
   color: rgba(255, 255, 255, 0.86);
 }
-.layer__level {
+.layer__side {
   justify-self: end;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+}
+.layer__level {
   color: rgba(255, 255, 255, 0.86);
+}
+.layer__offer {
+  padding: 6px 12px;
+  border: 2px solid #fff;
+  font-family: var(--label);
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: #fff;
+  transition:
+    background-color 0.2s,
+    color 0.2s;
+}
+.layer__offer:hover {
+  background: #fff;
+  color: var(--bg);
 }
 
 @media (max-width: 820px) {
@@ -133,8 +167,9 @@ const strates = [
     grid-template-columns: 1fr;
     gap: 8px;
   }
-  .layer__level {
+  .layer__side {
     justify-self: start;
+    align-items: flex-start;
   }
 }
 </style>
