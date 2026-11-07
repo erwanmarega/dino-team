@@ -96,4 +96,31 @@ const year = new Date().getFullYear()
   text-transform: uppercase;
   color: var(--body);
 }
+/* Survol : le « Roarrrrr » rugit */
+.footer__roar .brush-text {
+  display: inline-block;
+}
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .footer__roar:hover .brush-text {
+    animation: roar 0.5s ease-in-out;
+  }
+}
+@keyframes roar {
+  0%,
+  100% {
+    transform: none;
+  }
+  20% {
+    transform: rotate(-6deg) scale(1.25);
+  }
+  40% {
+    transform: rotate(5deg) scale(1.3);
+  }
+  60% {
+    transform: rotate(-4deg) scale(1.25);
+  }
+  80% {
+    transform: rotate(2deg) scale(1.1);
+  }
+}
 </style>

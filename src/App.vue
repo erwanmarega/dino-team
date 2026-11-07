@@ -3,7 +3,6 @@ import SiteHeader from './components/SiteHeader.vue'
 import HeroSection from './components/sections/HeroSection.vue'
 import CoachingSection from './components/sections/CoachingSection.vue'
 import StratesSection from './components/sections/StratesSection.vue'
-import HabitatSection from './components/sections/HabitatSection.vue'
 import ArchivesSection from './components/sections/ArchivesSection.vue'
 import CollectionSection from './components/sections/CollectionSection.vue'
 import AboutSection from './components/sections/AboutSection.vue'
@@ -19,7 +18,9 @@ import FaqSection from './components/sections/FaqSection.vue'
     <CoachingSection />
     <StratesSection />
     <TestimonialsSection />
-    <HabitatSection />
+    <!-- Habitat (salle privée) retiré temporairement : la salle n'existe pas encore.
+         Pour le remettre : réimporter HabitatSection, le replacer ici et rajouter
+         le lien dans SiteHeader.vue (puis renuméroter Archives et Collection). -->
     <ArchivesSection />
     <CollectionSection />
     <AboutSection />

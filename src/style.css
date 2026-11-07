@@ -174,7 +174,9 @@ a:hover {
   transition:
     background-color 0.2s,
     color 0.2s,
-    border-color 0.2s;
+    border-color 0.2s,
+    translate 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .btn--red {
@@ -209,13 +211,38 @@ a:hover {
   color: #fff;
 }
 
-/* Apparitions au scroll (directive v-reveal) */
+/* Survol : le bouton se soulève avec une ombre décalée, façon affiche imprimée */
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .btn:hover {
+    translate: -3px -3px;
+    box-shadow: 5px 5px 0 var(--red);
+  }
+
+  .btn--outline:hover,
+  .btn--outline-red:hover {
+    box-shadow: 5px 5px 0 var(--text);
+  }
+
+  .btn:active {
+    translate: 0 0;
+    box-shadow: 0 0 0 transparent;
+  }
+}
+
+/*
+ * Apparitions au scroll (directive v-reveal)
+ * Le retard ne s'applique qu'à l'apparition (opacity, transform) : les effets de
+ * survol (translate, box-shadow, border-color) restent immédiats. Les composants ne
+ * doivent donc pas redéfinir `transition` sur un élément qui porte v-reveal.
+ */
 .reveal {
   opacity: 0;
   transition:
-    opacity 0.7s ease,
-    transform 0.8s cubic-bezier(0.2, 0.7, 0.2, 1);
-  transition-delay: var(--reveal-delay, 0ms);
+    opacity 0.7s ease var(--reveal-delay, 0ms),
+    transform 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) var(--reveal-delay, 0ms),
+    translate 0.3s ease,
+    box-shadow 0.3s ease,
+    border-color 0.3s ease;
 }
 
 .reveal--up {
@@ -232,7 +259,7 @@ a:hover {
 
 .reveal--slam {
   transform: scale(1.18);
-  transition-timing-function: ease, cubic-bezier(0.2, 1.4, 0.4, 1);
+  transition-timing-function: ease, cubic-bezier(0.2, 1.4, 0.4, 1), ease, ease, ease;
 }
 
 .reveal.is-visible {

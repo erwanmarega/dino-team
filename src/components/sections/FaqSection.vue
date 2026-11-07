@@ -100,6 +100,14 @@ const questions = [
   text-transform: uppercase;
   transition: color 0.2s;
 }
+.qa__q > span:first-child {
+  transition: translate 0.25s ease;
+}
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .qa__q:hover > span:first-child {
+    translate: 10px 0;
+  }
+}
 .qa__q::-webkit-details-marker {
   display: none;
 }

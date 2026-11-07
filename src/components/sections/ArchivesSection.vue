@@ -14,7 +14,7 @@ const videos = [
     <div class="w archives__inner">
       <div class="g2">
         <div v-reveal class="archives__heading">
-          <p class="label label--red">04 — Archives</p>
+          <p class="label label--red">03 — Archives</p>
           <h2 class="section-title">Notes de terrain</h2>
         </div>
         <div v-reveal="150" class="intro">
@@ -100,6 +100,28 @@ const videos = [
   letter-spacing: 1px;
   text-transform: uppercase;
   color: var(--muted);
+  transition:
+    transform 0.35s cubic-bezier(0.2, 1.4, 0.4, 1),
+    border-color 0.2s,
+    color 0.2s;
+}
+/* Survol : la miniature penche et s'encadre de rouge, le titre glisse */
+.row:hover .row__thumb {
+  border-color: var(--red);
+  color: var(--text);
+}
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .row__title {
+    transition:
+      color 0.2s,
+      translate 0.3s ease;
+  }
+  .row:hover .row__thumb {
+    transform: rotate(-4deg) scale(1.06);
+  }
+  .row:hover .row__title {
+    translate: 8px 0;
+  }
 }
 .row__tag,
 .row__network {

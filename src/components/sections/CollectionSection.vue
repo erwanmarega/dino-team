@@ -22,7 +22,7 @@ function onSubmit() {
     <div class="w collection__inner">
       <div class="g2">
         <div v-reveal class="collection__heading">
-          <p class="label collection__label">05 — Collection · Bientôt</p>
+          <p class="label collection__label">04 — Collection · Bientôt</p>
           <h2 class="section-title">Pièces de collection</h2>
         </div>
         <div v-reveal="150" class="intro">
@@ -109,6 +109,28 @@ function onSubmit() {
   flex-direction: column;
   background: var(--bg);
 }
+/* Survol : l'objet se décolle avec une ombre noire décalée, la photo zoome */
+.item {
+  overflow: hidden;
+}
+.item__photo,
+.item__label {
+  transition:
+    transform 0.4s ease,
+    border-color 0.2s;
+}
+.item:hover .item__label {
+  border-top-color: #fff;
+}
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .item:hover {
+    translate: -4px -6px;
+    box-shadow: 8px 10px 0 var(--bg);
+  }
+  .item:hover .item__photo {
+    transform: scale(1.05);
+  }
+}
 .item__photo {
   height: 320px;
   display: flex;
@@ -177,10 +199,25 @@ function onSubmit() {
   letter-spacing: 1px;
   text-transform: uppercase;
   cursor: pointer;
+  transition:
+    background-color 0.2s,
+    color 0.2s,
+    translate 0.2s ease,
+    box-shadow 0.2s ease;
 }
 .signup__btn:hover {
   background: #fff;
   color: var(--bg);
+}
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .signup__btn:hover {
+    translate: -3px -3px;
+    box-shadow: 5px 5px 0 var(--bg);
+  }
+  .signup__btn:active {
+    translate: 0 0;
+    box-shadow: none;
+  }
 }
 .signup__btn:focus-visible {
   outline-color: #fff;

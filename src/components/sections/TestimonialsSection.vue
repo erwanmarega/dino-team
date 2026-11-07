@@ -179,6 +179,24 @@ const temoignages = [
   font-size: 72px;
   line-height: 1;
   color: var(--red);
+  transform-origin: left bottom;
+  transition: transform 0.4s cubic-bezier(0.2, 1.6, 0.4, 1);
+}
+/* Survol : la carte se soulève, le guillemet bascule et la strate « après » s'allume */
+.strate--apres {
+  transition: background-color 0.2s;
+}
+.card:hover .strate--apres {
+  background: var(--red-bright);
+}
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .card:hover {
+    translate: 0 -6px;
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
+  }
+  .card:hover .card__quote::before {
+    transform: rotate(-10deg) scale(1.2);
+  }
 }
 
 .card__who {

@@ -4,9 +4,9 @@ import DtLogo from './DtLogo.vue'
 const links = [
   { href: '#fiches', label: '01 Coaching' },
   { href: '#strates', label: '02 Évolution' },
-  { href: '#habitat', label: '03 Habitat' },
-  { href: '#archives', label: '04 Archives' },
-  { href: '#collection', label: '05 Collection' },
+  // Habitat retiré temporairement (salle pas encore ouverte), cf. App.vue.
+  { href: '#archives', label: '03 Archives' },
+  { href: '#collection', label: '04 Collection' },
 ]
 </script>
 
@@ -79,6 +79,40 @@ const links = [
   letter-spacing: 1.5px;
   text-transform: uppercase;
   color: var(--body);
+}
+/* Soulignement rouge qui se peint de gauche à droite */
+.nav a {
+  position: relative;
+  padding: 6px 0;
+}
+.nav a::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 3px;
+  background: var(--red);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.3s cubic-bezier(0.7, 0, 0.2, 1);
+}
+.nav a:hover::after,
+.nav a:focus-visible::after {
+  transform: scaleX(1);
+}
+/* Le badge pivote d'un coup, comme un tampon */
+.brand .dt-logo {
+  transition: transform 0.45s cubic-bezier(0.2, 1.6, 0.4, 1);
+}
+.brand:hover .dt-logo {
+  transform: rotate(-14deg) scale(1.06);
+}
+@media (prefers-reduced-motion: reduce) {
+  .nav a::after,
+  .brand .dt-logo {
+    transition: none;
+  }
 }
 .cta {
   min-height: 44px;

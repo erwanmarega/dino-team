@@ -105,6 +105,25 @@ const strates = [
   padding: 16px 0;
   color: #fff;
 }
+/* Survol : liseré blanc à gauche, le titre avance et le personnage grandit */
+.layer {
+  transition: box-shadow 0.25s ease;
+}
+.layer__title,
+.layer > .layer__grid > .fig {
+  transition: transform 0.35s cubic-bezier(0.2, 1.4, 0.4, 1);
+}
+.layer:hover {
+  box-shadow: inset 6px 0 0 #fff;
+}
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .layer:hover .layer__title {
+    transform: translateX(12px);
+  }
+  .layer:hover .layer__grid > .fig {
+    transform: scale(1.08);
+  }
+}
 .layer--last {
   padding-bottom: 24px;
 }

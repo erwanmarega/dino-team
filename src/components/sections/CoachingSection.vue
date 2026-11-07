@@ -127,6 +127,23 @@ const fiches = [
 .fiche {
   scroll-margin-top: 100px;
 }
+/* Survol : la fiche se soulève et son liseré passe au rouge.
+   Pas de `transition` ici : elle vient de .reveal (cf. style.css). */
+.fiche__title {
+  transition: color 0.2s;
+}
+.fiche:hover {
+  border-top-color: var(--red);
+}
+.fiche:hover .fiche__title {
+  color: var(--red-bright);
+}
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .fiche:hover {
+    translate: 0 -6px;
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
+  }
+}
 /* Fiche ciblée depuis une strate (#fiche-01…) */
 .fiche:target {
   border-top-color: var(--red);
