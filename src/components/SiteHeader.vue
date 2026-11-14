@@ -3,6 +3,7 @@ import { computed, nextTick, onBeforeUnmount, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import DtLogo from './DtLogo.vue'
 import BookingLink from './BookingLink.vue'
+import JungleVines from './JungleVines.vue'
 import { site } from '../config/site'
 
 const route = useRoute()
@@ -107,6 +108,12 @@ onBeforeUnmount(() => {
     </div>
   </header>
 
+  <!-- Lianas hang from the header's bottom edge. Kept out of the header itself
+       (z-index 50) so the open menu (40) and the curtain (60) cover them. -->
+  <div class="header-vines" aria-hidden="true">
+    <JungleVines variant="canopy" :seed="7" mode="edges" :reach="92" :sag="11" />
+  </div>
+
   <Transition name="menu">
     <div v-if="open" class="menu">
       <div class="menu__backdrop" @click="closeMenu()"></div>
@@ -145,6 +152,15 @@ onBeforeUnmount(() => {
   gap: 16px;
   height: 56px;
   padding: 0 16px;
+}
+
+/* Sticky 0-height anchor right under the 57px header (56 + border) */
+.header-vines {
+  position: sticky;
+  top: 57px;
+  z-index: 35;
+  height: 0;
+  pointer-events: none;
 }
 
 /* Burger: three thin lines, always at the far left */

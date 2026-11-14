@@ -6,7 +6,7 @@ export const legal = {
       heading: 'Éditeur du site',
       paragraphs: [
         'Le site DinoTeam est édité par [NOM PRÉNOM / RAISON SOCIALE], [STATUT — ex. micro-entrepreneur], immatriculé sous le numéro SIRET [SIRET].',
-        'Adresse : [ADRESSE]. E-mail : [EMAIL]. Téléphone : 07 70 80 86 08.',
+        'Adresse : [ADRESSE]. E-mail : enzocoaching77@gmail.com. Téléphone : 07 70 80 86 08.',
       ],
     },
     {
@@ -104,7 +104,7 @@ export const legal = {
     {
       heading: 'Responsable du traitement',
       paragraphs: [
-        'Le responsable du traitement des données personnelles est [NOM PRÉNOM / RAISON SOCIALE], [ADRESSE], [EMAIL].',
+        'Le responsable du traitement des données personnelles est [NOM PRÉNOM / RAISON SOCIALE], [ADRESSE], enzocoaching77@gmail.com.',
       ],
     },
     {
@@ -135,7 +135,7 @@ export const legal = {
     {
       heading: 'Vos droits',
       paragraphs: [
-        'Vous disposez des droits d’accès, de rectification, d’effacement, d’opposition, de limitation et de portabilité de vos données. Pour les exercer, écrivez à [EMAIL].',
+        'Vous disposez des droits d’accès, de rectification, d’effacement, d’opposition, de limitation et de portabilité de vos données. Pour les exercer, écrivez à enzocoaching77@gmail.com.',
         'Vous pouvez également introduire une réclamation auprès de la CNIL (cnil.fr).',
       ],
     },

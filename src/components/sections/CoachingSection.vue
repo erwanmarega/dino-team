@@ -1,5 +1,6 @@
 <script setup>
 import CharacterScene from '../CharacterScene.vue'
+import JungleVines from '../JungleVines.vue'
 import { fiches, options, infos } from '../../data/offers'
 
 </script>
@@ -46,6 +47,14 @@ import { fiches, options, infos } from '../../data/offers'
               <dd>{{ value }}</dd>
             </template>
           </dl>
+          <JungleVines
+            v-if="fiche.featured"
+            variant="drape"
+            :seed="fiche.num * 5 + 2"
+            :width="170"
+            :reach="18"
+            class="fiche__vine"
+          />
         </article>
       </div>
 
@@ -104,6 +113,13 @@ import { fiches, options, infos } from '../../data/offers'
 }
 .fiche--featured {
   border-color: var(--accent);
+}
+.fiche {
+  position: relative;
+}
+.fiche__vine {
+  top: -12px;
+  left: calc(50% - 85px);
 }
 .fiche {
   scroll-margin-top: 100px;

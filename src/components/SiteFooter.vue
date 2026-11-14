@@ -1,5 +1,6 @@
 <script setup>
 import DtLogo from './DtLogo.vue'
+import JungleVines from './JungleVines.vue'
 import { site } from '../config/site'
 
 const year = new Date().getFullYear()
@@ -19,6 +20,7 @@ const legal = [
 
 <template>
   <footer class="footer">
+    <JungleVines variant="canopy" :seed="23" :reach="34" :sag="8" :count="9" :span="[3, 97]" />
     <div class="w footer__inner">
       <div class="footer__cols">
         <div class="footer__brand">
@@ -61,6 +63,7 @@ const legal = [
 
 <style scoped>
 .footer {
+  position: relative;
   padding: 64px 0 40px;
   background: var(--bg);
   border-top: 1px solid var(--line);

@@ -12,7 +12,7 @@ export const site = {
     'https://search.google.com/local/writereview?placeid=ChIJb21GNLx4WAMRKEoskZUjkqk',
   googleRating: '5,0', // average rating shown on the profile (checked 2026-11-14)
   googleReviewCount: '5', // number of reviews on the profile (checked 2026-11-14)
-  email: '',
+  email: 'enzocoaching77@gmail.com',
   phone: '07 70 80 86 08',
   socials: {
     instagram: '',

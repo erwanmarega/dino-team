@@ -1,6 +1,7 @@
 <script setup>
 import BrushSlashes from '../BrushSlashes.vue'
 import BookingLink from '../BookingLink.vue'
+import JungleVines from '../JungleVines.vue'
 import { site } from '../../config/site'
 
 const hasBooking = Boolean(site.bookingUrl || site.discoveryUrl)
@@ -11,6 +12,7 @@ const mailto = site.email ? `mailto:${site.email}` : ''
 <template>
   <section id="contact" class="contact">
     <BrushSlashes corner="top-right" class="contact__slashes" />
+    <JungleVines variant="canopy" :seed="41" :reach="38" :sag="8" :count="6" :span="[38, 80]" />
     <div class="w contact__inner">
       <h2 v-reveal="{ variant: 'slam', delay: 150 }" class="contact__title">
         Prêt à <em v-reveal="{ variant: 'wipe', delay: 550 }" class="brush">évoluer ?</em>

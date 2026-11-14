@@ -1,5 +1,6 @@
 <script setup>
 import { computed } from 'vue'
+import JungleVines from './JungleVines.vue'
 
 const props = defineProps({
   partner: { type: Object, required: true },
@@ -30,6 +31,15 @@ const socials = computed(() =>
 
 <template>
   <article class="spec">
+    <JungleVines
+      variant="corner"
+      :seed="partner.num * 3 + 1"
+      :side="partner.num % 2 ? 'left' : 'right'"
+      lean="out"
+      :reach="partner.num % 2 ? 76 : 10"
+      :strands="0"
+      :class="partner.num % 2 ? 'spec__vine--l' : 'spec__vine--r'"
+    />
     <div class="spec__head">
       <span>Spécimen {{ partner.num }}</span>
       <span>{{ code }}</span>
@@ -87,6 +97,7 @@ const socials = computed(() =>
 
 <style scoped>
 .spec {
+  position: relative;
   display: flex;
   flex-direction: column;
   background: var(--surface);
@@ -94,6 +105,14 @@ const socials = computed(() =>
   border-left: 4px solid var(--accent);
   font-size: 14px;
   color: var(--body);
+}
+.spec__vine--l {
+  top: -16px;
+  left: -26px;
+}
+.spec__vine--r {
+  top: -16px;
+  right: -14px;
 }
 .spec__head {
   display: flex;

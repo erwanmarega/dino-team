@@ -1,9 +1,10 @@
 <script setup>
 import BrushSlashes from '../BrushSlashes.vue'
 import BookingLink from '../BookingLink.vue'
+import JungleVines from '../JungleVines.vue'
 
 import { site } from '../../config/site'
-import coachPhoto from '../../assets/coach/enzo-hero.jpg'
+import coachPhoto from '../../assets/coach/enzo-hero.webp'
 
 const firstName = site.coachFirstName
 const fullName = [site.coachFirstName, site.coachLastName].filter(Boolean).join(' ')
@@ -43,6 +44,8 @@ const fullName = [site.coachFirstName, site.coachLastName].filter(Boolean).join(
           fetchpriority="high"
         />
         <BrushSlashes corner="top-right" />
+        <JungleVines variant="corner" :seed="5" lean="in" :reach="70" :strands="0" class="photo__vine" />
+        <JungleVines variant="drape" :seed="9" :width="76" :reach="30" class="photo__drape" />
         <figcaption v-reveal="800" class="specimen">
           <div class="specimen__head"><span>Spécimen 001</span><span>DT-0001</span></div>
           <div>Nom : {{ fullName }}</div>
@@ -123,6 +126,15 @@ const fullName = [site.coachFirstName, site.coachLastName].filter(Boolean).join(
   object-fit: cover;
   object-position: 50% 20%;
 }
+.photo__vine {
+  top: -8px;
+  left: -14px;
+}
+/* Short garland on the left quarter only: the face stays clear in the middle */
+.photo__drape {
+  top: -2px;
+  left: 50px;
+}
 .photo__placeholder {
   position: absolute;
   inset: 0;
@@ -164,6 +176,13 @@ const fullName = [site.coachFirstName, site.coachLastName].filter(Boolean).join(
 }
 
 @media (max-width: 820px) {
+  .photo__drape {
+    display: none;
+  }
+  .photo__vine {
+    scale: 0.75;
+    transform-origin: 14px 8px;
+  }
   .hero__grid {
     grid-template-columns: 1fr;
   }

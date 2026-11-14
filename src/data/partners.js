@@ -42,7 +42,7 @@ export const partners = [
     photo: null,
     url: '',
     socials: { instagram: '' },
-    email: '',
+    email: 'enzocoaching77@gmail.com',
     phone: '07 70 80 86 08',
   },
   {
