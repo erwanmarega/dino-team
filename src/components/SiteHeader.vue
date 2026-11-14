@@ -104,7 +104,7 @@ onBeforeUnmount(() => {
         <span class="here__num">{{ current.num }}</span> {{ current.label }}
       </p>
 
-      <BookingLink fallback="/#contact" class="btn btn--accent cta">Réserver</BookingLink>
+      <BookingLink fallback="/faq#contact" class="btn btn--accent cta">Réserver</BookingLink>
     </div>
   </header>
 

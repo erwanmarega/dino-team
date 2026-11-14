@@ -2,7 +2,7 @@
 export const site = {
   coachFirstName: 'Enzo',
   coachLastName: 'Nuovo', // shown on the specimen card when set
-  city: '', // main service area
+  city: 'Seine-et-Marne (77)', // main service area
   bookingUrl: '', // Calendly link: assessment call ("bilan")
   discoveryUrl: '', // Calendly link: discovery session ("séance découverte")
   shopUrl: '', // external shop
@@ -15,7 +15,8 @@ export const site = {
   email: 'enzocoaching77@gmail.com',
   phone: '07 70 80 86 08',
   socials: {
-    instagram: '',
+    instagram: 'https://www.instagram.com/enzo.nuovo.77/',
+    facebook: 'https://www.facebook.com/enzonuovocoachingsportif/',
     tiktok: '',
     youtube: '',
   },

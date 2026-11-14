@@ -10,6 +10,8 @@
  * and use `photo: enzoPhoto`. Keep `photo: null` to show the "[PHOTO]" placeholder.
  */
 
+import enzoPhoto from '../assets/coach/enzo-portrait.webp'
+
 export const categories = [
   { id: 'manuel', label: 'Métiers manuels', examples: 'Garagistes, plaquistes, artisans…' },
   {
@@ -35,13 +37,16 @@ export const partners = [
     num: '001',
     name: 'Enzo Nuovo',
     job: 'Coach sportif',
-    specialty: '[Spécialité]',
+    specialty: 'Perte de poids, prise de masse, remise en forme',
     category: 'sport',
     description: "[Présentation de l'activité en 2–3 phrases.]",
-    location: '[VILLE]',
-    photo: null,
+    location: 'Seine-et-Marne (77)',
+    photo: enzoPhoto,
     url: '',
-    socials: { instagram: '' },
+    socials: {
+      instagram: 'https://www.instagram.com/enzo.nuovo.77/',
+      facebook: 'https://www.facebook.com/enzonuovocoachingsportif/',
+    },
     email: 'enzocoaching77@gmail.com',
     phone: '07 70 80 86 08',
   },

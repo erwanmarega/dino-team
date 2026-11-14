@@ -5,11 +5,13 @@ import { site } from '../config/site'
 
 const year = new Date().getFullYear()
 
+// Only networks with a real link are shown
 const socials = [
   { label: 'Instagram', href: site.socials.instagram },
+  { label: 'Facebook', href: site.socials.facebook },
   { label: 'TikTok', href: site.socials.tiktok },
   { label: 'YouTube', href: site.socials.youtube },
-]
+].filter((s) => s.href)
 
 const legal = [
   { label: 'Mentions légales', to: '/mentions-legales' },
@@ -43,9 +45,11 @@ const legal = [
           <span v-else>[TÉLÉPHONE]</span>
         </div>
 
-        <div class="footer__col">
+        <div v-if="socials.length" class="footer__col">
           <h2 class="footer__title">Réseaux</h2>
-          <a v-for="s in socials" :key="s.label" :href="s.href || '#'">{{ s.label }}</a>
+          <a v-for="s in socials" :key="s.label" :href="s.href" target="_blank" rel="noopener">
+            {{ s.label }}
+          </a>
         </div>
       </div>
 

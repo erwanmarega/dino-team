@@ -2,11 +2,15 @@
 import { computed } from 'vue'
 import { site } from '../../config/site'
 
-const networks = computed(() => [
-  { key: 'instagram', label: 'Instagram', href: site.socials.instagram },
-  { key: 'tiktok', label: 'TikTok', href: site.socials.tiktok },
-  { key: 'youtube', label: 'YouTube', href: site.socials.youtube },
-])
+// Only networks with a real link are shown
+const networks = computed(() =>
+  [
+    { key: 'instagram', label: 'Instagram', href: site.socials.instagram },
+    { key: 'facebook', label: 'Facebook', href: site.socials.facebook },
+    { key: 'tiktok', label: 'TikTok', href: site.socials.tiktok },
+    { key: 'youtube', label: 'YouTube', href: site.socials.youtube },
+  ].filter((n) => n.href),
+)
 
 const phoneHref = computed(() => `tel:${site.phone.replace(/\s+/g, '')}`)
 </script>
@@ -18,39 +22,34 @@ const phoneHref = computed(() => `tel:${site.phone.replace(/\s+/g, '')}`)
         <p class="label label--accent">Réseaux</p>
         <h2 class="section-title">Réseaux &amp; contact</h2>
         <p class="lede">
-          Le moyen le plus rapide de joindre {{ site.coachFirstName }} : un message sur Instagram.
+          Le moyen le plus rapide de joindre {{ site.coachFirstName }} : un message sur Instagram. Écris « DINO » en DM pour ton 1er bilan offert.
         </p>
       </div>
 
       <ul class="soc__cards">
         <li v-for="(n, i) in networks" :key="n.key" v-reveal="i * 80">
-          <component
-            :is="n.href ? 'a' : 'div'"
-            :href="n.href || undefined"
-            :target="n.href ? '_blank' : undefined"
-            :rel="n.href ? 'noopener' : undefined"
-            :aria-disabled="n.href ? undefined : 'true'"
-            class="card"
-            :class="{ 'card--off': !n.href }"
-          >
+          <a :href="n.href" target="_blank" rel="noopener" class="card">
             <svg class="card__icon" viewBox="0 0 24 24" aria-hidden="true">
               <template v-if="n.key === 'instagram'">
                 <rect x="3" y="3" width="18" height="18" rx="5" />
                 <circle cx="12" cy="12" r="4" />
                 <circle cx="17.2" cy="6.8" r="0.8" fill="currentColor" stroke="none" />
               </template>
+              <template v-else-if="n.key === 'facebook'">
+                <rect x="3" y="3" width="18" height="18" rx="5" />
+                <path d="M16 21v-7h2.5l.5-3H16V9.5C16 8.6 16.6 8 17.5 8H19V5.2C18.5 5.1 17.7 5 17 5c-2.2 0-4 1.5-4 4v2h-2.5v3H13v7" />
+              </template>
               <template v-else-if="n.key === 'tiktok'">
                 <path d="M14 3v11.5a3.5 3.5 0 1 1-3.5-3.5" />
                 <path d="M14 3c.4 2.6 2 4.2 5 4.5" />
               </template>
-              <template v-else>
+              <template v-else-if="n.key === 'youtube'">
                 <rect x="2.5" y="5.5" width="19" height="13" rx="4" />
                 <path d="M10 9.5v5l4.5-2.5z" fill="currentColor" stroke="none" />
               </template>
             </svg>
             <span class="card__name">{{ n.label }}</span>
-            <span v-if="!n.href" class="card__tag">Bientôt</span>
-          </component>
+          </a>
         </li>
       </ul>
 
@@ -111,9 +110,6 @@ a.card:hover {
   border-color: var(--accent);
   color: var(--accent-bright);
 }
-.card--off {
-  opacity: 0.6;
-}
 .card__icon {
   width: 26px;
   height: 26px;
@@ -129,16 +125,6 @@ a.card:hover {
   font-size: 26px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-}
-.card__tag {
-  margin-left: auto;
-  font-family: var(--label);
-  font-size: 11px;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  color: var(--muted);
-  border: 1px solid var(--line);
-  padding: 2px 8px;
 }
 .soc__lines {
   list-style: none;

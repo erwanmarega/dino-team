@@ -43,7 +43,7 @@ const routes = [
     meta: {
       title: 'FAQ coaching sportif et réseaux – DinoTeam',
       description:
-        'Réponses aux questions fréquentes avant ta première séance de coaching, et tous les moyens de contacter Enzo : Instagram, TikTok, YouTube, e-mail.',
+        'Réponses aux questions fréquentes avant ta première séance de coaching, et tous les moyens de contacter Enzo : Instagram, Facebook, e-mail, téléphone.',
       rubric: '03',
     },
   },

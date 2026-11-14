@@ -23,14 +23,32 @@ const fullName = [site.coachFirstName, site.coachLastName].filter(Boolean).join(
           </p>
         </div>
         <p v-reveal="550" class="hero__text">
-          Coaching personnalisé à domicile et en salle. Du premier squat aux charges lourdes, on
-          fait évoluer ton entraînement étape par étape, avec méthode et un peu d'humour.
+          Fondateur de DinoTeam, coach diplômé en Seine-et-Marne. Perte de poids, prise de masse ou
+          remise en forme : on fait évoluer ton entraînement étape par étape, à domicile ou en
+          salle.
         </p>
-        <div v-reveal="650" class="hero__actions">
-          <BookingLink class="btn btn--accent">Réserver mon bilan</BookingLink>
-          <BookingLink kind="discovery" class="btn btn--outline">
-            Réserver ma séance découverte
-          </BookingLink>
+        <dl v-reveal="600" class="creds">
+          <div class="creds__item">
+            <dt>Diplôme</dt>
+            <dd>Licence STAPS</dd>
+          </div>
+          <div class="creds__item">
+            <dt>Carte pro</dt>
+            <dd>[N° CARTE PRO]</dd>
+          </div>
+          <div class="creds__item">
+            <dt>Secteur</dt>
+            <dd>Seine-et-Marne (77)</dd>
+          </div>
+        </dl>
+        <div v-reveal="650" class="hero__cta">
+          <div class="hero__actions">
+            <BookingLink class="btn btn--accent">Réserver mon bilan</BookingLink>
+            <BookingLink kind="discovery" class="btn btn--outline">
+              Réserver ma séance découverte
+            </BookingLink>
+          </div>
+          <p class="hero__note label">1er bilan offert</p>
         </div>
       </div>
 
@@ -50,7 +68,7 @@ const fullName = [site.coachFirstName, site.coachLastName].filter(Boolean).join(
           <div class="specimen__head"><span>Spécimen 001</span><span>DT-0001</span></div>
           <div>Nom : {{ fullName }}</div>
           <div>Espèce : coach sportif</div>
-          <div>Habitat : domicile, salle</div>
+          <div>Habitat : Seine-et-Marne (77)</div>
           <div>Statut : <span class="specimen__status">en pleine évolution</span></div>
         </figcaption>
       </figure>
@@ -104,10 +122,45 @@ const fullName = [site.coachFirstName, site.coachLastName].filter(Boolean).join(
   max-width: 500px;
   color: var(--body);
 }
+.creds {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 22px;
+  margin: 0;
+  padding: 10px 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+.creds__item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.creds dt {
+  font-family: var(--label);
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.creds dd {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+}
 .hero__actions {
   display: flex;
   flex-wrap: wrap;
   gap: 14px;
+}
+.hero__note {
+  margin: 10px 0 0;
+  font-family: var(--label);
+  font-size: 12px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--muted);
 }
 
 .photo {
