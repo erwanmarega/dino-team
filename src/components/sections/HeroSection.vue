@@ -1,9 +1,12 @@
 <script setup>
 import BrushSlashes from '../BrushSlashes.vue'
+import BookingLink from '../BookingLink.vue'
 
-// Photo du coach : dépose le fichier dans src/assets/ puis remplace null par l’import, ex.
-// import coachPhoto from "../../assets/coach.jpg"
-const coachPhoto = null
+import { site } from '../../config/site'
+import coachPhoto from '../../assets/coach/enzo-hero.jpg'
+
+const firstName = site.coachFirstName
+const fullName = [site.coachFirstName, site.coachLastName].filter(Boolean).join(' ')
 </script>
 
 <template>
@@ -11,7 +14,7 @@ const coachPhoto = null
     <BrushSlashes corner="top-left" class="hero__slashes" />
     <div class="w hero__grid">
       <div class="hero__copy">
-        <p v-reveal class="label label--red">Spécimen n°001 — [PRÉNOM], coach sportif</p>
+        <p v-reveal class="label label--accent">Spécimen n°001 — {{ firstName }}, coach sportif</p>
         <div class="hero__titles">
           <h1 v-reveal="{ variant: 'slam', delay: 100 }" class="hero__title">Évolue.</h1>
           <p v-reveal="{ variant: 'fade', delay: 450 }" class="hero__sub brush-text">
@@ -23,23 +26,26 @@ const coachPhoto = null
           fait évoluer ton entraînement étape par étape, avec méthode et un peu d'humour.
         </p>
         <div v-reveal="650" class="hero__actions">
-          <a href="#contact" class="btn btn--red">Réserver une séance découverte</a>
-          <a href="#strates" class="btn btn--outline">Trouver mon niveau</a>
+          <BookingLink class="btn btn--accent">Réserver mon bilan</BookingLink>
+          <BookingLink kind="discovery" class="btn btn--outline">
+            Réserver ma séance découverte
+          </BookingLink>
         </div>
       </div>
 
       <figure v-reveal="{ variant: 'right', delay: 200 }" class="photo">
         <img
-          v-if="coachPhoto"
           :src="coachPhoto"
-          alt="[PRÉNOM], coach sportif DinoTeam"
+          :alt="`${firstName}, coach sportif DinoTeam, bras fléchis`"
           class="photo__img"
+          width="1050"
+          height="1400"
+          fetchpriority="high"
         />
-        <div v-else class="photo__placeholder">[PHOTO DU COACH]</div>
         <BrushSlashes corner="top-right" />
         <figcaption v-reveal="800" class="specimen">
           <div class="specimen__head"><span>Spécimen 001</span><span>DT-0001</span></div>
-          <div>Nom : [PRÉNOM NOM]</div>
+          <div>Nom : {{ fullName }}</div>
           <div>Espèce : coach sportif</div>
           <div>Habitat : domicile, salle</div>
           <div>Statut : <span class="specimen__status">en pleine évolution</span></div>
@@ -52,7 +58,7 @@ const coachPhoto = null
 <style scoped>
 .hero {
   position: relative;
-  padding: 72px 0 96px;
+  padding: 56px 0 56px;
   overflow: hidden;
 }
 .hero__slashes {
@@ -69,7 +75,7 @@ const coachPhoto = null
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  gap: 40px;
+  gap: 28px;
 }
 .hero__titles {
   display: flex;
@@ -103,7 +109,7 @@ const coachPhoto = null
 
 .photo {
   position: relative;
-  min-height: 600px;
+  min-height: 560px;
   margin: 0;
   background: var(--surface);
   border: 1px solid var(--line);
@@ -115,7 +121,7 @@ const coachPhoto = null
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center top;
+  object-position: 50% 20%;
 }
 .photo__placeholder {
   position: absolute;
@@ -134,7 +140,7 @@ const coachPhoto = null
   bottom: 20px;
   width: 280px;
   background: var(--bg);
-  border: 2px solid var(--red);
+  border: 2px solid var(--accent);
   padding: 16px 18px;
   font-size: 13px;
   line-height: 1.7;
@@ -153,7 +159,7 @@ const coachPhoto = null
   color: var(--text);
 }
 .specimen__status {
-  color: var(--red-bright);
+  color: var(--accent-bright);
   font-weight: 600;
 }
 

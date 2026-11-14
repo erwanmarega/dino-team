@@ -1,35 +1,49 @@
 <script setup>
 import BrushSlashes from '../BrushSlashes.vue'
-import CharacterScene from '../CharacterScene.vue'
-import DtLogo from '../DtLogo.vue'
+import BookingLink from '../BookingLink.vue'
+import { site } from '../../config/site'
 
-const year = new Date().getFullYear()
+const hasBooking = Boolean(site.bookingUrl || site.discoveryUrl)
+// No booking URL yet: buttons become mailto links, or inert spans without email.
+const mailto = site.email ? `mailto:${site.email}` : ''
 </script>
 
 <template>
   <section id="contact" class="contact">
     <BrushSlashes corner="top-right" class="contact__slashes" />
-    <BrushSlashes corner="bottom-left" class="contact__slashes" />
     <div class="w contact__inner">
-      <div v-reveal="{ variant: 'left' }">
-        <CharacterScene name="walk" />
-      </div>
       <h2 v-reveal="{ variant: 'slam', delay: 150 }" class="contact__title">
-        Prêt à<br /><em v-reveal="{ variant: 'wipe', delay: 550 }" class="brush">évoluer ?</em>
+        Prêt à <em v-reveal="{ variant: 'wipe', delay: 550 }" class="brush">évoluer ?</em>
       </h2>
       <div v-reveal="300" class="contact__actions">
-        <a href="#" class="btn btn--red">Réserver ma séance découverte</a>
-        <a href="#" class="btn btn--outline">M'écrire sur Instagram</a>
+        <template v-if="hasBooking">
+          <BookingLink class="btn btn--accent">Réserver mon bilan</BookingLink>
+          <BookingLink kind="discovery" class="btn btn--outline">
+            Réserver ma séance découverte
+          </BookingLink>
+        </template>
+        <template v-else-if="mailto">
+          <a :href="mailto" class="btn btn--accent">Réserver mon bilan</a>
+          <a :href="mailto" class="btn btn--outline">Réserver ma séance découverte</a>
+        </template>
+        <template v-else>
+          <span class="btn btn--accent btn--disabled" aria-disabled="true">Réserver mon bilan</span>
+          <span class="btn btn--outline btn--disabled" aria-disabled="true">
+            Réserver ma séance découverte
+          </span>
+        </template>
+        <a
+          v-if="site.socials.instagram"
+          :href="site.socials.instagram"
+          target="_blank"
+          rel="noopener"
+          class="btn btn--outline"
+          >M'écrire sur Instagram</a
+        >
       </div>
-      <footer class="footer">
-        <div class="footer__brand">
-          <DtLogo :size="44" />
-          <span>DinoTeam</span>
-        </div>
-        <span>[EMAIL] · [TÉLÉPHONE] · [VILLE]</span>
-        <span>© {{ year }} · Mentions légales</span>
-      </footer>
-      <p class="footer__roar">Rejoignez la DinoTeam — <span class="brush-text">Roarrrrr</span></p>
+      <p v-if="!hasBooking" class="contact__note">
+        Réservation en ligne bientôt disponible — écris-moi en attendant.
+      </p>
     </div>
   </section>
 </template>
@@ -37,9 +51,9 @@ const year = new Date().getFullYear()
 <style scoped>
 .contact {
   position: relative;
-  padding: 120px 0 48px;
-  background: var(--bg);
-  border-top: 4px solid var(--red);
+  padding: 64px 0 40px;
+  background: var(--veil);
+  border-top: 4px solid var(--accent);
   overflow: hidden;
 }
 .contact__slashes {
@@ -49,13 +63,13 @@ const year = new Date().getFullYear()
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: 32px;
+  gap: 24px;
 }
 .contact__title {
   font-family: var(--display);
   font-weight: 400;
-  font-size: clamp(80px, 12vw, 180px);
-  line-height: 0.88;
+  font-size: clamp(56px, 9vw, 120px);
+  line-height: 0.9;
   letter-spacing: 1px;
   text-transform: uppercase;
 }
@@ -64,63 +78,13 @@ const year = new Date().getFullYear()
   flex-wrap: wrap;
   gap: 14px;
 }
-.footer {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: center;
-  gap: 16px;
-  border-top: 1px solid var(--line);
-  padding-top: 28px;
-  margin-top: 56px;
-  font-family: var(--label);
+.btn--disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+.contact__note {
   font-size: 14px;
-  letter-spacing: 1px;
-  text-transform: uppercase;
   color: var(--muted);
-}
-.footer__brand {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  font-family: var(--display);
-  font-size: 28px;
-  letter-spacing: 1.5px;
-  color: var(--text);
-}
-.footer__roar {
-  text-align: center;
-  font-family: var(--label);
-  font-size: 15px;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: var(--body);
-}
-/* Survol : le « Roarrrrr » rugit */
-.footer__roar .brush-text {
-  display: inline-block;
-}
-@media (hover: hover) and (prefers-reduced-motion: no-preference) {
-  .footer__roar:hover .brush-text {
-    animation: roar 0.5s ease-in-out;
-  }
-}
-@keyframes roar {
-  0%,
-  100% {
-    transform: none;
-  }
-  20% {
-    transform: rotate(-6deg) scale(1.25);
-  }
-  40% {
-    transform: rotate(5deg) scale(1.3);
-  }
-  60% {
-    transform: rotate(-4deg) scale(1.25);
-  }
-  80% {
-    transform: rotate(2deg) scale(1.1);
-  }
 }
 </style>

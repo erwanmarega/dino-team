@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+# The production domain is not known yet; uncomment and set it once it is.
+# Sitemap: https://example.com/sitemap.xml

@@ -2,7 +2,7 @@
 import LifterFigure from '../LifterFigure.vue'
 
 // Du plus avancé (en haut) au débutant (en bas), comme des couches géologiques :
-// le rouge s'intensifie à mesure qu'on monte.
+// le vert s'intensifie à mesure qu'on monte.
 // offer : la fiche coaching conseillée pour ce niveau (#fiche-01, 02, 03).
 const strates = [
   {
@@ -10,7 +10,7 @@ const strates = [
     title: 'Performance',
     text: 'Objectifs précis, cycles de force, préparation à une échéance.',
     level: 'Confirmé',
-    bg: 'var(--red)',
+    bg: 'var(--accent)',
     figure: 4,
     offer: { num: '03', label: 'Pack évolution' },
   },
@@ -19,7 +19,7 @@ const strates = [
     title: 'Progression',
     text: 'Programmes structurés, charges qui montent, on casse les plateaux.',
     level: 'Intermédiaire',
-    bg: '#a3161b',
+    bg: '#176a37',
     figure: 3,
     offer: { num: '03', label: 'Pack évolution' },
   },
@@ -28,7 +28,7 @@ const strates = [
     title: 'Fondations',
     text: 'Les mouvements de base maîtrisés : squat, soulevé, développé, tirage.',
     level: 'Débutant +',
-    bg: '#5c1013',
+    bg: '#0a3a1e',
     figure: 2,
     offer: { num: '02', label: 'En salle' },
   },
@@ -37,7 +37,7 @@ const strates = [
     title: 'Reprise',
     text: 'Retrouver le goût de bouger, poser des habitudes, apprendre les bons gestes.',
     level: 'Débutant',
-    bg: '#2a1213',
+    bg: '#0f2216',
     figure: 1,
     offer: { num: '01', label: 'À domicile' },
     last: true,
@@ -48,7 +48,7 @@ const strates = [
 <template>
   <section id="strates" class="strates">
     <div v-reveal class="w strates__heading">
-      <p class="label label--red">02 — Évolution</p>
+      <p class="label label--accent">02 — Évolution</p>
       <h2 class="section-title">
         Chaque niveau est une strate.<br /><em
           v-reveal="{ variant: 'wipe', delay: 350 }"

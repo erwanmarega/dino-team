@@ -1,20 +1,7 @@
 <script setup>
-import { ref } from 'vue'
 import CharacterScene from '../CharacterScene.vue'
-
-const items = [
-  { num: '01', name: 'Sweat DinoTeam', photo: '[PHOTO SWEAT]' },
-  { num: '02', name: 'Jogging DinoTeam', photo: '[PHOTO JOGGING]' },
-  { num: '03', name: 'Tapis de sol', photo: '[PHOTO TAPIS]' },
-]
-
-const email = ref('')
-const submitted = ref(false)
-
-function onSubmit() {
-  // TODO: brancher sur le service d'emailing.
-  submitted.value = true
-}
+import { site } from '../../config/site'
+import { products } from '../../data/products'
 </script>
 
 <template>
@@ -22,8 +9,8 @@ function onSubmit() {
     <div class="w collection__inner">
       <div class="g2">
         <div v-reveal class="collection__heading">
-          <p class="label collection__label">04 — Collection · Bientôt</p>
-          <h2 class="section-title">Pièces de collection</h2>
+          <p class="label label--accent">01 — Boutique</p>
+          <h1 class="section-title">Pièces de collection</h1>
         </div>
         <div v-reveal="150" class="intro">
           <p class="lede collection__lede">
@@ -35,61 +22,57 @@ function onSubmit() {
 
       <div class="items">
         <article
-          v-for="(item, i) in items"
+          v-for="(item, i) in products"
           :key="item.num"
           v-reveal="{ variant: 'slam', delay: i * 140 }"
           class="item"
         >
-          <div class="item__photo">{{ item.photo }}</div>
+          <div class="item__photo">
+            <img v-if="item.photo" :src="item.photo" :alt="item.name" loading="lazy" />
+            <span v-else>[PHOTO]</span>
+          </div>
           <div class="item__label">
-            <span>Objet {{ item.num }} — {{ item.name }}</span
-            ><span>[PRIX] €</span>
+            <span class="item__name">{{ item.num }} — {{ item.name }}</span>
+            <span class="item__meta">{{ item.category }} · {{ item.price || '[PRIX]' }} €</span>
           </div>
         </article>
       </div>
 
-      <form v-reveal class="signup" @submit.prevent="onSubmit">
-        <label class="signup__label">
-          Être prévenu du lancement
-          <input
-            v-model="email"
-            type="email"
-            required
-            placeholder="ton@email.fr"
-            class="signup__input"
-          />
-        </label>
-        <button type="submit" class="signup__btn">M'inscrire</button>
-        <p v-if="submitted" class="signup__ok" role="status">
-          Merci, tu seras prévenu du lancement.
-        </p>
-      </form>
+      <div v-reveal class="cta">
+        <a
+          v-if="site.shopUrl"
+          :href="site.shopUrl"
+          target="_blank"
+          rel="noopener"
+          class="btn btn--accent"
+          >Ouvrir la boutique</a
+        >
+        <span v-else class="btn btn--outline cta__off" aria-disabled="true"
+          >Boutique bientôt en ligne</span
+        >
+      </div>
     </div>
   </section>
 </template>
 
 <style scoped>
 .collection {
-  padding: 104px 0;
-  background: var(--red);
-  color: #fff;
+  padding: 72px 0 96px;
+  background: var(--veil);
+  border-top: 1px solid var(--line);
 }
 .collection__inner {
   display: flex;
   flex-direction: column;
-  gap: 48px;
+  gap: 40px;
 }
 .collection__heading {
   display: flex;
   flex-direction: column;
   gap: 14px;
 }
-.collection__label {
-  color: #fff;
-}
 .collection__lede {
-  color: #fff;
-  max-width: 300px;
+  max-width: 340px;
   flex: 1 1 220px;
 }
 .intro {
@@ -107,123 +90,61 @@ function onSubmit() {
 .item {
   display: flex;
   flex-direction: column;
-  background: var(--bg);
-}
-/* Survol : l'objet se décolle avec une ombre noire décalée, la photo zoome */
-.item {
+  background: var(--surface);
+  border: 1px solid var(--line);
   overflow: hidden;
-}
-.item__photo,
-.item__label {
   transition:
-    transform 0.4s ease,
-    border-color 0.2s;
-}
-.item:hover .item__label {
-  border-top-color: #fff;
-}
-@media (hover: hover) and (prefers-reduced-motion: no-preference) {
-  .item:hover {
-    translate: -4px -6px;
-    box-shadow: 8px 10px 0 var(--bg);
-  }
-  .item:hover .item__photo {
-    transform: scale(1.05);
-  }
+    translate 0.3s ease,
+    border-color 0.3s ease;
 }
 .item__photo {
-  height: 320px;
+  height: 280px;
   display: flex;
   align-items: center;
   justify-content: center;
+  background: var(--bg-2);
   font-family: var(--label);
   font-size: 13px;
   letter-spacing: 2px;
   color: var(--muted);
+  overflow: hidden;
+}
+.item__photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 .item__label {
-  border-top: 3px solid var(--red-deep);
-  padding: 14px 16px;
-  font-family: var(--label);
-  font-size: 14px;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  display: flex;
-  justify-content: space-between;
-  gap: 12px;
-}
-
-.signup {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-end;
-  gap: 12px;
-  border-top: 1px solid rgba(255, 255, 255, 0.4);
-  padding-top: 32px;
-}
-.signup__label {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  flex: 1 1 280px;
+  gap: 4px;
+  border-top: 2px solid var(--accent);
+  padding: 14px 16px;
   font-family: var(--label);
-  font-size: 14px;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-}
-.signup__input {
-  height: 52px;
-  padding: 0 16px;
-  border: 2px solid #fff;
-  background: transparent;
-  color: #fff;
-  font-size: 16px;
-  font-family: var(--sans);
-  border-radius: 0;
-}
-.signup__input::placeholder {
-  color: rgba(255, 255, 255, 0.75);
-}
-.signup__input:focus-visible {
-  outline-color: #fff;
-}
-.signup__btn {
-  height: 52px;
-  padding: 0 32px;
-  background: var(--bg);
-  color: #fff;
-  border: 0;
-  font-family: var(--label);
-  font-weight: 600;
-  font-size: 16px;
   letter-spacing: 1px;
   text-transform: uppercase;
-  cursor: pointer;
-  transition:
-    background-color 0.2s,
-    color 0.2s,
-    translate 0.2s ease,
-    box-shadow 0.2s ease;
 }
-.signup__btn:hover {
-  background: #fff;
-  color: var(--bg);
+.item__name {
+  font-size: 15px;
+  color: var(--text);
+}
+.item__meta {
+  font-size: 13px;
+  color: var(--muted);
 }
 @media (hover: hover) and (prefers-reduced-motion: no-preference) {
-  .signup__btn:hover {
-    translate: -3px -3px;
-    box-shadow: 5px 5px 0 var(--bg);
-  }
-  .signup__btn:active {
-    translate: 0 0;
-    box-shadow: none;
+  .item:hover {
+    translate: 0 -4px;
+    border-color: var(--accent);
   }
 }
-.signup__btn:focus-visible {
-  outline-color: #fff;
+
+.cta {
+  display: flex;
 }
-.signup__ok {
-  flex-basis: 100%;
-  font-size: 14px;
+.cta__off {
+  cursor: not-allowed;
+  opacity: 0.6;
+  pointer-events: none;
 }
 </style>

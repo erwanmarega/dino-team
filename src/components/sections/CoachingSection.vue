@@ -1,45 +1,7 @@
 <script setup>
 import CharacterScene from '../CharacterScene.vue'
+import { fiches, options, infos } from '../../data/offers'
 
-const fiches = [
-  {
-    num: '01',
-    kind: 'À domicile',
-    scene: 'pushup',
-    title: 'Le coach vient à toi',
-    text: 'Matériel fourni, zéro trajet. Parfait pour reprendre ou s’entraîner entre deux obligations.',
-    details: [
-      ['Format', 'Solo ou duo'],
-      ['Zone', '[VILLE / SECTEUR]'],
-      ['Tarif', 'dès [TARIF] €'],
-    ],
-  },
-  {
-    num: '02',
-    kind: 'En salle',
-    scene: 'curl',
-    title: 'Technique & charges',
-    text: 'Tout l’équipement d’une salle pour apprendre les mouvements clés et progresser en sécurité.',
-    details: [
-      ['Format', 'Individuel'],
-      ['Lieu', '[NOM DE LA SALLE]'],
-      ['Tarif', 'dès [TARIF] €'],
-    ],
-    featured: true,
-  },
-  {
-    num: '03',
-    kind: 'Suivi',
-    scene: 'chart',
-    title: 'Le pack évolution',
-    text: 'Plusieurs séances par mois et des conseils entre les séances pour mesurer ta progression.',
-    details: [
-      ['Rythme', '[NOMBRE] séances / mois'],
-      ['Inclus', 'Bilan + suivi'],
-      ['Tarif', '[TARIF] € / mois'],
-    ],
-  },
-]
 </script>
 
 <template>
@@ -47,7 +9,7 @@ const fiches = [
     <div class="w coaching__inner">
       <div class="g2">
         <div v-reveal class="coaching__heading">
-          <p class="label label--red">01 — Coaching</p>
+          <p class="label label--accent">00 — Coaching</p>
           <h2 class="section-title">
             Trois façons de<br /><em v-reveal="{ variant: 'wipe', delay: 350 }" class="brush"
               >s'entraîner ensemble</em
@@ -86,20 +48,39 @@ const fiches = [
           </dl>
         </article>
       </div>
+
+      <div v-reveal class="options">
+        <h3 class="options__title">Prestations &amp; options</h3>
+        <ul class="options__list">
+          <li v-for="o in options" :key="o.title" class="option">
+            <div class="option__main">
+              <span class="option__name">{{ o.title }}</span>
+              <span class="option__text">{{ o.text }}</span>
+            </div>
+            <span class="option__tag">{{ o.tag }}</span>
+          </li>
+        </ul>
+        <p class="options__infos">
+          <strong>Infos utiles</strong>
+          <template v-for="[term, value] in infos" :key="term">
+            · {{ term }} : {{ value }}
+          </template>
+        </p>
+      </div>
     </div>
   </section>
 </template>
 
 <style scoped>
 .coaching {
-  padding: 104px 0;
-  background: var(--bg-2);
+  padding: 64px 0;
+  background: var(--veil-2);
   border-top: 1px solid var(--line);
 }
 .coaching__inner {
   display: flex;
   flex-direction: column;
-  gap: 56px;
+  gap: 36px;
 }
 .coaching__heading {
   display: flex;
@@ -113,7 +94,7 @@ const fiches = [
   gap: 20px;
 }
 .fiche {
-  padding: 32px;
+  padding: 24px;
   display: flex;
   flex-direction: column;
   gap: 18px;
@@ -122,21 +103,21 @@ const fiches = [
   border-top: 4px solid var(--line);
 }
 .fiche--featured {
-  border-color: var(--red);
+  border-color: var(--accent);
 }
 .fiche {
   scroll-margin-top: 100px;
 }
-/* Survol : la fiche se soulève et son liseré passe au rouge.
+/* Survol : la fiche se soulève et son liseré passe au vert.
    Pas de `transition` ici : elle vient de .reveal (cf. style.css). */
 .fiche__title {
   transition: color 0.2s;
 }
 .fiche:hover {
-  border-top-color: var(--red);
+  border-top-color: var(--accent);
 }
 .fiche:hover .fiche__title {
-  color: var(--red-bright);
+  color: var(--accent-bright);
 }
 @media (hover: hover) and (prefers-reduced-motion: no-preference) {
   .fiche:hover {
@@ -144,15 +125,15 @@ const fiches = [
     box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
   }
 }
-/* Fiche ciblée depuis une strate (#fiche-01…) */
+/* Fiche ciblée par son ancre (#fiche-01…) */
 .fiche:target {
-  border-top-color: var(--red);
+  border-top-color: var(--accent);
   animation: fiche-ping 1.4s ease-out;
 }
 @keyframes fiche-ping {
   0%,
   30% {
-    box-shadow: 0 0 0 3px var(--red-bright);
+    box-shadow: 0 0 0 3px var(--accent-bright);
   }
   100% {
     box-shadow: 0 0 0 3px transparent;
@@ -161,8 +142,61 @@ const fiches = [
 @media (prefers-reduced-motion: reduce) {
   .fiche:target {
     animation: none;
-    box-shadow: 0 0 0 3px var(--red-bright);
+    box-shadow: 0 0 0 3px var(--accent-bright);
   }
+}
+.options__title {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: 32px;
+  line-height: 1;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+.options__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 12px;
+}
+.option {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 16px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+}
+.option__main {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.option__name {
+  font-weight: 600;
+}
+.option__text {
+  font-size: 14px;
+  color: var(--body);
+}
+.option__tag {
+  flex-shrink: 0;
+  font-family: var(--label);
+  font-size: 12px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--accent-bright);
+}
+.options__infos {
+  margin-top: 14px;
+  font-size: 14px;
+  color: var(--muted);
+}
+.options__infos strong {
+  color: var(--text);
 }
 .fiche__meta {
   display: flex;
@@ -174,13 +208,13 @@ const fiches = [
   text-transform: uppercase;
 }
 .fiche__num {
-  color: var(--red-bright);
+  color: var(--accent-bright);
 }
 .fiche__kind {
   color: var(--muted);
 }
 .fiche__scene {
-  height: 150px;
+  height: 120px;
   display: flex;
   align-items: center;
   justify-content: center;

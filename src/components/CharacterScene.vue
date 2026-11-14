@@ -115,8 +115,8 @@ defineProps({
         stroke-linecap="round"
       />
       <rect x="66" y="134" width="24" height="4" fill="#CFC8BA" />
-      <rect x="62" y="128" width="7" height="16" rx="1.5" style="fill: var(--red)" />
-      <rect x="87" y="128" width="7" height="16" rx="1.5" style="fill: var(--red)" />
+      <rect x="62" y="128" width="7" height="16" rx="1.5" style="fill: var(--accent)" />
+      <rect x="87" y="128" width="7" height="16" rx="1.5" style="fill: var(--accent)" />
     </g>
     <g class="cu-r">
       <line
@@ -129,8 +129,8 @@ defineProps({
         stroke-linecap="round"
       />
       <rect x="110" y="134" width="24" height="4" fill="#CFC8BA" />
-      <rect x="106" y="128" width="7" height="16" rx="1.5" style="fill: var(--red)" />
-      <rect x="131" y="128" width="7" height="16" rx="1.5" style="fill: var(--red)" />
+      <rect x="106" y="128" width="7" height="16" rx="1.5" style="fill: var(--accent)" />
+      <rect x="131" y="128" width="7" height="16" rx="1.5" style="fill: var(--accent)" />
     </g>
   </svg>
   <svg
@@ -179,12 +179,12 @@ defineProps({
     </g>
     <path d="M140 60 V190 H230" stroke="#F4F4F4" stroke-width="2" stroke-linecap="round" />
     <rect class="ch-b1" x="152" y="150" width="16" height="40" style="fill: #5A5A5A" />
-    <rect class="ch-b2" x="176" y="122" width="16" height="68" style="fill: var(--red-deep)" />
-    <rect class="ch-b3" x="200" y="92" width="16" height="98" style="fill: var(--red)" />
+    <rect class="ch-b2" x="176" y="122" width="16" height="68" style="fill: var(--accent-deep)" />
+    <rect class="ch-b3" x="200" y="92" width="16" height="98" style="fill: var(--accent)" />
     <path
       class="ch-ck"
       d="M194 66 l8 8 l18 -20"
-      style="stroke: var(--red)"
+      style="stroke: var(--accent)"
       stroke-width="4"
       stroke-linecap="round"
       stroke-linejoin="round"
@@ -216,7 +216,7 @@ defineProps({
       stroke-width="3"
     />
     <circle cx="62" cy="99" r="7" stroke="#F4F4F4" stroke-width="2.5" />
-    <circle class="rec" cx="72" cy="81" r="3.5" fill="var(--red)" />
+    <circle class="rec" cx="72" cy="81" r="3.5" fill="var(--accent)" />
     <g transform="translate(112 10) scale(0.84)">
       <path
         d="M92 130 L88 210 M108 130 L112 210"
@@ -540,7 +540,7 @@ defineProps({
     </g>
     <g transform="translate(520 0)">
       <g class="wk-bob">
-        <circle cx="-2" cy="64" r="26" style="fill: var(--red)" />
+        <circle cx="-2" cy="64" r="26" style="fill: var(--accent)" />
         <circle cx="-2" cy="64" r="6" fill="#0B0B0B" />
         <g class="wk-l2">
           <line

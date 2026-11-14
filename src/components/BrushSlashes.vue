@@ -1,5 +1,5 @@
 <script setup>
-// Coups de griffe rouges des affiches, posés en décor dans un coin.
+// Coups de griffe vertes des affiches, posés en décor dans un coin.
 defineProps({
   corner: {
     type: String,
@@ -15,7 +15,7 @@ defineProps({
     :class="`slashes--${corner}`"
     aria-hidden="true"
     viewBox="0 0 220 220"
-    fill="var(--red)"
+    fill="var(--accent)"
   >
     <path d="M40 0 L52 0 L4 150 L0 146 Z" opacity="0.9" />
     <path d="M86 0 L104 0 L18 206 L12 200 Z" />

@@ -6,7 +6,7 @@
  *   v-reveal="{ variant: 'left', delay: 100 }"
  *
  * Variantes : up (défaut), left, right, fade, slam (gros titres),
- * wipe (bandeaux rouges .brush, peints de gauche à droite).
+ * wipe (bandeaux verts .brush, peints de gauche à droite).
  * Les styles sont dans style.css (.reveal…). Sans IntersectionObserver,
  * rien n'est masqué.
  */

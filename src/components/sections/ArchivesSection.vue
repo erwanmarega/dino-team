@@ -14,7 +14,7 @@ const videos = [
     <div class="w archives__inner">
       <div class="g2">
         <div v-reveal class="archives__heading">
-          <p class="label label--red">03 — Archives</p>
+          <p class="label label--accent">03 — Archives</p>
           <h2 class="section-title">Notes de terrain</h2>
         </div>
         <div v-reveal="150" class="intro">
@@ -85,7 +85,7 @@ const videos = [
 }
 .row:hover .row__title,
 .row:hover .row__arrow {
-  color: var(--red-bright);
+  color: var(--accent-bright);
 }
 .row__thumb {
   width: 64px;
@@ -105,9 +105,9 @@ const videos = [
     border-color 0.2s,
     color 0.2s;
 }
-/* Survol : la miniature penche et s'encadre de rouge, le titre glisse */
+/* Survol : la miniature penche et s'encadre de vert, le titre glisse */
 .row:hover .row__thumb {
-  border-color: var(--red);
+  border-color: var(--accent);
   color: var(--text);
 }
 @media (hover: hover) and (prefers-reduced-motion: no-preference) {
@@ -131,7 +131,7 @@ const videos = [
   text-transform: uppercase;
 }
 .row__tag {
-  color: var(--red-bright);
+  color: var(--accent-bright);
 }
 .row__network {
   color: var(--muted);

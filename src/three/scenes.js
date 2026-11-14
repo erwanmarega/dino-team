@@ -1,9 +1,9 @@
 import * as THREE from 'three'
 
-// Keep in sync with --red / --red-deep in style.css.
+// Keep in sync with --accent / --accent-deep in style.css.
 export const BRAND = {
-  red: '#E3261F',
-  redDeep: '#8E1216',
+  accent: '#1F7A3F',
+  accentDeep: '#0F3D22',
   dark: '#141414',
 }
 
@@ -13,10 +13,10 @@ const L = Math.PI
 
 function materials() {
   return {
-    red: new THREE.MeshStandardMaterial({ color: BRAND.red, metalness: 0.85, roughness: 0.3 }),
+    accent: new THREE.MeshStandardMaterial({ color: BRAND.accent, metalness: 0.85, roughness: 0.3 }),
     black: new THREE.MeshStandardMaterial({ color: 0x161513, metalness: 0.35, roughness: 0.55 }),
     steel: new THREE.MeshStandardMaterial({ color: 0xc9c6bf, metalness: 0.95, roughness: 0.22 }),
-    redDeep: new THREE.MeshStandardMaterial({ color: BRAND.redDeep, metalness: 0.1, roughness: 0.7 }),
+    accentDeep: new THREE.MeshStandardMaterial({ color: BRAND.accentDeep, metalness: 0.1, roughness: 0.7 }),
     dark: new THREE.MeshStandardMaterial({ color: BRAND.dark, metalness: 0.1, roughness: 0.8 }),
     frame: new THREE.MeshStandardMaterial({ color: 0x1a1918, metalness: 0.6, roughness: 0.45 }),
   }
@@ -36,11 +36,11 @@ function dumbbell(M, s) {
   for (const d of [-1, 1]) {
     g.add(cylX(0.2 * s, 0.08 * s, M.steel, d * 0.62 * s))
     g.add(cylX(0.85 * s, 0.22 * s, M.black, d * 0.77 * s))
-    const rim = new THREE.Mesh(new THREE.TorusGeometry(0.85 * s, 0.03 * s, 12, 64), M.red)
+    const rim = new THREE.Mesh(new THREE.TorusGeometry(0.85 * s, 0.03 * s, 12, 64), M.accent)
     rim.rotation.y = Math.PI / 2
     rim.position.x = d * 0.77 * s
     g.add(rim)
-    g.add(cylX(0.7 * s, 0.14 * s, M.red, d * 0.95 * s))
+    g.add(cylX(0.7 * s, 0.14 * s, M.accent, d * 0.95 * s))
     g.add(cylX(0.22 * s, 0.1 * s, M.steel, d * 1.08 * s))
   }
   return g
@@ -111,7 +111,7 @@ export function buildSalle(ctx) {
   box(3.4, 1.9, 0.06, M.dark, 2.6, 2.6, -3.97)
 
   const logo = textTexture(1024, 512, (c) => {
-    c.fillStyle = BRAND.red
+    c.fillStyle = BRAND.accent
     c.textAlign = 'center'
     c.textBaseline = 'middle'
     c.font = '170px "Bebas Neue", Impact, sans-serif'
@@ -134,7 +134,7 @@ export function buildSalle(ctx) {
   })
   box(11, 0.04, 0.04, strip, 0, 4.4, -3.95)
   box(0.04, 0.04, 9, strip, -4.95, 4.4, 0)
-  for (let i = 0; i < 6; i++) box(0.08, 3.6, 0.04, M.redDeep, -4.2 + i * 0.32, 1.8, -3.97)
+  for (let i = 0; i < 6; i++) box(0.08, 3.6, 0.04, M.accentDeep, -4.2 + i * 0.32, 1.8, -3.97)
 
   // Rack
   const px = -0.6
@@ -150,15 +150,15 @@ export function buildSalle(ctx) {
   box(1.6, 0.08, 0.08, M.frame, px, 2.6, pz + 0.75)
   box(0.08, 0.08, 0.84, M.frame, px - 0.75, 2.6, pz + 0.37)
   box(0.08, 0.08, 0.84, M.frame, px + 0.75, 2.6, pz + 0.37)
-  box(0.14, 0.06, 0.14, M.red, px - 0.75, 1.38, pz + 0.82)
-  box(0.14, 0.06, 0.14, M.red, px + 0.75, 1.38, pz + 0.82)
+  box(0.14, 0.06, 0.14, M.accent, px - 0.75, 1.38, pz + 0.82)
+  box(0.14, 0.06, 0.14, M.accent, px + 0.75, 1.38, pz + 0.82)
 
   // Barbell
   const bar = new THREE.Group()
   bar.add(cylX(0.03, 2.4, M.steel))
   for (const d of [-1, 1]) {
     bar.add(cylX(0.45, 0.07, M.black, d * 0.92))
-    bar.add(cylX(0.36, 0.06, M.red, d * 1.0))
+    bar.add(cylX(0.36, 0.06, M.accent, d * 1.0))
     bar.add(cylX(0.05, 0.06, M.steel, d * 1.07))
   }
   bar.position.set(px, 1.46, pz + 0.82)
@@ -167,7 +167,7 @@ export function buildSalle(ctx) {
   // Bench
   const bx = 2.2
   const bz = -0.6
-  box(0.38, 0.1, 1.3, M.redDeep, bx, 0.48, bz)
+  box(0.38, 0.1, 1.3, M.accentDeep, bx, 0.48, bz)
   box(0.06, 0.43, 0.06, M.frame, bx, 0.215, bz - 0.5)
   box(0.06, 0.43, 0.06, M.frame, bx, 0.215, bz + 0.5)
   box(0.5, 0.05, 0.08, M.frame, bx, 0.03, bz - 0.5)
@@ -183,7 +183,7 @@ export function buildSalle(ctx) {
   }
 
   // Kettlebells
-  const kbMats = [M.frame, M.redDeep, M.dark]
+  const kbMats = [M.frame, M.accentDeep, M.dark]
   for (let i = 0; i < 3; i++) {
     const k = kettlebell(kbMats[i], 0.9 + i * 0.15)
     k.position.set(-2.6 + i * 0.6, 0, 0.9)
@@ -194,7 +194,7 @@ export function buildSalle(ctx) {
   // Plate stack
   for (let i = 0; i < 5; i++) {
     const r = 0.45 - i * 0.04
-    const p = new THREE.Mesh(new THREE.CylinderGeometry(r, r, 0.07, 48), i % 2 ? M.red : M.black)
+    const p = new THREE.Mesh(new THREE.CylinderGeometry(r, r, 0.07, 48), i % 2 ? M.accent : M.black)
     p.position.set(3.6, 0.035 + i * 0.075, -3.0)
     scene.add(p)
   }

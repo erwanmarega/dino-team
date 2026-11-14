@@ -1,14 +1,14 @@
 /*
- * DinoTeam – direction artistique "affiche Instagram" : noir profond, rouge
- * affiche, titres condensés en capitales, accents au pinceau.
+ * DinoTeam – direction artistique "affiche Instagram" : noir profond, vert
+ * forêt, titres condensés en capitales, accents au pinceau.
  */
 :root {
-  /* Rouge */
-  --red: #e3261f;
+  /* Vert */
+  --accent: #1f7a3f;
   /* aplats, boutons (texte blanc dessus) */
-  --red-bright: #ff4a3d;
-  /* texte rouge sur fond noir (contraste AA) */
-  --red-deep: #8e1216;
+  --accent-bright: #6fdc8c;
+  /* texte vert clair sur fond noir (contraste AA) */
+  --accent-deep: #0f3d22;
 
   /* Noirs & gris */
   --bg: #0b0b0b;
@@ -18,6 +18,10 @@
   --text: #f4f4f4;
   --body: #c8c8c8;
   --muted: #9b9b9b;
+
+  /* Semi-transparent section backgrounds: let the rubric decor show through */
+  --veil: color-mix(in srgb, var(--bg) 62%, transparent);
+  --veil-2: color-mix(in srgb, var(--bg-2) 66%, transparent);
 
   --display: 'Bebas Neue', 'Oswald', Impact, sans-serif;
   --label: 'Oswald', 'Arial Narrow', sans-serif;
@@ -49,9 +53,10 @@ html {
   }
 }
 
+/* No background here: the root's one reaches the canvas, so the z-index: -1
+   rubric decor paints above it and below the page content. */
 body {
   margin: 0;
-  background: var(--bg);
 }
 
 main {
@@ -71,16 +76,16 @@ a {
 }
 
 a:hover {
-  color: var(--red-bright);
+  color: var(--accent-bright);
 }
 
 :focus-visible {
-  outline: 2px solid var(--red-bright);
+  outline: 2px solid var(--accent-bright);
   outline-offset: 2px;
 }
 
 ::selection {
-  background: var(--red);
+  background: var(--accent);
   color: #fff;
 }
 
@@ -108,8 +113,8 @@ a:hover {
   color: var(--muted);
 }
 
-.label--red {
-  color: var(--red-bright);
+.label--accent {
+  color: var(--accent-bright);
 }
 
 .section-title {
@@ -121,12 +126,12 @@ a:hover {
   text-transform: uppercase;
 }
 
-/* Bandeau rouge "coup de pinceau", comme sur les affiches */
+/* Bandeau vert "coup de pinceau", comme sur les affiches */
 .brush {
   display: inline-block;
   margin-top: 6px;
   padding: 2px 18px 0;
-  background: var(--red);
+  background: var(--accent);
   color: #fff;
   font-style: normal;
   transform: rotate(-1.5deg);
@@ -145,11 +150,11 @@ a:hover {
       2% 48%);
 }
 
-/* Accent manuscrit rouge ("OFFRE SPÉCIALE", "ROARRRR") */
+/* Accent manuscrit vert ("OFFRE SPÉCIALE", "ROARRRR") */
 .brush-text {
   font-family: var(--brush);
   font-weight: 400;
-  color: var(--red-bright);
+  color: var(--accent-bright);
   text-transform: uppercase;
 }
 
@@ -179,12 +184,12 @@ a:hover {
     box-shadow 0.2s ease;
 }
 
-.btn--red {
-  background: var(--red);
+.btn--accent {
+  background: var(--accent);
   color: #fff;
 }
 
-.btn--red:hover {
+.btn--accent:hover {
   background: #fff;
   color: var(--bg);
 }
@@ -195,19 +200,19 @@ a:hover {
 }
 
 .btn--outline:hover {
-  border-color: var(--red);
-  background: var(--red);
+  border-color: var(--accent);
+  background: var(--accent);
   color: #fff;
 }
 
-.btn--outline-red {
-  border: 2px solid var(--red);
+.btn--outline-accent {
+  border: 2px solid var(--accent);
   color: var(--text);
   align-self: flex-start;
 }
 
-.btn--outline-red:hover {
-  background: var(--red);
+.btn--outline-accent:hover {
+  background: var(--accent);
   color: #fff;
 }
 
@@ -215,11 +220,11 @@ a:hover {
 @media (hover: hover) and (prefers-reduced-motion: no-preference) {
   .btn:hover {
     translate: -3px -3px;
-    box-shadow: 5px 5px 0 var(--red);
+    box-shadow: 5px 5px 0 var(--accent);
   }
 
   .btn--outline:hover,
-  .btn--outline-red:hover {
+  .btn--outline-accent:hover {
     box-shadow: 5px 5px 0 var(--text);
   }
 
@@ -267,7 +272,7 @@ a:hover {
   transform: none;
 }
 
-/* Bandeau rouge peint de gauche à droite (garde son inclinaison) */
+/* Bandeau vert peint de gauche à droite (garde son inclinaison) */
 .brush.reveal--wipe {
   opacity: 1;
   transform: rotate(-1.5deg) scaleX(0);

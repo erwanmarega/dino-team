@@ -18,7 +18,7 @@ useThreeScene(canvas, buildSalle, { shadows: true })
   <section id="habitat" class="habitat">
     <div class="w habitat__grid">
       <div class="habitat__copy">
-        <p v-reveal class="label label--red">03 — Habitat · Bientôt</p>
+        <p v-reveal class="label label--accent">03 — Habitat · Bientôt</p>
         <h2 v-reveal="80" class="section-title">
           Le futur habitat<br /><em v-reveal="{ variant: 'wipe', delay: 400 }" class="brush"
             >de la team</em
@@ -38,7 +38,7 @@ useThreeScene(canvas, buildSalle, { shadows: true })
             >{{ label }}
           </li>
         </ol>
-        <a v-reveal="500" href="#contact" class="btn btn--outline-red"
+        <a v-reveal="500" href="#contact" class="btn btn--outline-accent"
           >Être prévenu de l'ouverture</a
         >
       </div>
@@ -98,7 +98,7 @@ useThreeScene(canvas, buildSalle, { shadows: true })
   border-bottom: 1px solid var(--line);
 }
 .features__letter {
-  color: var(--red-bright);
+  color: var(--accent-bright);
   font-weight: 600;
 }
 
