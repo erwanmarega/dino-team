@@ -1,150 +1,232 @@
 <script setup>
-import CharacterScene from '../CharacterScene.vue'
+import { computed } from 'vue'
+import SceneSection from '../SceneSection.vue'
+import SectionHeading from '../SectionHeading.vue'
+import boutiqueImg from '../../assets/scenes/boutique-studio.jpg'
 import { site } from '../../config/site'
 import { products } from '../../data/products'
+
+// Unique category labels, in order of first appearance
+const productCategories = computed(() => [...new Set(products.map((p) => p.category))])
 </script>
 
 <template>
-  <section id="collection" class="collection">
-    <div class="w collection__inner">
-      <div class="g2">
-        <div v-reveal class="collection__heading">
-          <p class="label label--accent">01 — Boutique</p>
-          <h1 class="section-title">Pièces de collection</h1>
-        </div>
-        <div v-reveal="150" class="intro">
-          <p class="lede collection__lede">
+  <div>
+    <SceneSection :image="boutiqueImg" alt="Vêtements DinoTeam dans un décor sombre" class="hero">
+      <div class="container hero__inner">
+        <div class="hero__content animate-rise">
+          <p class="label-mono text-primary">01 — Boutique</p>
+          <h1 class="hero__title">La collection <span class="text-primary">DinoTeam</span></h1>
+          <p class="hero__lede">
             Sweats, joggings et tapis aux couleurs de la team. Sobres, solides, faits pour durer.
           </p>
-          <CharacterScene name="flex" />
+          <div class="hero__actions">
+            <a
+              v-if="site.shopUrl"
+              :href="site.shopUrl"
+              target="_blank"
+              rel="noopener"
+              class="btn btn--leaf btn--xl"
+              >Ouvrir la boutique</a
+            >
+            <span v-else class="btn btn--trail btn--xl is-off" aria-disabled="true"
+              >Boutique bientôt en ligne</span
+            >
+            <a href="#collection" class="btn btn--trail btn--xl">Voir la collection</a>
+          </div>
         </div>
       </div>
+    </SceneSection>
 
-      <div class="items">
-        <article
-          v-for="(item, i) in products"
-          :key="item.num"
-          v-reveal="{ variant: 'slam', delay: i * 140 }"
-          class="item"
-        >
-          <div class="item__photo">
-            <img v-if="item.photo" :src="item.photo" :alt="item.name" loading="lazy" />
-            <span v-else>[PHOTO]</span>
-          </div>
-          <div class="item__label">
-            <span class="item__name">{{ item.num }} — {{ item.name }}</span>
-            <span class="item__meta">{{ item.category }} · {{ item.price || '[PRIX]' }} €</span>
-          </div>
-        </article>
-      </div>
+    <section id="collection" class="collection">
+      <div class="container">
+        <div class="collection__head">
+          <SectionHeading kicker="Aperçu" title="Pièces de collection" />
+          <ul class="pills" aria-label="Catégories">
+            <li v-for="c in productCategories" :key="c" class="pill label-mono">{{ c }}</li>
+          </ul>
+        </div>
 
-      <div v-reveal class="cta">
-        <a
-          v-if="site.shopUrl"
-          :href="site.shopUrl"
-          target="_blank"
-          rel="noopener"
-          class="btn btn--accent"
-          >Ouvrir la boutique</a
-        >
-        <span v-else class="btn btn--outline cta__off" aria-disabled="true"
-          >Boutique bientôt en ligne</span
-        >
+        <div class="items">
+          <article v-for="item in products" :key="item.num" v-reveal class="item">
+            <div class="item__photo">
+              <img v-if="item.photo" :src="item.photo" :alt="item.name" loading="lazy" />
+              <span v-else class="label-mono">[PHOTO]</span>
+            </div>
+            <div class="item__meta">
+              <div>
+                <p class="label-mono text-muted">{{ item.category }}</p>
+                <h3 class="item__name">{{ item.num }} — {{ item.name }}</h3>
+              </div>
+              <span class="item__price">{{ item.price || '[PRIX]' }} €</span>
+            </div>
+          </article>
+        </div>
+
+        <div class="cta bg-forest-gradient">
+          <div>
+            <h2 class="cta__title">Tailles, prix, panier</h2>
+            <p class="cta__text text-muted">La boutique complète s'ouvre dans un nouvel onglet.</p>
+          </div>
+          <a
+            v-if="site.shopUrl"
+            :href="site.shopUrl"
+            target="_blank"
+            rel="noopener"
+            class="btn btn--leaf btn--xl"
+            >Accéder à la boutique</a
+          >
+          <span v-else class="btn btn--trail btn--xl is-off" aria-disabled="true"
+            >Boutique bientôt en ligne</span
+          >
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
+  </div>
 </template>
 
 <style scoped>
+.hero {
+  min-height: 88svh;
+}
+.hero__inner {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  min-height: 88svh;
+  padding-top: 7rem;
+  padding-bottom: 4rem;
+}
+.hero__content {
+  max-width: 36rem;
+}
+.hero__title {
+  margin-top: 1.25rem;
+  font-size: clamp(3rem, 14vw, 6rem);
+  font-weight: 900;
+  line-height: 1;
+  overflow-wrap: break-word;
+}
+.hero__lede {
+  margin-top: 1.5rem;
+  max-width: 28rem;
+  font-size: 1.125rem;
+  color: color-mix(in oklab, var(--foreground) 90%, transparent);
+}
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 2rem;
+}
+.is-off {
+  cursor: not-allowed;
+  opacity: 0.6;
+  pointer-events: none;
+}
+
 .collection {
-  padding: 72px 0 96px;
-  background: var(--veil);
-  border-top: 1px solid var(--line);
+  scroll-margin-top: 4rem;
+  padding: 5rem 0;
+  background: var(--background);
 }
-.collection__inner {
-  display: flex;
-  flex-direction: column;
-  gap: 40px;
-}
-.collection__heading {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-}
-.collection__lede {
-  max-width: 340px;
-  flex: 1 1 220px;
-}
-.intro {
+.collection__head {
   display: flex;
   flex-wrap: wrap;
   align-items: flex-end;
-  gap: 24px;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+.pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.pill {
+  padding: 0.375rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--muted-foreground);
 }
 
 .items {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 24px;
-}
-.item {
-  display: flex;
-  flex-direction: column;
-  background: var(--surface);
-  border: 1px solid var(--line);
-  overflow: hidden;
-  transition:
-    translate 0.3s ease,
-    border-color 0.3s ease;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin-top: 2.5rem;
 }
 .item__photo {
-  height: 280px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--bg-2);
-  font-family: var(--label);
-  font-size: 13px;
-  letter-spacing: 2px;
-  color: var(--muted);
+  aspect-ratio: 3 / 4;
   overflow: hidden;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--muted-foreground);
+  transition: border-color 0.3s ease;
 }
 .item__photo img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
-.item__label {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  border-top: 2px solid var(--accent);
-  padding: 14px 16px;
-  font-family: var(--label);
-  letter-spacing: 1px;
-  text-transform: uppercase;
-}
-.item__name {
-  font-size: 15px;
-  color: var(--text);
+.item:hover .item__photo {
+  border-color: var(--primary);
 }
 .item__meta {
-  font-size: 13px;
-  color: var(--muted);
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
 }
-@media (hover: hover) and (prefers-reduced-motion: no-preference) {
-  .item:hover {
-    translate: 0 -4px;
-    border-color: var(--accent);
-  }
+.item__name {
+  margin-top: 0.25rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+.item__price {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 700;
+  white-space: nowrap;
 }
 
 .cta {
   display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  margin-top: 3.5rem;
+  padding: 2rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  text-align: center;
 }
-.cta__off {
-  cursor: not-allowed;
-  opacity: 0.6;
-  pointer-events: none;
+.cta__title {
+  font-size: 2.25rem;
+  font-weight: 800;
+}
+.cta__text {
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+}
+
+@media (min-width: 768px) {
+  .cta {
+    flex-direction: row;
+    text-align: left;
+  }
+}
+@media (min-width: 1024px) {
+  .items {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
 }
 </style>

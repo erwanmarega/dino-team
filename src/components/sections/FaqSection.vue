@@ -1,152 +1,144 @@
 <script setup>
+import { ref } from 'vue'
 import { questions } from '../../data/faq'
+
+// Single-open accordion: index of the open item, or -1
+const open = ref(-1)
+const toggle = (i) => {
+  open.value = open.value === i ? -1 : i
+}
 </script>
 
 <template>
   <section id="faq" class="faq">
-    <div class="w faq__grid">
-      <div v-reveal class="faq__heading">
-        <p class="label label--accent">03 — FAQ &amp; Réseaux</p>
-        <h1 class="section-title">
-          Avant ta<br /><em v-reveal="{ variant: 'wipe', delay: 350 }" class="brush"
-            >première séance</em
+    <p class="label-mono text-muted">Questions fréquentes</p>
+    <ul class="faq__list">
+      <li v-for="(q, i) in questions" :key="q.q" class="qa">
+        <h2 class="qa__h">
+          <button
+            :id="`faq-q-${i}`"
+            type="button"
+            class="qa__q"
+            :aria-expanded="open === i"
+            :aria-controls="`faq-a-${i}`"
+            @click="toggle(i)"
           >
-        </h1>
-        <p class="lede">Tout ce qu'on me demande avant de se lancer.</p>
-        <a href="#reseaux" class="btn btn--outline-accent">Une autre question ? Écris-moi</a>
-      </div>
-
-      <div class="faq__list">
-        <details v-for="(q, i) in questions" :key="q.q" v-reveal="i * 80" name="faq" class="qa">
-          <summary class="qa__q">
-            <span>{{ q.q }}</span>
-            <span class="qa__icon" aria-hidden="true"></span>
-          </summary>
-          <p class="qa__a">{{ q.a }}</p>
-        </details>
-      </div>
-    </div>
+            <span class="qa__text">
+              <span class="label-mono text-primary qa__num">{{ String(i + 1).padStart(2, '0') }}</span>
+              <span>{{ q.q }}</span>
+            </span>
+            <svg class="qa__chev" :class="{ 'is-open': open === i }" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="m6 9 6 6 6-6" />
+            </svg>
+          </button>
+        </h2>
+        <div
+          :id="`faq-a-${i}`"
+          role="region"
+          :aria-labelledby="`faq-q-${i}`"
+          class="qa__panel"
+          :class="{ 'is-open': open === i }"
+        >
+          <div class="qa__inner">
+            <p class="qa__a text-muted">{{ q.a }}</p>
+          </div>
+        </div>
+      </li>
+    </ul>
   </section>
 </template>
 
-
-
 <style scoped>
 .faq {
-  padding: 64px 0;
-  background: var(--veil-2);
-  border-top: 1px solid var(--line);
+  min-width: 0;
 }
-.faq__grid {
-  display: grid;
-  grid-template-columns: 0.9fr 1.1fr;
-  gap: 40px;
-  align-items: start;
-}
-.faq__heading {
-  position: sticky;
-  top: 120px;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
 .faq__list {
-  border-top: 1px solid var(--line);
+  list-style: none;
+  margin: 1rem 0 0;
+  padding: 0 1.25rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--card);
 }
 .qa {
-  border-bottom: 1px solid var(--line);
+  border-bottom: 1px solid var(--border);
+}
+.qa:last-child {
+  border-bottom: 0;
+}
+.qa__h {
+  margin: 0;
+  font: inherit;
+  text-transform: none;
 }
 .qa__q {
   display: flex;
-  justify-content: space-between;
+  width: 100%;
   align-items: center;
-  gap: 24px;
-  padding: 14px 0;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 0;
+  background: none;
+  border: 0;
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  font-weight: 600;
+  text-align: left;
   cursor: pointer;
-  list-style: none;
-  font-family: var(--display);
-  font-size: 24px;
-  line-height: 1.05;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
   transition: color 0.2s;
 }
-.qa__q > span:first-child {
-  transition: translate 0.25s ease;
+.qa__q:hover {
+  color: var(--primary);
 }
-@media (hover: hover) and (prefers-reduced-motion: no-preference) {
-  .qa__q:hover > span:first-child {
-    translate: 10px 0;
-  }
+.qa__q:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
 }
-.qa__q::-webkit-details-marker {
-  display: none;
+.qa__text {
+  display: flex;
+  gap: 1rem;
+  min-width: 0;
 }
-.qa__q:hover,
-.qa[open] .qa__q {
-  color: var(--accent-bright);
+.qa__num {
+  padding-top: 0.25rem;
 }
-
-/* « + » qui devient « − » */
-.qa__icon {
-  position: relative;
+.qa__chev {
+  width: 1rem;
+  height: 1rem;
   flex-shrink: 0;
-  width: 18px;
-  height: 18px;
-}
-.qa__icon::before,
-.qa__icon::after {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 0;
-  width: 100%;
-  height: 3px;
-  margin-top: -1.5px;
-  background: currentColor;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
   transition: transform 0.25s ease;
 }
-.qa__icon::after {
-  transform: rotate(90deg);
+.qa__chev.is-open {
+  transform: rotate(180deg);
 }
-.qa[open] .qa__icon::after {
-  transform: rotate(0deg);
+.qa__panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.25s ease;
 }
-
+.qa__panel.is-open {
+  grid-template-rows: 1fr;
+}
+.qa__inner {
+  overflow: hidden;
+}
 .qa__a {
-  padding: 0 40px 16px 0;
-  font-size: 16px;
-  color: var(--body);
+  margin: 0;
+  padding: 0 0 1rem 2.5rem;
 }
-.qa[open] .qa__a {
-  animation: qa-open 0.3s ease;
+.qa__panel:not(.is-open) .qa__inner {
+  visibility: hidden;
 }
-@keyframes qa-open {
-  from {
-    opacity: 0;
-    transform: translateY(-6px);
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
-  .qa[open] .qa__a {
-    animation: none;
-  }
-}
-@media (max-width: 820px) {
-  .faq__grid {
-    grid-template-columns: 1fr;
-    gap: 40px;
-  }
-  .faq__heading {
-    position: static;
-  }
-  .qa__q {
-    font-size: 21px;
-  }
-  .qa__a {
-    padding-right: 0;
+  .qa__panel,
+  .qa__chev {
+    transition: none;
   }
 }
 </style>

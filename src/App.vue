@@ -3,7 +3,6 @@ import { ref } from 'vue'
 import { useRoute } from 'vue-router'
 import SiteHeader from './components/SiteHeader.vue'
 import SiteFooter from './components/SiteFooter.vue'
-import RubricDecor from './components/RubricDecor.vue'
 import ForestCurtain from './components/ForestCurtain.vue'
 import TrailNav from './components/TrailNav.vue'
 import { markSwapped, transition } from './composables/useRouteTransition'
@@ -12,7 +11,7 @@ const route = useRoute()
 const main = ref(null)
 
 // Rubric of the page actually on screen: it only changes once the new view is
-// mounted, so the decor and the trail switch while the curtain is closed.
+// mounted, so the trail switches while the curtain is closed.
 const shownRubric = ref(route.meta.rubric ?? '')
 
 // Keep the page height while the old view leaves so the footer does not jump.
@@ -29,7 +28,6 @@ function onEnter() {
 </script>
 
 <template>
-  <RubricDecor :rubric="shownRubric" />
   <SiteHeader />
   <main ref="main">
     <RouterView v-slot="{ Component }">
@@ -44,7 +42,8 @@ function onEnter() {
       </Transition>
     </RouterView>
   </main>
-  <TrailNav v-if="shownRubric" :current="shownRubric" />
+  <!-- The coaching page ends with its own TrailSection, so prev/next would duplicate it. -->
+  <TrailNav v-if="shownRubric && shownRubric !== '00'" :current="shownRubric" />
   <SiteFooter />
   <ForestCurtain />
 </template>
@@ -61,27 +60,27 @@ function onEnter() {
 }
 
 /* Between rubrics: the old view leaves behind the closed curtain, the new one
-   scales in while the foliage parts. in = deeper (grows), out = back (settles). */
+   slides in while the lianas clear. in = sinking (the page rises from below),
+   out = climbing back (it comes down from above). */
 .page-in-leave-active,
 .page-out-leave-active {
   transition: none;
 }
 .page-in-enter-active,
 .page-out-enter-active {
-  transform-origin: 50% 0;
   transition:
-    opacity 0.4s ease 0.16s,
-    transform 0.55s cubic-bezier(0.2, 0.7, 0.2, 1) 0.16s;
+    opacity 0.4s ease 0.26s,
+    transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) 0.26s;
 }
 .page-in-enter-from,
 .page-out-enter-from {
   opacity: 0;
 }
 .page-in-enter-from {
-  transform: scale(0.965);
+  transform: translateY(56px);
 }
 .page-out-enter-from {
-  transform: scale(1.035);
+  transform: translateY(-56px);
 }
 
 @media (prefers-reduced-motion: reduce) {

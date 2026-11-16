@@ -1,355 +1,216 @@
 <script setup>
-import { computed, nextTick, onBeforeUnmount, ref, watch } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
-import DtLogo from './DtLogo.vue'
-import BookingLink from './BookingLink.vue'
-import JungleVines from './JungleVines.vue'
+import SiteLogo from './SiteLogo.vue'
+import MenuOverlay from './MenuOverlay.vue'
 import { site } from '../config/site'
 
 const route = useRoute()
 const open = ref(false)
-const burger = ref(null)
-const panel = ref(null)
+const scrolled = ref(false)
 
-// Rubric matching the active route (legal and 404 pages have none).
-const current = computed(() => site.rubrics.find((r) => r.num === route.meta.rubric) ?? null)
-
-function setLock(locked) {
-  document.body.style.overflow = locked ? 'hidden' : ''
-}
-
-async function openMenu() {
-  open.value = true
-  setLock(true)
-  await nextTick()
-  panel.value?.querySelector('a')?.focus()
-}
-
-function closeMenu({ restoreFocus = true } = {}) {
-  if (!open.value) return
-  open.value = false
-  setLock(false)
-  if (restoreFocus) burger.value?.focus()
-}
-
-function toggle() {
-  if (open.value) closeMenu()
-  else openMenu()
-}
-
-// While the menu is open, Tab cycles between the burger and the panel links.
-function onKeydown(e) {
-  if (e.key === 'Escape') {
-    closeMenu()
-    return
-  }
-  if (e.key !== 'Tab' || !panel.value) return
-  const items = [burger.value, ...panel.value.querySelectorAll('a[href]')]
-  const first = items[0]
-  const last = items[items.length - 1]
-  const active = document.activeElement
-  if (!items.includes(active)) {
-    e.preventDefault()
-    ;(e.shiftKey ? last : items[1] ?? first).focus()
-  } else if (e.shiftKey && active === first) {
-    e.preventDefault()
-    last.focus()
-  } else if (!e.shiftKey && active === last) {
-    e.preventDefault()
-    first.focus()
-  }
-}
-
-watch(open, (isOpen) => {
-  if (isOpen) document.addEventListener('keydown', onKeydown)
-  else document.removeEventListener('keydown', onKeydown)
+// Rubric matching the active route; legal pages get a neutral label, the 404 none.
+const current = computed(() => {
+  const rubric = site.rubrics.find((r) => r.num === route.meta.rubric)
+  if (rubric) return rubric
+  if (route.meta.noindex && route.name !== 'not-found') return { num: '—', label: 'Infos légales' }
+  return null
 })
+
+function onScroll() {
+  scrolled.value = window.scrollY > 40
+}
+
+onMounted(() => {
+  onScroll()
+  window.addEventListener('scroll', onScroll, { passive: true })
+})
+onBeforeUnmount(() => window.removeEventListener('scroll', onScroll))
 
 // Close on navigation (focus stays on the new page content).
 watch(
   () => route.fullPath,
-  () => closeMenu({ restoreFocus: false }),
+  () => {
+    open.value = false
+  },
 )
-
-onBeforeUnmount(() => {
-  document.removeEventListener('keydown', onKeydown)
-  setLock(false)
-})
 </script>
 
 <template>
-  <header class="header">
+  <header class="header" :class="{ 'is-scrolled': scrolled }">
     <div class="header__inner">
-      <button
-        ref="burger"
-        type="button"
-        class="burger"
-        :class="{ 'is-open': open }"
-        :aria-expanded="open"
-        aria-controls="site-menu"
-        :aria-label="open ? 'Fermer le menu' : 'Ouvrir le menu'"
-        @click="toggle"
-      >
-        <span class="burger__line"></span>
-        <span class="burger__line"></span>
-        <span class="burger__line"></span>
-      </button>
+      <div class="header__left">
+        <button
+          type="button"
+          class="burger"
+          aria-label="Ouvrir le menu"
+          aria-haspopup="dialog"
+          :aria-expanded="open"
+          @click="open = true"
+        >
+          <span class="burger__line"></span>
+          <span class="burger__line"></span>
+          <span class="burger__line"></span>
+        </button>
+        <p v-if="current" class="pill pill--rubric glass" aria-label="Rubrique actuelle">
+          <span class="label-mono text-primary">{{ current.num }}</span>
+          <span class="pill__sep"></span>
+          <span class="label-mono">{{ current.label }}</span>
+        </p>
+      </div>
 
-      <RouterLink to="/" class="brand">
-        <DtLogo :size="34" />
-        <span class="brand__name">DinoTeam</span>
+      <RouterLink to="/" class="header__logo" aria-label="Accueil DinoTeam">
+        <SiteLogo :size="40" alt="" />
       </RouterLink>
 
-      <p v-if="current" class="here" aria-label="Rubrique actuelle">
-        <span class="here__num">{{ current.num }}</span> {{ current.label }}
-      </p>
-
-      <BookingLink fallback="/faq#contact" class="btn btn--accent cta">Réserver</BookingLink>
+      <div class="header__right">
+        <span v-if="current" class="pill pill--num glass label-mono">{{ current.num }}</span>
+        <RouterLink to="/faq#contact" class="pill pill--contact glass label-mono">Contact</RouterLink>
+      </div>
     </div>
   </header>
 
-  <!-- Lianas hang from the header's bottom edge. Kept out of the header itself
-       (z-index 50) so the open menu (40) and the curtain (60) cover them. -->
-  <div class="header-vines" aria-hidden="true">
-    <JungleVines variant="canopy" :seed="7" mode="edges" :reach="92" :sag="11" />
-  </div>
-
-  <Transition name="menu">
-    <div v-if="open" class="menu">
-      <div class="menu__backdrop" @click="closeMenu()"></div>
-      <nav id="site-menu" ref="panel" class="menu__panel" aria-label="Navigation principale">
-        <p v-if="current" class="menu__here">
-          Tu es ici : <span class="menu__here-num">{{ current.num }}</span> {{ current.label }}
-        </p>
-        <RouterLink
-          v-for="r in site.rubrics"
-          :key="r.num"
-          :to="r.to"
-          class="menu__link"
-          :class="{ 'is-active': r.num === route.meta.rubric }"
-          :aria-current="r.num === route.meta.rubric ? 'page' : undefined"
-        >
-          <span class="menu__num">{{ r.num }}</span>
-          <span>{{ r.label }}</span>
-        </RouterLink>
-      </nav>
-    </div>
-  </Transition>
+  <MenuOverlay :open="open" :current="route.meta.rubric ?? ''" @close="open = false" />
 </template>
 
 <style scoped>
 .header {
-  position: sticky;
-  top: 0;
+  position: fixed;
+  inset: 0 0 auto;
   z-index: 50;
-  background: rgba(11, 11, 11, 0.92);
-  backdrop-filter: blur(8px);
-  border-bottom: 1px solid var(--line);
+  border-bottom: 1px solid transparent;
+  transition:
+    background-color 0.3s,
+    border-color 0.3s,
+    backdrop-filter 0.3s;
+}
+.header.is-scrolled {
+  background: oklch(0.13 0.008 155 / 0.6);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom-color: var(--border);
 }
 .header__inner {
+  position: relative;
   display: flex;
   align-items: center;
-  gap: 16px;
-  height: 56px;
-  padding: 0 16px;
+  justify-content: space-between;
+  height: 4rem;
+  padding: 0 1rem;
+}
+.header__left,
+.header__right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.header__right {
+  gap: 0.5rem;
 }
 
-/* Sticky 0-height anchor right under the 57px header (56 + border) */
-.header-vines {
-  position: sticky;
-  top: 57px;
-  z-index: 35;
-  height: 0;
-  pointer-events: none;
-}
-
-/* Burger: three thin lines, always at the far left */
 .burger {
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
   justify-content: center;
   gap: 5px;
-  width: 44px;
-  height: 44px;
-  padding: 0 10px;
-  margin-left: -10px;
-  background: none;
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0 0 0 0.625rem;
   border: 0;
-  color: var(--text);
+  border-radius: 50%;
+  background: none;
+  color: var(--foreground);
   cursor: pointer;
 }
 .burger__line {
   display: block;
-  height: 2px;
+  height: 1px;
   background: currentColor;
   transition:
-    transform 0.25s ease,
-    opacity 0.2s ease;
+    width 0.2s,
+    background-color 0.2s;
 }
-.burger:hover {
-  color: var(--accent-bright);
+.burger__line:nth-child(1) {
+  width: 1.5rem;
 }
-.burger.is-open .burger__line:nth-child(1) {
-  transform: translateY(7px) rotate(45deg);
+.burger__line:nth-child(2) {
+  width: 1rem;
 }
-.burger.is-open .burger__line:nth-child(2) {
-  opacity: 0;
+.burger__line:nth-child(3) {
+  width: 1.25rem;
 }
-.burger.is-open .burger__line:nth-child(3) {
-  transform: translateY(-7px) rotate(-45deg);
+.burger:hover .burger__line {
+  background: var(--primary);
+}
+.burger:hover .burger__line:nth-child(1) {
+  width: 1.25rem;
+}
+.burger:hover .burger__line:nth-child(2) {
+  width: 1.5rem;
+}
+.burger:hover .burger__line:nth-child(3) {
+  width: 0.75rem;
 }
 
-.brand {
-  display: flex;
+.pill {
+  margin: 0;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+}
+.pill--rubric {
+  display: none;
   align-items: center;
-  gap: 10px;
+  gap: 0.5rem;
+  padding: 0.375rem 0.75rem;
 }
-.brand:hover {
-  color: inherit;
+.pill__sep {
+  width: 1px;
+  height: 0.75rem;
+  background: var(--border);
 }
-.brand__name {
-  font-family: var(--display);
-  font-size: 24px;
-  line-height: 1;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
+.pill--num {
+  padding: 0.375rem 0.75rem;
 }
-/* The badge turns at once, like a stamp */
-.brand .dt-logo {
-  transition: transform 0.45s cubic-bezier(0.2, 1.6, 0.4, 1);
+.pill--contact {
+  display: none;
+  padding: 0.5rem 1rem;
+  transition:
+    border-color 0.2s,
+    color 0.2s;
 }
-.brand:hover .dt-logo {
-  transform: rotate(-14deg) scale(1.06);
-}
-
-.here {
-  padding-left: 16px;
-  border-left: 1px solid var(--line);
-  font-family: var(--label);
-  font-weight: 500;
-  font-size: 14px;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  color: var(--body);
-  white-space: nowrap;
-}
-.here__num {
-  color: var(--accent-bright);
+.pill--contact:hover {
+  border-color: var(--primary);
+  color: var(--primary);
 }
 
-.cta {
-  margin-left: auto;
-  min-height: 36px;
-  padding: 6px 16px;
-  font-size: 14px;
-}
-
-/* Menu panel */
-.menu {
-  position: fixed;
-  inset: 0;
-  z-index: 40;
-}
-.menu__backdrop {
+.header__logo {
   position: absolute;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.65);
+  left: 50%;
+  translate: -50% 0;
 }
-.menu__panel {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  width: min(420px, 88vw);
-  padding: 88px 28px 32px;
-  overflow-y: auto;
-  background: var(--bg-2);
-  border-right: 1px solid var(--line);
+.header__logo :deep(.site-logo) {
+  box-shadow: 0 0 0 1px var(--border);
+  transition: transform 0.2s;
 }
-.menu__here {
-  margin-bottom: 8px;
-  font-family: var(--label);
-  font-weight: 500;
-  font-size: 13px;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: var(--muted);
-}
-.menu__here-num {
-  color: var(--accent-bright);
-}
-.menu__link {
-  display: flex;
-  align-items: baseline;
-  gap: 16px;
-  padding: 10px 0;
-  font-family: var(--display);
-  font-size: clamp(40px, 9vw, 56px);
-  line-height: 1;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  color: var(--text);
-}
-.menu__num {
-  font-family: var(--label);
-  font-size: 16px;
-  letter-spacing: 2px;
-  color: var(--muted);
-}
-.menu__link:hover,
-.menu__link.is-active {
-  color: var(--accent-bright);
-}
-.menu__link.is-active .menu__num {
-  color: var(--accent-bright);
+.header__logo:hover :deep(.site-logo) {
+  transform: scale(1.05);
 }
 
-.menu-enter-active,
-.menu-leave-active {
-  transition: opacity 0.25s ease;
-}
-.menu-enter-active .menu__panel,
-.menu-leave-active .menu__panel {
-  transition: transform 0.3s cubic-bezier(0.2, 0.7, 0.2, 1);
-}
-.menu-enter-from,
-.menu-leave-to {
-  opacity: 0;
-}
-.menu-enter-from .menu__panel,
-.menu-leave-to .menu__panel {
-  transform: translateX(-100%);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .burger__line,
-  .brand .dt-logo,
-  .menu-enter-active,
-  .menu-leave-active,
-  .menu-enter-active .menu__panel,
-  .menu-leave-active .menu__panel {
-    transition: none;
+@media (min-width: 640px) {
+  .pill--rubric {
+    display: flex;
   }
-}
-
-@media (max-width: 480px) {
-  .header__inner {
-    gap: 10px;
-    padding: 0 12px;
-  }
-  .brand__name {
+  .pill--num {
     display: none;
   }
-  .here {
-    padding-left: 10px;
-    font-size: 13px;
-    letter-spacing: 1px;
+}
+@media (min-width: 768px) {
+  .header__inner {
+    padding: 0 2rem;
   }
-  .cta {
-    padding: 6px 12px;
+  .pill--contact {
+    display: inline-flex;
   }
 }
 </style>

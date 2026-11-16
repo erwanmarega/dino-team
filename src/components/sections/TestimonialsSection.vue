@@ -1,98 +1,101 @@
 <script setup>
-import { reactive } from 'vue'
+import { ref } from 'vue'
+import SectionHeading from '../SectionHeading.vue'
 import { site } from '../../config/site'
 import { testimonials } from '../../data/testimonials'
 
 const visible = testimonials.filter((t) => !t.draft)
 
-// Long reviews are clamped; the reader can expand them in place.
+// Long reviews are clamped in the card; the full text opens in a dialog so the
+// grid layout never changes.
 const LONG_REVIEW = 320
-const expanded = reactive(new Set())
 const isLong = (t) => (t.citation || '').length > LONG_REVIEW
-function toggle(num) {
-  if (expanded.has(num)) expanded.delete(num)
-  else expanded.add(num)
+
+const dialog = ref(null)
+const opened = ref(null)
+let opener = null
+function openReview(t, event) {
+  opener = event.currentTarget
+  opened.value = t
+  dialog.value?.showModal()
+}
+function closeReview() {
+  dialog.value?.close()
+}
+function onDialogClose() {
+  opened.value = null
+  opener?.focus()
+}
+// A click on the backdrop targets the dialog element itself
+function onDialogClick(event) {
+  if (event.target === dialog.value) closeReview()
 }
 </script>
 
 <template>
-  <section id="temoignages" class="fouilles">
-    <div class="w fouilles__inner">
-      <div class="g2">
-        <div v-reveal class="fouilles__heading">
-          <p class="label label--accent">Registre des fouilles — Témoignages</p>
-          <h2 class="section-title">
-            Spécimens<br /><em v-reveal="{ variant: 'wipe', delay: 350 }" class="brush"
-              >en pleine évolution</em
-            >
-          </h2>
-        </div>
-        <p v-reveal="150" class="lede">
-          Ils sont arrivés en reprise ou coincés sur un plateau. Voilà où ils en sont aujourd'hui,
-          racontés par eux.
-        </p>
-      </div>
+  <section id="temoignages" class="fouilles bg-forest-gradient">
+    <div class="container fouilles__inner">
+      <SectionHeading v-reveal kicker="III · Témoignages">
+        <template #title>Spécimens en <span class="text-primary">pleine évolution</span></template>
+        Ils sont arrivés en reprise ou coincés sur un plateau. Voilà où ils en sont aujourd'hui,
+        racontés par eux.
+      </SectionHeading>
 
       <div class="cards">
         <figure
           v-for="(t, i) in visible"
           :key="t.num"
           v-reveal="i * 140"
-          class="card"
+          class="tcard"
         >
-          <div class="card__meta">
-            <span class="card__num">Fouille n°{{ t.num }}</span>
-            <span v-if="t.source === 'google'" class="card__source">
+          <div class="tcard__meta">
+            <span class="tcard__num">Fouille n°{{ t.num }}</span>
+            <span v-if="t.source === 'google'" class="tcard__source">
               Avis Google<template v-if="t.date"> · {{ t.date }}</template>
             </span>
-            <span v-else-if="t.duree" class="card__duree">{{ t.duree }}</span>
+            <span v-else-if="t.duree" class="tcard__duree">{{ t.duree }}</span>
           </div>
 
           <div
             v-if="t.avant && t.apres"
-            class="card__strates"
+            class="tcard__strates"
             :aria-label="`Passé de ${t.avant} à ${t.apres}`"
           >
             <span class="strate strate--avant">{{ t.avant }}</span>
-            <span class="card__arrow" aria-hidden="true">→</span>
+            <span class="tcard__arrow" aria-hidden="true">→</span>
             <span class="strate strate--apres">{{ t.apres }}</span>
           </div>
 
-          <div v-if="t.photoBefore && t.photoAfter" class="card__photos">
+          <div v-if="t.photoBefore && t.photoAfter" class="tcard__photos">
             <img :src="t.photoBefore" alt="Avant le coaching" loading="lazy" />
             <img :src="t.photoAfter" alt="Après le coaching" loading="lazy" />
           </div>
 
           <p
             v-if="t.rating"
-            class="card__rating"
+            class="tcard__rating"
             role="img"
             :aria-label="`Note : ${t.rating} sur 5`"
           >
             <span aria-hidden="true">{{ '★'.repeat(t.rating) }}{{ '☆'.repeat(5 - t.rating) }}</span>
           </p>
 
-          <blockquote
-            :id="`avis-${t.num}`"
-            class="card__quote"
-            :class="{ 'card__quote--clamped': isLong(t) && !expanded.has(t.num) }"
-          >
+          <blockquote class="tcard__quote" :class="{ 'tcard__quote--clamped': isLong(t) }">
             <p>{{ t.citation }}</p>
           </blockquote>
           <button
             v-if="isLong(t)"
             type="button"
-            class="card__more"
-            :aria-expanded="expanded.has(t.num)"
-            :aria-controls="`avis-${t.num}`"
-            @click="toggle(t.num)"
+            class="tcard__more"
+            aria-haspopup="dialog"
+            @click="openReview(t, $event)"
           >
-            {{ expanded.has(t.num) ? 'Réduire' : 'Lire la suite' }}
+            Lire la suite
           </button>
 
-          <figcaption class="card__who">
-            <span class="card__name">{{ t.nom }}</span>
-            <span class="card__offre">{{ t.offre }}</span>
+          <figcaption class="tcard__who">
+            <span class="tcard__name">{{ t.nom }}</span>
+            <span class="tcard__offre">{{ t.offre }}</span>
           </figcaption>
         </figure>
       </div>
@@ -115,7 +118,7 @@ function toggle(num) {
             :href="site.googleReviewsUrl"
             target="_blank"
             rel="noopener"
-            class="btn btn--outline-accent"
+            class="btn btn--trail"
             >Voir tous les avis Google</a
           >
           <a
@@ -123,67 +126,251 @@ function toggle(num) {
             :href="site.googleWriteReviewUrl"
             target="_blank"
             rel="noopener"
-            class="btn btn--outline"
+            class="btn btn--trail"
             >Laisser un avis</a
           >
         </div>
       </div>
     </div>
+
+    <dialog
+      ref="dialog"
+      class="review"
+      aria-labelledby="review-title"
+      @close="onDialogClose"
+      @click="onDialogClick"
+    >
+      <div v-if="opened" class="review__panel">
+        <div class="review__head">
+          <p id="review-title" class="review__meta">
+            <span class="tcard__num">Fouille n°{{ opened.num }}</span>
+            <span v-if="opened.source === 'google'" class="tcard__source">
+              Avis Google<template v-if="opened.date"> · {{ opened.date }}</template>
+            </span>
+          </p>
+          <button type="button" class="review__close" aria-label="Fermer" @click="closeReview">
+            ✕
+          </button>
+        </div>
+        <p v-if="opened.rating" class="tcard__rating" role="img" :aria-label="`Note : ${opened.rating} sur 5`">
+          <span aria-hidden="true">{{ '★'.repeat(opened.rating) }}{{ '☆'.repeat(5 - opened.rating) }}</span>
+        </p>
+        <blockquote class="review__quote">
+          <p>{{ opened.citation }}</p>
+        </blockquote>
+        <p class="tcard__who">
+          <span class="tcard__name">{{ opened.nom }}</span>
+          <span class="tcard__offre">{{ opened.offre }}</span>
+        </p>
+      </div>
+    </dialog>
   </section>
 </template>
 
 
 
+
 <style scoped>
 .fouilles {
-  padding: 64px 0;
-  background: var(--veil-2);
-  border-top: 1px solid var(--line);
+  position: relative;
+  padding: 6rem 0;
+  overflow: hidden;
+  scroll-margin-top: 4rem;
 }
 .fouilles__inner {
   display: flex;
   flex-direction: column;
-  gap: 36px;
+  gap: 2.5rem;
 }
-.fouilles__heading {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-}
-
 .cards {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+  gap: 1rem;
 }
-.card {
-  margin: 0;
-  padding: 24px;
+.tcard {
   display: flex;
   flex-direction: column;
-  gap: 18px;
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-left: 4px solid var(--accent);
+  gap: 1rem;
+  margin: 0;
+  padding: 1.5rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--card);
 }
-.card__meta {
+.tcard__meta,
+.review__meta {
   display: flex;
   justify-content: space-between;
-  gap: 12px;
-  font-family: var(--label);
-  font-weight: 500;
-  font-size: 13px;
-  letter-spacing: 1.5px;
+  gap: 0.75rem;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
 }
-.card__num {
-  color: var(--accent-bright);
+.tcard__num {
+  color: var(--primary);
 }
-.card__duree {
-  color: var(--muted);
+.tcard__duree,
+.tcard__source {
+  color: var(--muted-foreground);
 }
-.card__source {
-  color: var(--body);
+
+.tcard__strates {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.875rem 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+.strate {
+  padding: 0.375rem 0.625rem;
+  border-radius: var(--radius);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+.strate--avant {
+  background: var(--color-muted);
+  color: var(--foreground);
+}
+.strate--apres {
+  background: var(--primary);
+  color: var(--primary-foreground);
+}
+.tcard__arrow {
+  color: var(--muted-foreground);
+}
+.tcard__photos {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--border);
+}
+.tcard__photos img {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+}
+.tcard__rating {
+  margin: 0;
+  color: var(--primary);
+  letter-spacing: 0.15em;
+}
+.tcard__quote {
+  margin: 0;
+  font-size: 0.9375rem;
+}
+.tcard__quote p {
+  white-space: pre-line;
+}
+.tcard__quote--clamped p {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 7;
+  line-clamp: 7;
+  overflow: hidden;
+}
+.tcard__more {
+  align-self: flex-start;
+  margin-top: -0.5rem;
+  padding: 0.25rem 0;
+  background: none;
+  border: 0;
+  border-bottom: 1px solid currentColor;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--primary);
+  cursor: pointer;
+}
+.tcard__more:hover {
+  color: var(--foreground);
+}
+.tcard__who {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+  margin-top: auto;
+}
+
+/* Full review dialog */
+.review {
+  width: min(40rem, calc(100% - 2rem));
+  max-height: calc(100svh - 4rem);
+  padding: 0;
+  border: 1px solid color-mix(in oklab, var(--primary) 30%, transparent);
+  border-radius: var(--radius);
+  background: var(--card);
+  color: var(--foreground);
+  box-shadow: var(--shadow-card);
+  overflow: auto;
+}
+.review::backdrop {
+  background: oklch(0.1 0.01 155 / 0.8);
+  backdrop-filter: blur(4px);
+}
+.review__panel {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1.5rem;
+}
+.review__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.review__meta {
+  flex-wrap: wrap;
+  gap: 0.25rem 1rem;
+  margin: 0;
+}
+.review__close {
+  flex: none;
+  width: 2.25rem;
+  height: 2.25rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: none;
+  color: var(--foreground);
+  cursor: pointer;
+}
+.review__close:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+.review__quote {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.65;
+}
+.review__quote p {
+  margin: 0;
+  white-space: pre-line;
+}
+.tcard__name {
+  font-weight: 600;
+}
+.tcard__offre {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+}
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .tcard {
+    transition: translate 0.3s;
+  }
+  .tcard:hover {
+    translate: 0 -4px;
+  }
 }
 
 /* Google rating summary + links (filled by hand in src/config/site.js) */
@@ -192,163 +379,35 @@ function toggle(num) {
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: 16px 32px;
+  gap: 1rem 2rem;
 }
 .google__score {
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
-  gap: 6px 12px;
+  gap: 0.375rem 0.75rem;
   margin: 0;
 }
 .google__note {
-  font-family: var(--display);
-  font-size: 40px;
+  font-family: var(--font-display);
+  font-size: 2.5rem;
+  font-weight: 800;
   line-height: 1;
 }
 .google__stars {
-  color: var(--accent-bright);
-  letter-spacing: 2px;
+  color: var(--primary);
+  letter-spacing: 0.15em;
 }
 .google__count {
-  font-family: var(--label);
-  font-size: 13px;
-  letter-spacing: 1.5px;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--muted);
+  color: var(--muted-foreground);
 }
 .google__actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 12px;
-}
-
-.card__strates {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 10px;
-  padding: 14px 0;
-  border-top: 1px solid var(--line);
-  border-bottom: 1px solid var(--line);
-}
-.strate {
-  padding: 6px 10px;
-  font-family: var(--label);
-  font-weight: 600;
-  font-size: 12px;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  color: #fff;
-}
-.strate--avant {
-  background: #0f2216;
-}
-.strate--apres {
-  background: var(--accent);
-}
-.card__arrow {
-  color: var(--muted);
-  font-size: 18px;
-}
-
-.card__photos {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-}
-.card__photos img {
-  width: 100%;
-  aspect-ratio: 3 / 4;
-  object-fit: cover;
-}
-.card__rating {
-  margin: 0;
-  color: var(--accent-bright);
-  letter-spacing: 2px;
-}
-
-.card__quote {
-  margin: 0;
-  position: relative;
-  padding-top: 28px;
-  font-size: 17px;
-  color: var(--text);
-}
-.card__quote p {
-  white-space: pre-line;
-}
-.card__quote--clamped p {
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 7;
-  line-clamp: 7;
-  overflow: hidden;
-}
-.card__more {
-  align-self: flex-start;
-  margin-top: -8px;
-  padding: 4px 0;
-  background: none;
-  border: 0;
-  border-bottom: 1px solid currentColor;
-  font-family: var(--label);
-  font-size: 13px;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  color: var(--accent-bright);
-  cursor: pointer;
-}
-.card__more:hover {
-  color: var(--text);
-}
-.card__quote::before {
-  content: '“';
-  position: absolute;
-  top: -14px;
-  left: -4px;
-  font-family: var(--display);
-  font-size: 72px;
-  line-height: 1;
-  color: var(--accent);
-  transform-origin: left bottom;
-  transition: transform 0.4s cubic-bezier(0.2, 1.6, 0.4, 1);
-}
-/* Survol : la carte se soulève, le guillemet bascule et la strate « après » s'allume */
-.strate--apres {
-  transition: background-color 0.2s;
-}
-.card:hover .strate--apres {
-  background: var(--accent-bright);
-}
-@media (hover: hover) and (prefers-reduced-motion: no-preference) {
-  .card:hover {
-    translate: 0 -6px;
-    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
-  }
-  .card:hover .card__quote::before {
-    transform: rotate(-10deg) scale(1.2);
-  }
-}
-
-.card__who {
-  margin-top: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-.card__name {
-  font-family: var(--display);
-  font-size: 28px;
-  line-height: 1;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-}
-.card__offre {
-  font-family: var(--label);
-  font-size: 13px;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  color: var(--muted);
+  gap: 0.75rem;
 }
 </style>

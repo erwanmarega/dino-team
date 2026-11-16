@@ -1,6 +1,9 @@
 <script setup>
 import { computed, ref } from 'vue'
+import SceneSection from '../components/SceneSection.vue'
+import SectionHeading from '../components/SectionHeading.vue'
 import SpecimenCard from '../components/SpecimenCard.vue'
+import riverImg from '../assets/scenes/river-tent.jpg'
 import { categories, partners } from '../data/partners'
 
 const criteria = [
@@ -33,34 +36,42 @@ const currentCategory = computed(() => categories.find((c) => c.id === selected.
 </script>
 
 <template>
-  <section class="collab">
-    <div class="w collab__inner">
-      <header class="collab__intro">
-        <p v-reveal class="label label--accent">02 — Collaborations</p>
-        <h1 v-reveal="100" class="section-title">
-          Des partenaires<br /><em class="brush">de confiance</em>
-        </h1>
-        <p v-reveal="200" class="lede">
-          DinoTeam ne travaille qu'avec des professionnels sérieux, compétents et passionnés par
-          leur métier, qui livrent un travail de qualité. L'objectif : un réseau qui grandit, de
-          métiers variés, réunis par une identité commune.
-        </p>
-      </header>
+  <div>
+    <SceneSection
+      :image="riverImg"
+      alt="Tente éclairée au bord d'une rivière dans la jungle"
+      mirror
+      class="hero"
+    >
+      <div class="container hero__inner">
+        <div class="hero__content animate-rise">
+          <p class="label-mono text-primary">02 — Collaborations · Le campement</p>
+          <h1 class="hero__title">Des partenaires <span class="text-primary">de confiance</span></h1>
+          <p class="hero__lede">
+            DinoTeam ne travaille qu'avec des professionnels sérieux, compétents et passionnés par
+            leur métier, qui livrent un travail de qualité. L'objectif : un réseau qui grandit, de
+            métiers variés, réunis par une identité commune.
+          </p>
+          <ul class="criteria" aria-label="Critères de sélection">
+            <li v-for="c in criteria" :key="c.title" class="criteria__item glass">
+              <span class="criteria__title">{{ c.title }}</span>
+              <span class="criteria__text">{{ c.text }}</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </SceneSection>
 
-      <ul v-reveal="250" class="criteria" aria-label="Critères de sélection">
-        <li v-for="c in criteria" :key="c.title" class="criteria__item">
-          <span class="criteria__title">{{ c.title }}</span>
-          <span class="criteria__text">{{ c.text }}</span>
-        </li>
-      </ul>
+    <section class="directory">
+      <div class="container">
+        <SectionHeading kicker="Les spécimens partenaires" title="Explorer par métier" />
 
-      <div class="directory">
         <div class="filters" role="group" aria-label="Filtrer par catégorie">
           <button
             v-for="f in filters"
             :key="f.id"
             type="button"
-            class="filter"
+            class="filter label-mono"
             :class="{ 'filter--active': selected === f.id }"
             :aria-pressed="selected === f.id"
             @click="selected = f.id"
@@ -69,9 +80,9 @@ const currentCategory = computed(() => categories.find((c) => c.id === selected.
           </button>
         </div>
 
-        <p v-if="currentCategory" class="examples">{{ currentCategory.examples }}</p>
+        <p v-if="currentCategory" class="examples text-muted">{{ currentCategory.examples }}</p>
 
-        <p class="label count" aria-live="polite">
+        <p class="label-mono text-muted count" aria-live="polite">
           {{ visible.length }} spécimen{{ visible.length > 1 ? 's' : '' }}
         </p>
 
@@ -82,89 +93,99 @@ const currentCategory = computed(() => categories.find((c) => c.id === selected.
             :partner="p"
             :category-label="labelById[p.category] || ''"
           />
+          <RouterLink to="/faq#contact" class="join">
+            <span class="label-mono text-primary">Rejoindre le réseau</span>
+            <span class="join__title">Et si c'était toi ?</span>
+            <span class="join__text text-muted"
+              >Tu es professionnel et tu veux rejoindre le réseau ? Prendre contact.</span
+            >
+          </RouterLink>
         </div>
-        <p v-else class="empty">Aucun spécimen répertorié dans cette catégorie pour l'instant.</p>
+        <template v-else>
+          <p class="empty text-muted">
+            Aucun spécimen répertorié dans cette catégorie pour l'instant.
+          </p>
+          <RouterLink to="/faq#contact" class="btn btn--leaf btn--xl">Prendre contact</RouterLink>
+        </template>
       </div>
-
-      <div v-reveal class="join">
-        <p class="join__text">Tu es professionnel et tu veux rejoindre le réseau ?</p>
-        <RouterLink to="/faq#contact" class="btn btn--accent">Prendre contact</RouterLink>
-      </div>
-    </div>
-  </section>
+    </section>
+  </div>
 </template>
 
 <style scoped>
-.collab {
-  padding: 96px 0 120px;
+.hero {
+  min-height: 92svh;
 }
-.collab__inner {
+.hero__inner {
   display: flex;
   flex-direction: column;
-  gap: 48px;
+  justify-content: flex-end;
+  min-height: 92svh;
+  padding-top: 7rem;
+  padding-bottom: 4rem;
 }
-.collab__intro {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 20px;
+.hero__content {
+  max-width: 42rem;
 }
-.lede {
-  max-width: 640px;
+.hero__title {
+  margin-top: 1.25rem;
+  font-size: clamp(2.75rem, 13vw, 6rem);
+  font-weight: 900;
+  line-height: 1;
+  overflow-wrap: break-word;
 }
-
+.hero__lede {
+  margin-top: 1.5rem;
+  max-width: 34rem;
+  font-size: 1.0625rem;
+  color: color-mix(in oklab, var(--foreground) 90%, transparent);
+}
 .criteria {
-  list-style: none;
-  margin: 0;
-  padding: 0;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-  gap: 16px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem;
+  margin: 2rem 0 0;
+  padding: 0;
+  list-style: none;
 }
 .criteria__item {
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  padding: 4px 0 4px 16px;
-  border-left: 3px solid var(--accent);
+  gap: 0.25rem;
+  padding: 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
 }
 .criteria__title {
-  font-family: var(--label);
+  font-size: 0.8125rem;
   font-weight: 600;
-  font-size: 15px;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  color: var(--text);
+  color: var(--primary);
 }
 .criteria__text {
-  font-size: 14px;
-  color: var(--body);
+  font-size: 0.75rem;
+  color: var(--muted-foreground);
 }
 
 .directory {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+  padding: 5rem 0;
+  background: var(--background);
 }
 .filters {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 0.5rem;
+  margin-top: 2rem;
 }
 .filter {
-  min-height: 44px;
-  padding: 8px 18px;
   display: inline-flex;
   align-items: center;
-  gap: 10px;
+  gap: 0.5rem;
+  min-height: 44px;
+  padding: 0.5rem 1rem;
   background: transparent;
-  border: 1px solid var(--line);
-  color: var(--body);
-  font-family: var(--label);
-  font-size: 14px;
-  font-weight: 500;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--muted-foreground);
   cursor: pointer;
   transition:
     background-color 0.2s,
@@ -172,74 +193,75 @@ const currentCategory = computed(() => categories.find((c) => c.id === selected.
     color 0.2s;
 }
 .filter:hover {
-  border-color: var(--accent);
-  color: var(--text);
+  border-color: color-mix(in oklab, var(--primary) 60%, transparent);
+  color: var(--foreground);
 }
 .filter--active,
 .filter--active:hover {
-  background: var(--accent);
-  border-color: var(--accent);
-  color: #fff;
+  background: var(--primary);
+  border-color: var(--primary);
+  color: var(--primary-foreground);
 }
 .filter__count {
-  font-size: 12px;
   opacity: 0.75;
 }
 .examples {
-  color: var(--muted);
-  font-size: 14px;
+  margin-top: 1rem;
+  font-size: 0.875rem;
 }
 .count {
-  margin-top: 8px;
+  margin-top: 1.5rem;
 }
-
 .grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 20px;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1rem;
+  margin-top: 1rem;
 }
 .empty {
-  padding: 48px 24px;
-  border: 1px dashed var(--line);
+  margin: 1rem 0 1.5rem;
+  padding: 3rem 1.5rem;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius);
   text-align: center;
-  color: var(--muted);
 }
-
 .join {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   align-items: center;
-  justify-content: space-between;
-  gap: 20px;
-  padding: 28px 32px;
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-left: 4px solid var(--accent);
+  justify-content: center;
+  gap: 0.75rem;
+  min-height: 16rem;
+  padding: 1.5rem;
+  border: 1px dashed color-mix(in oklab, var(--primary) 50%, transparent);
+  border-radius: var(--radius);
+  text-align: center;
+  transition: background-color 0.2s;
 }
-.join__text {
-  font-family: var(--display);
-  font-size: 32px;
-  line-height: 1.05;
+.join:hover {
+  background: var(--color-accent);
+}
+.join__title {
+  font-family: var(--font-display);
+  font-size: 1.875rem;
+  font-weight: 700;
   text-transform: uppercase;
 }
+.join__text {
+  font-size: 0.875rem;
+}
 
-@media (max-width: 1000px) {
+@media (min-width: 640px) {
+  .criteria {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
   .grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
-@media (max-width: 640px) {
-  .collab {
-    padding: 64px 0 80px;
-  }
+@media (min-width: 1024px) {
   .grid {
-    grid-template-columns: minmax(0, 1fr);
-  }
-  .join {
-    padding: 24px 20px;
-  }
-  .join__text {
-    font-size: 26px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 </style>

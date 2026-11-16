@@ -4,18 +4,17 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="robots" content="noindex" />
-    <meta name="theme-color" content="#0B0B0B" />
+    <meta name="theme-color" content="#0d1410" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>Page introuvable – DinoTeam</title>
     <style>
-      :root {
-        --accent: #1f7a3f;
-        --accent-bright: #6fdc8c;
-        --bg: #0b0b0b;
-        --line: #2b2b2b;
-        --text: #f4f4f4;
-        --body: #c8c8c8;
-        --muted: #9b9b9b;
+            :root {
+        --leaf: #b9ec6b;
+        --leaf-fg: #0f1f14;
+        --bg: #0d1410;
+        --card: #121b15;
+        --text: #f1f3ec;
+        --muted: #a5b0a6;
         color-scheme: dark;
       }
       * {
@@ -27,9 +26,9 @@
         display: grid;
         place-items: center;
         padding: 40px 20px;
-        background: var(--bg);
+        background: radial-gradient(ellipse at top, #1b3a26 0%, var(--bg) 70%);
         color: var(--text);
-        font-family: 'Inter', system-ui, sans-serif;
+        font-family: 'Manrope', system-ui, sans-serif;
         line-height: 1.55;
         text-align: center;
       }
@@ -38,40 +37,34 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 22px;
+        gap: 20px;
       }
       .label {
         margin: 0;
-        font-family: 'Oswald', 'Arial Narrow', sans-serif;
-        font-weight: 500;
-        font-size: 13px;
-        letter-spacing: 2px;
+        font-family: 'JetBrains Mono', ui-monospace, monospace;
+        font-size: 12px;
+        letter-spacing: 0.18em;
         text-transform: uppercase;
-        color: var(--accent-bright);
+        color: var(--leaf);
       }
       h1 {
         margin: 0;
-        font-family: 'Bebas Neue', 'Oswald', Impact, sans-serif;
-        font-weight: 400;
+        font-family: 'Big Shoulders Display', 'Arial Narrow', Impact, sans-serif;
+        font-weight: 900;
         font-size: clamp(120px, 30vw, 200px);
         line-height: 0.85;
-        letter-spacing: 2px;
+        color: var(--leaf);
       }
       .sub {
         margin: 0;
-        display: inline-block;
-        padding: 4px 18px 0;
-        background: var(--accent);
-        color: #fff;
-        font-family: 'Bebas Neue', 'Oswald', Impact, sans-serif;
-        font-size: 34px;
-        letter-spacing: 0.5px;
+        font-family: 'Big Shoulders Display', 'Arial Narrow', Impact, sans-serif;
+        font-weight: 700;
+        font-size: 30px;
         text-transform: uppercase;
-        transform: rotate(-1.5deg);
       }
       p.text {
         margin: 0;
-        color: var(--body);
+        color: var(--muted);
         font-size: 17px;
       }
       .btn {
@@ -80,31 +73,21 @@
         justify-content: center;
         min-height: 48px;
         padding: 14px 28px;
-        background: var(--accent);
-        color: #fff;
-        font-family: 'Oswald', 'Arial Narrow', sans-serif;
-        font-size: 16px;
+        border-radius: 6px;
+        background: var(--leaf);
+        color: var(--leaf-fg);
+        font-family: 'Manrope', system-ui, sans-serif;
+        font-size: 15px;
         font-weight: 600;
-        letter-spacing: 1px;
-        text-transform: uppercase;
         text-decoration: none;
-        transition:
-          background-color 0.2s,
-          color 0.2s;
+        transition: opacity 0.2s;
       }
       .btn:hover {
-        background: #fff;
-        color: var(--bg);
+        opacity: 0.88;
       }
       .btn:focus-visible {
-        outline: 2px solid var(--accent-bright);
-        outline-offset: 2px;
-      }
-      .roar {
-        margin: 12px 0 0;
-        font-family: 'Permanent Marker', cursive;
-        color: var(--accent-bright);
-        text-transform: uppercase;
+        outline: 2px solid var(--leaf);
+        outline-offset: 3px;
       }
     </style>
   </head>
@@ -118,7 +101,6 @@
         le reste de la team est toujours là.
       </p>
       <a href="/" class="btn">Retour à l'accueil</a>
-      <p class="roar">Roarrrrr</p>
     </main>
   </body>
 </html>

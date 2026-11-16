@@ -3,18 +3,18 @@ import { NavigationFailureType, isNavigationFailure } from 'vue-router'
 import { site } from '../config/site'
 
 // Direction-aware page transition shared by the router guards, App.vue and
-// ForestCurtain.vue. Between two rubrics a "forest curtain" closes, the route
-// swaps underneath, then the curtain opens. Anything else is a plain fade.
+// ForestCurtain.vue. Between two rubrics a "forest curtain" closes (a descent
+// along a tree through lianas), the route swaps underneath, then it opens. Anything else is a plain fade.
 
-export const CLOSE_MS = 300
-export const HOLD_MS = 160
-export const OPEN_MS = 340
+export const CLOSE_MS = 420
+export const HOLD_MS = 260
+export const OPEN_MS = 520
 const WATCHDOG_MS = 3000
 
 export const transition = reactive({
   phase: 'idle', // idle | closing | closed | opening
   kind: 'fade', // curtain | fade
-  direction: 'in', // in = deeper into the forest (higher rubric number), out = coming back
+  direction: 'in', // in = sinking deeper (higher rubric number), out = climbing back
   label: '',
 })
 

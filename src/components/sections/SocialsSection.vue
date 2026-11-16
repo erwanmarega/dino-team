@@ -17,141 +17,140 @@ const phoneHref = computed(() => `tel:${site.phone.replace(/\s+/g, '')}`)
 
 <template>
   <section id="reseaux" class="soc">
-    <div class="w soc__inner">
-      <div v-reveal class="soc__heading">
-        <p class="label label--accent">Réseaux</p>
-        <h2 class="section-title">Réseaux &amp; contact</h2>
-        <p class="lede">
-          Le moyen le plus rapide de joindre {{ site.coachFirstName }} : un message sur Instagram. Écris « DINO » en DM pour ton 1er bilan offert.
-        </p>
-      </div>
+    <p class="label-mono text-muted">Réseaux</p>
+    <p class="soc__intro text-muted">
+      Le moyen le plus rapide de joindre {{ site.coachFirstName }} : un message sur Instagram.
+      Écris « DINO » en DM pour ton 1er bilan offert.
+    </p>
 
-      <ul class="soc__cards">
-        <li v-for="(n, i) in networks" :key="n.key" v-reveal="i * 80">
-          <a :href="n.href" target="_blank" rel="noopener" class="card">
-            <svg class="card__icon" viewBox="0 0 24 24" aria-hidden="true">
-              <template v-if="n.key === 'instagram'">
-                <rect x="3" y="3" width="18" height="18" rx="5" />
-                <circle cx="12" cy="12" r="4" />
-                <circle cx="17.2" cy="6.8" r="0.8" fill="currentColor" stroke="none" />
-              </template>
-              <template v-else-if="n.key === 'facebook'">
-                <rect x="3" y="3" width="18" height="18" rx="5" />
-                <path d="M16 21v-7h2.5l.5-3H16V9.5C16 8.6 16.6 8 17.5 8H19V5.2C18.5 5.1 17.7 5 17 5c-2.2 0-4 1.5-4 4v2h-2.5v3H13v7" />
-              </template>
-              <template v-else-if="n.key === 'tiktok'">
-                <path d="M14 3v11.5a3.5 3.5 0 1 1-3.5-3.5" />
-                <path d="M14 3c.4 2.6 2 4.2 5 4.5" />
-              </template>
-              <template v-else-if="n.key === 'youtube'">
-                <rect x="2.5" y="5.5" width="19" height="13" rx="4" />
-                <path d="M10 9.5v5l4.5-2.5z" fill="currentColor" stroke="none" />
-              </template>
-            </svg>
-            <span class="card__name">{{ n.label }}</span>
-          </a>
-        </li>
-      </ul>
+    <ul class="soc__grid">
+      <li v-for="n in networks" :key="n.key">
+        <a :href="n.href" target="_blank" rel="noopener" class="soc__link">
+          <svg class="soc__icon" viewBox="0 0 24 24" aria-hidden="true">
+            <template v-if="n.key === 'instagram'">
+              <rect x="3" y="3" width="18" height="18" rx="5" />
+              <circle cx="12" cy="12" r="4" />
+              <circle cx="17.2" cy="6.8" r="0.8" fill="currentColor" stroke="none" />
+            </template>
+            <template v-else-if="n.key === 'facebook'">
+              <rect x="3" y="3" width="18" height="18" rx="5" />
+              <path d="M16 21v-7h2.5l.5-3H16V9.5C16 8.6 16.6 8 17.5 8H19V5.2C18.5 5.1 17.7 5 17 5c-2.2 0-4 1.5-4 4v2h-2.5v3H13v7" />
+            </template>
+            <template v-else-if="n.key === 'tiktok'">
+              <path d="M14 3v11.5a3.5 3.5 0 1 1-3.5-3.5" />
+              <path d="M14 3c.4 2.6 2 4.2 5 4.5" />
+            </template>
+            <template v-else-if="n.key === 'youtube'">
+              <rect x="2.5" y="5.5" width="19" height="13" rx="4" />
+              <path d="M10 9.5v5l4.5-2.5z" fill="currentColor" stroke="none" />
+            </template>
+          </svg>
+          <span class="soc__name">{{ n.label }}</span>
+        </a>
+      </li>
+    </ul>
 
-      <ul v-reveal class="soc__lines">
-        <li>
-          <span class="soc__k">E-mail</span>
-          <a v-if="site.email" :href="`mailto:${site.email}`">{{ site.email }}</a>
-          <span v-else>[EMAIL]</span>
-        </li>
-        <li>
-          <span class="soc__k">Téléphone</span>
-          <a v-if="site.phone" :href="phoneHref">{{ site.phone }}</a>
-          <span v-else>[TÉLÉPHONE]</span>
-        </li>
-      </ul>
-    </div>
+    <ul class="soc__lines card">
+      <li>
+        <svg class="soc__lico" viewBox="0 0 24 24" aria-hidden="true">
+          <rect x="3" y="5" width="18" height="14" rx="2" />
+          <path d="m3 7 9 6 9-6" />
+        </svg>
+        <a v-if="site.email" :href="`mailto:${site.email}`">{{ site.email }}</a>
+        <span v-else>[EMAIL]</span>
+      </li>
+      <li>
+        <svg class="soc__lico" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z" />
+        </svg>
+        <a v-if="site.phone" :href="phoneHref">{{ site.phone }}</a>
+        <span v-else>[TÉLÉPHONE]</span>
+      </li>
+    </ul>
   </section>
 </template>
 
 <style scoped>
 .soc {
-  padding: 64px 0;
-  background: var(--veil);
-  border-top: 1px solid var(--line);
-}
-.soc__inner {
   display: flex;
   flex-direction: column;
-  gap: 32px;
+  gap: 1rem;
 }
-.soc__heading {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
+.soc__intro {
+  margin: 0;
+  font-size: 0.9rem;
 }
-.soc__cards {
+.soc__grid {
   list-style: none;
   margin: 0;
   padding: 0;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(7rem, 1fr));
+  gap: 0.75rem;
 }
-.card {
+.soc__link {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 14px;
-  padding: 18px 20px;
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-left: 4px solid var(--accent);
-  color: var(--text);
-  transition:
-    border-color 0.2s,
-    color 0.2s;
+  gap: 0.5rem;
+  padding: 1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--card);
+  color: var(--foreground);
+  transition: border-color 0.2s;
 }
-a.card:hover {
-  border-color: var(--accent);
-  color: var(--accent-bright);
+.soc__link:hover,
+.soc__link:focus-visible {
+  border-color: var(--primary);
 }
-.card__icon {
-  width: 26px;
-  height: 26px;
-  flex-shrink: 0;
+.soc__icon {
+  width: 1.5rem;
+  height: 1.5rem;
   fill: none;
-  stroke: currentColor;
+  stroke: var(--muted-foreground);
   stroke-width: 1.8;
   stroke-linecap: round;
   stroke-linejoin: round;
+  transition: stroke 0.2s;
 }
-.card__name {
-  font-family: var(--display);
-  font-size: 26px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+.soc__link:hover .soc__icon,
+.soc__link:focus-visible .soc__icon {
+  stroke: var(--primary);
+}
+.soc__name {
+  font-size: 0.75rem;
+  font-weight: 600;
 }
 .soc__lines {
   list-style: none;
   margin: 0;
-  padding: 0;
+  padding: 1rem;
   display: flex;
-  flex-wrap: wrap;
-  gap: 12px 40px;
-  color: var(--body);
+  flex-direction: column;
+  gap: 0.5rem;
+  font-size: 0.875rem;
 }
 .soc__lines li {
   display: flex;
-  gap: 10px;
-  align-items: baseline;
-}
-.soc__k {
-  font-family: var(--label);
-  font-size: 13px;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  color: var(--muted);
+  align-items: center;
+  gap: 0.75rem;
+  min-width: 0;
 }
 .soc__lines a {
-  color: var(--text);
-  border-bottom: 1px solid var(--accent);
+  overflow-wrap: anywhere;
 }
 .soc__lines a:hover {
-  color: var(--accent-bright);
+  color: var(--primary);
+}
+.soc__lico {
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+  fill: none;
+  stroke: var(--primary);
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 </style>

@@ -1,6 +1,5 @@
 <script setup>
 import { computed } from 'vue'
-import JungleVines from './JungleVines.vue'
 
 const props = defineProps({
   partner: { type: Object, required: true },
@@ -30,19 +29,10 @@ const socials = computed(() =>
 </script>
 
 <template>
-  <article class="spec">
-    <JungleVines
-      variant="corner"
-      :seed="partner.num * 3 + 1"
-      :side="partner.num % 2 ? 'left' : 'right'"
-      lean="out"
-      :reach="partner.num % 2 ? 76 : 10"
-      :strands="0"
-      :class="partner.num % 2 ? 'spec__vine--l' : 'spec__vine--r'"
-    />
+  <article class="spec glass shadow-card">
     <div class="spec__head">
-      <span>Spécimen {{ partner.num }}</span>
-      <span>{{ code }}</span>
+      <span class="label-mono text-primary">Spécimen {{ partner.num }}</span>
+      <span class="label-mono text-muted">{{ code }}</span>
     </div>
 
     <div class="spec__photo">
@@ -52,27 +42,27 @@ const socials = computed(() =>
         :alt="`${partner.name}, ${partner.job}`"
         loading="lazy"
       />
-      <span v-else class="spec__placeholder">[PHOTO]</span>
+      <span v-else class="spec__placeholder label-mono">[PHOTO]</span>
     </div>
 
     <div class="spec__body">
       <h3 class="spec__name">{{ partner.name }}</h3>
-      <p v-if="partner.job || partner.specialty" class="spec__job">
+      <p v-if="partner.job || partner.specialty" class="spec__job label-mono text-primary">
         {{ [partner.job, partner.specialty].filter(Boolean).join(' · ') }}
       </p>
 
-      <dl class="spec__lines">
-        <div v-if="categoryLabel">
-          <dt>Catégorie</dt>
+      <dl v-if="categoryLabel || partner.location" class="spec__rows">
+        <div v-if="categoryLabel" class="spec__row">
+          <dt class="label-mono text-muted">Catégorie</dt>
           <dd>{{ categoryLabel }}</dd>
         </div>
-        <div v-if="partner.location">
-          <dt>Habitat</dt>
+        <div v-if="partner.location" class="spec__row">
+          <dt class="label-mono text-muted">Habitat</dt>
           <dd>{{ partner.location }}</dd>
         </div>
       </dl>
 
-      <p v-if="partner.description" class="spec__desc">{{ partner.description }}</p>
+      <p v-if="partner.description" class="spec__desc text-muted">{{ partner.description }}</p>
 
       <ul
         v-if="partner.url || socials.length || partner.email || partner.phone"
@@ -97,46 +87,31 @@ const socials = computed(() =>
 
 <style scoped>
 .spec {
-  position: relative;
   display: flex;
   flex-direction: column;
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-left: 4px solid var(--accent);
-  font-size: 14px;
-  color: var(--body);
-}
-.spec__vine--l {
-  top: -16px;
-  left: -26px;
-}
-.spec__vine--r {
-  top: -16px;
-  right: -14px;
+  overflow: hidden;
+  border: 1px solid color-mix(in oklab, var(--primary) 30%, transparent);
+  border-radius: var(--radius);
+  font-size: 0.875rem;
+  transition:
+    translate 0.3s ease,
+    border-color 0.3s ease;
 }
 .spec__head {
   display: flex;
   justify-content: space-between;
-  padding: 12px 18px;
-  border-bottom: 1px solid var(--line);
-  font-family: var(--label);
-  font-weight: 600;
-  font-size: 13px;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  color: var(--text);
-}
-.spec__head span:last-child {
-  color: var(--accent-bright);
+  gap: 0.75rem;
+  padding: 0.625rem 1rem;
+  border-bottom: 1px solid color-mix(in oklab, var(--primary) 20%, transparent);
 }
 .spec__photo {
-  aspect-ratio: 4 / 3;
-  background: var(--bg-2);
-  border-bottom: 1px solid var(--line);
   display: flex;
   align-items: center;
   justify-content: center;
+  aspect-ratio: 4 / 3;
   overflow: hidden;
+  background: var(--card);
+  border-bottom: 1px solid var(--border);
 }
 .spec__photo img {
   width: 100%;
@@ -145,87 +120,62 @@ const socials = computed(() =>
   object-position: center top;
 }
 .spec__placeholder {
-  font-family: var(--label);
-  font-size: 14px;
-  letter-spacing: 2px;
-  color: var(--muted);
+  color: var(--muted-foreground);
 }
 .spec__body {
   display: flex;
-  flex-direction: column;
-  gap: 12px;
-  padding: 20px 18px 22px;
   flex: 1;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1.25rem 1rem 1.25rem;
 }
 .spec__name {
-  font-family: var(--display);
-  font-weight: 400;
-  font-size: 30px;
+  font-size: 2rem;
+  font-weight: 800;
   line-height: 1;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-  color: var(--text);
 }
-.spec__job {
-  font-family: var(--label);
-  font-size: 14px;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  color: var(--accent-bright);
-}
-.spec__lines {
+.spec__rows {
   margin: 0;
-  line-height: 1.7;
 }
-.spec__lines div {
-  display: flex;
-  gap: 8px;
+.spec__row {
+  display: grid;
+  grid-template-columns: 7.5rem 1fr;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 0;
+  border-top: 1px solid var(--border);
 }
-.spec__lines dt {
-  color: var(--muted);
+.spec__row:last-child {
+  border-bottom: 1px solid var(--border);
 }
-.spec__lines dt::after {
-  content: ' :';
-}
-.spec__lines dd {
+.spec__row dd {
   margin: 0;
-  color: var(--text);
+  font-weight: 500;
 }
 .spec__desc {
   line-height: 1.55;
 }
 .spec__links {
-  list-style: none;
-  margin: auto 0 0;
-  padding: 14px 0 0;
-  border-top: 1px solid var(--line);
   display: flex;
   flex-wrap: wrap;
-  gap: 8px 16px;
+  gap: 0.5rem 1rem;
+  margin: auto 0 0;
+  padding: 0.875rem 0 0;
+  list-style: none;
+  border-top: 1px solid var(--border);
 }
 .spec__links a {
-  font-family: var(--label);
-  font-size: 13px;
-  letter-spacing: 1.5px;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--text);
-  border-bottom: 1px solid var(--accent);
+  border-bottom: 1px solid color-mix(in oklab, var(--primary) 50%, transparent);
   overflow-wrap: anywhere;
-}
-.spec__links a:hover {
-  color: var(--accent-bright);
-}
-
-.spec {
-  transition:
-    translate 0.3s ease,
-    box-shadow 0.3s ease,
-    border-color 0.3s ease;
 }
 @media (hover: hover) and (prefers-reduced-motion: no-preference) {
   .spec:hover {
     translate: 0 -6px;
-    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
+    border-color: var(--primary);
   }
 }
 </style>
