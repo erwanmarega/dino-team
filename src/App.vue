@@ -59,28 +59,19 @@ function onEnter() {
   opacity: 0;
 }
 
-/* Between rubrics: the old view leaves behind the closed curtain, the new one
-   slides in while the lianas clear. in = sinking (the page rises from below),
-   out = climbing back (it comes down from above). */
+/* Between rubrics: the old view leaves behind the rail journey overlay; the new
+   one only fades in, since the overlay ends on the same scene as its hero. */
 .page-in-leave-active,
 .page-out-leave-active {
   transition: none;
 }
 .page-in-enter-active,
 .page-out-enter-active {
-  transition:
-    opacity 0.4s ease 0.26s,
-    transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) 0.26s;
+  transition: opacity 0.3s ease;
 }
 .page-in-enter-from,
 .page-out-enter-from {
   opacity: 0;
-}
-.page-in-enter-from {
-  transform: translateY(56px);
-}
-.page-out-enter-from {
-  transform: translateY(-56px);
 }
 
 @media (prefers-reduced-motion: reduce) {
