@@ -81,13 +81,11 @@ watch(
   border-bottom: 1px solid transparent;
   transition:
     background-color 0.3s,
-    border-color 0.3s,
-    backdrop-filter 0.3s;
+    border-color 0.3s;
 }
+/* Solid once scrolled: content must never show through the header. */
 .header.is-scrolled {
-  background: oklch(0.13 0.008 155 / 0.6);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  background: var(--background);
   border-bottom-color: var(--border);
 }
 .header__inner {
