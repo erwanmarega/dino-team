@@ -4,7 +4,13 @@ import SectionHeading from '../SectionHeading.vue'
 import { site } from '../../config/site'
 import { testimonials } from '../../data/testimonials'
 
-const visible = testimonials.filter((t) => !t.draft)
+// Keep the section short: only the most recent reviews, the full list lives on
+// Google (buttons below). Entries without `published` go last; the sort is stable.
+const MAX_TESTIMONIALS = 3
+const visible = testimonials
+  .filter((t) => !t.draft)
+  .sort((a, b) => (b.published || '').localeCompare(a.published || ''))
+  .slice(0, MAX_TESTIMONIALS)
 
 // Long reviews are clamped in the card; the full text opens in a dialog so the
 // grid layout never changes.

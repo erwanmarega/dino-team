@@ -60,12 +60,12 @@ watch(
       </div>
 
       <RouterLink to="/" class="header__logo" aria-label="Accueil DinoTeam">
-        <SiteLogo :size="40" alt="" />
+        <SiteLogo :size="68" alt="" />
       </RouterLink>
 
       <div class="header__right">
         <span v-if="current" class="pill pill--num glass label-mono">{{ current.num }}</span>
-        <RouterLink to="/faq#contact" class="pill pill--contact glass label-mono">Contact</RouterLink>
+        <RouterLink to="/faq#reseaux" class="pill pill--contact glass label-mono">Contact</RouterLink>
       </div>
     </div>
   </header>
@@ -182,14 +182,24 @@ watch(
   color: var(--primary);
 }
 
+/* Large centred badge hanging slightly below the bar; shrinks once scrolled. */
 .header__logo {
   position: absolute;
+  top: 0.5rem;
   left: 50%;
   translate: -50% 0;
 }
 .header__logo :deep(.site-logo) {
-  box-shadow: 0 0 0 1px var(--border);
-  transition: transform 0.2s;
+  box-shadow:
+    0 0 0 1px var(--border),
+    0 6px 18px oklch(0 0 0 / 0.45);
+  transform-origin: 50% 0;
+  transition:
+    transform 0.2s,
+    scale 0.3s ease;
+}
+.header.is-scrolled .header__logo :deep(.site-logo) {
+  scale: 0.75;
 }
 .header__logo:hover :deep(.site-logo) {
   transform: scale(1.05);

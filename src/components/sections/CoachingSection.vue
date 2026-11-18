@@ -6,10 +6,12 @@ import { fiches, options, infos } from '../../data/offers'
 <template>
   <section id="fiches" class="coaching">
     <div class="container">
-      <SectionHeading v-reveal kicker="II · Accompagnements">
-        <template #title>Trois façons de <span class="text-primary">s'entraîner ensemble</span></template>
-        Chaque accompagnement commence par un bilan : ton niveau, ton objectif, ton temps
-        disponible. Ensuite on construit, séance après séance.
+      <SectionHeading v-reveal kicker="II · Accompagnement">
+        <template #title>Des milliers de façons de <span class="text-primary">s'entraîner et d'évoluer</span></template>
+        <span class="coaching__lead">
+          Chaque accompagnement est différent, et surtout il est adapté à TOI. Et cela commence
+          forcément par un premier contact, un bilan et des objectifs fixés.
+        </span>
       </SectionHeading>
 
       <div class="fiches">
@@ -19,20 +21,27 @@ import { fiches, options, infos } from '../../data/offers'
           :key="fiche.num"
           :id="`fiche-${fiche.num}`"
           class="fiche"
-          :class="{ 'fiche--featured shadow-glow': fiche.featured }"
+          :class="{
+            'fiche--featured shadow-glow': fiche.featured,
+            'fiche--upcoming': fiche.upcoming,
+          }"
         >
-          <div class="fiche__meta label-mono">
-            <span class="text-primary">Fiche n°{{ fiche.num }}</span>
-            <span class="text-muted">{{ fiche.kind }}</span>
+          <div class="fiche__content">
+            <div class="fiche__meta label-mono">
+              <span class="text-primary">Fiche n°{{ fiche.num }}</span>
+              <span class="text-muted">{{ fiche.kind }}</span>
+            </div>
+            <h3 class="fiche__title">{{ fiche.title }}</h3>
+            <p class="text-muted">{{ fiche.text }}</p>
+            <dl class="fiche__details">
+              <template v-for="[term, value] in fiche.details" :key="term">
+                <dt class="label-mono text-muted">{{ term }}</dt>
+                <dd>{{ value }}</dd>
+              </template>
+            </dl>
           </div>
-          <h3 class="fiche__title">{{ fiche.title }}</h3>
-          <p class="text-muted">{{ fiche.text }}</p>
-          <dl class="fiche__details">
-            <template v-for="[term, value] in fiche.details" :key="term">
-              <dt class="label-mono text-muted">{{ term }}</dt>
-              <dd>{{ value }}</dd>
-            </template>
-          </dl>
+          <span v-if="fiche.upcoming" class="fiche__banner label-mono" aria-hidden="true">À venir</span>
+          <span v-if="fiche.upcoming" class="sr-only">Offre à venir, pas encore disponible.</span>
         </article>
       </div>
 
@@ -65,6 +74,9 @@ import { fiches, options, infos } from '../../data/offers'
   background: var(--background);
   scroll-margin-top: 4rem;
 }
+.coaching__lead {
+  color: var(--foreground);
+}
 .fiches {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
@@ -72,14 +84,48 @@ import { fiches, options, infos } from '../../data/offers'
   margin-top: 3rem;
 }
 .fiche {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
+  position: relative;
+  overflow: hidden;
   padding: 1.5rem;
   border: 1px solid var(--border);
   border-radius: var(--radius);
   background: var(--card);
   scroll-margin-top: 100px;
+}
+.fiche__content {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  height: 100%;
+}
+.fiche--upcoming {
+  border-color: var(--border);
+}
+.fiche--upcoming .fiche__content {
+  opacity: 0.55;
+  filter: grayscale(1);
+}
+.fiche__banner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 150%;
+  padding: 0.6rem 0;
+  font-size: 0.875rem;
+  font-weight: 700;
+  text-align: center;
+  background: var(--primary);
+  color: var(--primary-foreground);
+  transform: translate(-50%, -50%) rotate(-25deg);
+  pointer-events: none;
+}
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
 }
 .fiche--featured {
   border-color: color-mix(in oklab, var(--primary) 60%, transparent);
@@ -107,7 +153,7 @@ import { fiches, options, infos } from '../../data/offers'
   font-weight: 500;
 }
 @media (hover: hover) and (prefers-reduced-motion: no-preference) {
-  .fiche:hover {
+  .fiche:not(.fiche--upcoming):hover {
     translate: 0 -4px;
   }
 }
@@ -141,7 +187,7 @@ import { fiches, options, infos } from '../../data/offers'
 }
 .options__list {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
   gap: 0.75rem;
   margin: 0;
   padding: 0;

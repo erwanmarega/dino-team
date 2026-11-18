@@ -4,9 +4,8 @@ import { site } from '../config/site'
 export const fiches = [
   {
     num: '01',
-    kind: 'À domicile',
-    scene: 'pushup',
-    title: 'Le coach vient à toi',
+    kind: 'Le coach vient à toi',
+    title: 'À domicile',
     text: 'Matériel fourni, zéro trajet. Parfait pour reprendre ou s’entraîner entre deux obligations.',
     details: [
       ['Format', 'Solo ou duo'],
@@ -16,9 +15,8 @@ export const fiches = [
   },
   {
     num: '02',
-    kind: 'En salle',
-    scene: 'curl',
-    title: 'Technique & charges',
+    kind: 'Technique & charges',
+    title: 'En salle commerciale',
     text: 'Tout l’équipement d’une salle pour apprendre les mouvements clés et progresser en sécurité.',
     details: [
       ['Format', 'Individuel'],
@@ -29,24 +27,22 @@ export const fiches = [
   },
   {
     num: '03',
-    kind: 'Suivi',
-    scene: 'chart',
-    title: 'Le pack évolution',
-    text: 'Plusieurs séances par mois et des conseils entre les séances pour mesurer ta progression.',
+    kind: 'Bientôt',
+    title: 'Salle privée ou HomeGym privatisée',
+    text: 'Un espace privé, rien que pour toi et ton coach. En préparation.',
     details: [
-      ['Rythme', '[NOMBRE] séances / mois'],
-      ['Inclus', 'Bilan + suivi'],
-      ['Tarif', '[TARIF] € / mois'],
+      ['Format', 'Individuel ou duo'],
+      ['Lieu', '[À VENIR]'],
     ],
+    upcoming: true,
   },
 ]
 
-// "Prestations & options": tag is the price or "Inclus".
+// "Prestations & options": tag is the price or "Sur mesure".
 export const options = [
-  { title: 'Bilan de départ', text: 'Niveau, objectif, temps disponible : on fait le point.', tag: 'Inclus' },
-  { title: 'Programme entre les séances', text: 'Un plan à suivre seul pour ne pas perdre le rythme.', tag: '[TARIF]' },
-  { title: 'Suivi nutrition [À CONFIRMER]', text: 'Des repères simples pour accompagner l’entraînement.', tag: '[TARIF]' },
-  { title: 'Séance duo', text: 'Viens avec un ami ou un proche, on partage la séance.', tag: '[TARIF]' },
+  { title: 'Alimentaire', text: 'Des repères et un plan adaptés à tes besoins pour accompagner l’entraînement.', tag: '[TARIF]' },
+  { title: 'Gestion et organisation de vie quotidienne', text: 'Trouver un rythme qui tient avec ton travail, ta famille et ton sommeil.', tag: '[TARIF]' },
+  { title: 'Un autre besoin particulier ?', text: 'Chaque personne est différente. Échangeons sur tes attentes pour construire un accompagnement qui te correspond.', tag: 'Sur mesure' },
 ]
 
 export const infos = [

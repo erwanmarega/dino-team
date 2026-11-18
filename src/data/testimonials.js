@@ -1,11 +1,13 @@
 // Replace with real client feedback (with their consent).
 // Optional per entry: photoBefore / photoAfter (imported image URLs; the pair is
-// shown only when both are set), rating (1-5), source and date.
+// shown only when both are set), rating (1-5), source, date and published.
+// `published` ('YYYY-MM') orders the cards: only the most recent ones are shown
+// on the coaching page (see MAX_TESTIMONIALS in TestimonialsSection.vue).
 //
 // Google reviews are added by hand (free, no API key): copy the review text, the
 // author's name as shown on Google, the star rating and the date, and set
 // `source: 'google'` so the card shows an "Avis Google" tag. Example:
-//   { num: '04', source: 'google', date: 'mars 2026', rating: 5,
+//   { num: '06', source: 'google', date: 'mars 2027', published: '2027-03', rating: 5,
 //     nom: 'Julie M.', citation: 'Texte de l’avis…', offre: 'À domicile',
 //     duree: '', avant: '', apres: '', photoBefore: null, photoAfter: null },
 // Update site.googleRating / site.googleReviewCount when new reviews come in.
@@ -16,6 +18,7 @@ export const testimonials = [
   {
     num: '01',
     source: 'google',
+    published: '2026-11',
     date: 'nov. 2026',
     rating: 5,
     nom: 'Soline G.',
@@ -31,6 +34,7 @@ export const testimonials = [
   {
     num: '02',
     source: 'google',
+    published: '2026-09',
     date: 'sept. 2026',
     rating: 5,
     nom: 'Marine G.',
@@ -46,6 +50,7 @@ export const testimonials = [
   {
     num: '03',
     source: 'google',
+    published: '2026-10',
     date: 'oct. 2026',
     rating: 5,
     nom: 'Sandrine N.',
@@ -61,6 +66,7 @@ export const testimonials = [
   {
     num: '04',
     source: 'google',
+    published: '2026-11',
     date: 'nov. 2026',
     rating: 5,
     nom: 'Olive',
@@ -76,6 +82,7 @@ export const testimonials = [
   {
     num: '05',
     source: 'google',
+    published: '2026-10',
     date: 'oct. 2026',
     rating: 5,
     nom: 'Marie A.',

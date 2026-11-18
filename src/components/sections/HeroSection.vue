@@ -19,13 +19,20 @@ const subnav = [
   { href: '#fiches', n: 'II', label: 'Formules & tarifs' },
   { href: '#temoignages', n: 'III', label: 'Évolutions' },
 ]
+// Goal badges; `icon` selects the inline SVG (dumbbell | flame | jaw)
+const goals = [
+  { key: 'muscu', label: 'Musculation', icon: 'dumbbell' },
+  { key: 'masse', label: 'Prise de masse', icon: 'dumbbell' },
+  { key: 'poids', label: 'Perte de poids', icon: 'flame' },
+  { key: 'autres', label: "Et bien d'autres", icon: 'jaw' },
+]
 </script>
 
 <template>
   <SceneSection id="top" :image="forestRails" alt="Rails envahis par la jungle" class="hero">
     <div class="container hero__grid">
       <div class="hero__copy animate-rise">
-        <p class="label-mono text-primary">Spécimen n°001 — {{ firstName }}, coach sportif</p>
+        <p class="label-mono text-primary">I. Spécimen n°001 — {{ firstName }}, coach sportif</p>
         <h1 class="hero__title">
           Évolue<br /><span class="text-primary">à ton</span> rythme.
         </h1>
@@ -34,6 +41,49 @@ const subnav = [
           remise en forme : on fait évoluer ton entraînement étape par étape, à domicile ou en
           salle.
         </p>
+        <svg class="lifeline" viewBox="0 0 320 40" preserveAspectRatio="none" fill="none" aria-hidden="true">
+          <!-- Dim base trace that "breathes", plus a bright pulse sweeping along it
+               like a heart-rate monitor. -->
+          <path
+            class="lifeline__path"
+            pathLength="1"
+            d="M0 20H80L88 20L94 6L101 34L107 20H140L146 20L152 4L160 36L166 20H320"
+          />
+          <path
+            class="lifeline__pulse"
+            pathLength="1"
+            d="M0 20H80L88 20L94 6L101 34L107 20H140L146 20L152 4L160 36L166 20H320"
+          />
+        </svg>
+        <ul class="goals" aria-label="Objectifs">
+          <li v-for="g in goals" :key="g.key" class="glass goal label-mono">
+            <svg
+              class="goal__icon"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <template v-if="g.icon === 'dumbbell'">
+                <path d="M6.5 6.5v11M17.5 6.5v11M3.5 9v6M20.5 9v6M6.5 12h11" />
+              </template>
+              <template v-else-if="g.icon === 'flame'">
+                <path d="M12 3c1 3.5 5 5.5 5 10a5 5 0 0 1-10 0c0-2 1-3 2-4 .3 1.5 1 2 2 2 0-3-1-5 1-8z" />
+              </template>
+              <template v-else>
+                <!-- Open jaw: upper and lower arches with interleaved fangs -->
+                <path d="M3 9.5C3 5.5 7 3 12 3s9 2.5 9 6.5H3z" />
+                <path d="M5.5 9.5 7 13l1.5-3.5M11 9.5l1 3 1-3M15.5 9.5 17 13l1.5-3.5" />
+                <path d="M3 14.5C3 18.5 7 21 12 21s9-2.5 9-6.5H3z" />
+                <path d="M8.5 14.5 10 11.5l1.5 3M12.5 14.5l1.5-3 1.5 3" />
+              </template>
+            </svg>
+            {{ g.label }}
+          </li>
+        </ul>
         <div class="hero__cta">
           <div class="hero__actions">
             <BookingLink class="btn btn--leaf btn--xl">Réserver mon bilan</BookingLink>
@@ -108,8 +158,96 @@ const subnav = [
   font-size: 1.0625rem;
   color: var(--muted-foreground);
 }
+.lifeline {
+  display: block;
+  width: 100%;
+  max-width: 22rem;
+  height: 2.5rem;
+  margin-top: 1.5rem;
+  overflow: visible;
+}
+.lifeline__path,
+.lifeline__pulse {
+  stroke: var(--primary);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+/* Base trace: draws in once, then slowly breathes (dim <-> bright). */
+.lifeline__path {
+  filter: drop-shadow(0 0 4px color-mix(in oklab, var(--primary) 70%, transparent));
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation:
+    lifeline-draw 1.6s 0.5s ease-out forwards,
+    lifeline-breathe 2.6s 2.1s ease-in-out infinite;
+}
+/* Pulse: a short bright segment sweeping left to right, one beat per breath. */
+.lifeline__pulse {
+  stroke-width: 3;
+  filter: drop-shadow(0 0 6px var(--primary)) drop-shadow(0 0 2px var(--primary));
+  stroke-dasharray: 0.18 1.2;
+  stroke-dashoffset: 0.18;
+  opacity: 0;
+  animation: lifeline-sweep 2.6s 2.1s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+}
+@keyframes lifeline-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes lifeline-breathe {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.35;
+  }
+}
+@keyframes lifeline-sweep {
+  0% {
+    stroke-dashoffset: 0.18;
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  85% {
+    opacity: 1;
+  }
+  100% {
+    stroke-dashoffset: -1;
+    opacity: 0;
+  }
+}
+.goals {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 1.5rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+.goal {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.9rem;
+  border: 1px solid color-mix(in oklab, var(--primary) 70%, transparent);
+  border-radius: 4px;
+  color: var(--foreground);
+  letter-spacing: 0.08em;
+}
+.goal__icon {
+  flex: none;
+  width: 1.0625rem;
+  height: 1.0625rem;
+  color: var(--primary);
+}
 .hero__cta {
-  margin-top: 2rem;
+  margin-top: 1.5rem;
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
@@ -249,6 +387,13 @@ const subnav = [
   .hero__copy,
   .hero__photo {
     animation: none;
+  }
+  .lifeline__path {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+  .lifeline__pulse {
+    display: none;
   }
 }
 </style>

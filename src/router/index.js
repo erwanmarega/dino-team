@@ -95,6 +95,17 @@ function layoutTop(el) {
   return top
 }
 
+const HEADER_OFFSET = 56
+
+// Scroll position for a hash target: centered in the viewport when it fits,
+// otherwise aligned just below the fixed header.
+function hashTop(el) {
+  const top = layoutTop(el)
+  const free = window.innerHeight - HEADER_OFFSET - el.offsetHeight
+  const offset = free > 0 ? HEADER_OFFSET + free / 2 : HEADER_OFFSET
+  return Math.max(0, top - offset)
+}
+
 const router = createRouter({
   history: createWebHistory(),
   routes,
@@ -108,9 +119,12 @@ const router = createRouter({
       // The new view may still be mid scale-in: measure its layout position,
       // which ignores transforms, instead of its bounding box.
       const target = document.querySelector(to.hash)
-      if (target) return { left: 0, top: Math.max(0, layoutTop(target) - 56), behavior: 'instant' }
+      if (target) return { left: 0, top: hashTop(target), behavior: 'instant' }
     }
-    if (to.hash) return { el: to.hash, top: 56, behavior: 'smooth' }
+    if (to.hash) {
+      const target = document.querySelector(to.hash)
+      if (target) return { left: 0, top: hashTop(target), behavior: 'smooth' }
+    }
     return { top: 0, behavior: 'instant' }
   },
 })

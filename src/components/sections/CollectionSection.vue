@@ -62,24 +62,6 @@ const productCategories = computed(() => [...new Set(products.map((p) => p.categ
             </div>
           </article>
         </div>
-
-        <div class="cta bg-forest-gradient">
-          <div>
-            <h2 class="cta__title">Tailles, prix, panier</h2>
-            <p class="cta__text text-muted">La boutique complète s'ouvre dans un nouvel onglet.</p>
-          </div>
-          <a
-            v-if="site.shopUrl"
-            :href="site.shopUrl"
-            target="_blank"
-            rel="noopener"
-            class="btn btn--leaf btn--xl"
-            >Accéder à la boutique</a
-          >
-          <span v-else class="btn btn--trail btn--xl is-off" aria-disabled="true"
-            >Boutique bientôt en ligne</span
-          >
-        </div>
       </div>
     </section>
   </div>
@@ -197,33 +179,6 @@ const productCategories = computed(() => [...new Set(products.map((p) => p.categ
   white-space: nowrap;
 }
 
-.cta {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1.5rem;
-  margin-top: 3.5rem;
-  padding: 2rem;
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  text-align: center;
-}
-.cta__title {
-  font-size: 2.25rem;
-  font-weight: 800;
-}
-.cta__text {
-  margin-top: 0.5rem;
-  font-size: 0.875rem;
-}
-
-@media (min-width: 768px) {
-  .cta {
-    flex-direction: row;
-    text-align: left;
-  }
-}
 @media (min-width: 1024px) {
   .items {
     grid-template-columns: repeat(4, minmax(0, 1fr));
