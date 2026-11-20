@@ -17,12 +17,19 @@ const visible = testimonials
 const LONG_REVIEW = 320
 const isLong = (t) => (t.citation || '').length > LONG_REVIEW
 
+// Display label derived from the card position: E-01, E-02...
+const specimen = (i) => `E-${String(i + 1).padStart(2, '0')}`
+// Second footer chip: follow-up duration, else offer, else review date
+const detail = (t) => t.duree || t.offre || t.date
+
 const dialog = ref(null)
 const opened = ref(null)
+const openedLabel = ref('')
 let opener = null
-function openReview(t, event) {
+function openReview(t, i, event) {
   opener = event.currentTarget
   opened.value = t
+  openedLabel.value = specimen(i)
   dialog.value?.showModal()
 }
 function closeReview() {
@@ -43,66 +50,89 @@ function onDialogClick(event) {
     <div class="container fouilles__inner">
       <SectionHeading v-reveal kicker="III · Témoignages">
         <template #title>Spécimens en <span class="text-primary">pleine évolution</span></template>
-        Ils sont arrivés en reprise ou coincés sur un plateau. Voilà où ils en sont aujourd'hui,
-        racontés par eux.
+        Avis clients (Google) et évolutions partagées avec autorisation.
       </SectionHeading>
 
       <div class="cards">
-        <figure
-          v-for="(t, i) in visible"
-          :key="t.num"
-          v-reveal="i * 140"
-          class="tcard"
-        >
-          <div class="tcard__meta">
-            <span class="tcard__num">Fouille n°{{ t.num }}</span>
-            <span v-if="t.source === 'google'" class="tcard__source">
-              Avis Google<template v-if="t.date"> · {{ t.date }}</template>
-            </span>
-            <span v-else-if="t.duree" class="tcard__duree">{{ t.duree }}</span>
-          </div>
-
+        <figure v-for="(t, i) in visible" :key="t.num" v-reveal="i * 140" class="tcard">
           <div
-            v-if="t.avant && t.apres"
-            class="tcard__strates"
-            :aria-label="`Passé de ${t.avant} à ${t.apres}`"
+            class="tcard__photos"
+            :aria-label="t.photoBefore && t.photoAfter ? undefined : 'Photos avant / après à venir'"
           >
-            <span class="strate strate--avant">{{ t.avant }}</span>
-            <span class="tcard__arrow" aria-hidden="true">→</span>
-            <span class="strate strate--apres">{{ t.apres }}</span>
+            <template v-if="t.photoBefore && t.photoAfter">
+              <img :src="t.photoBefore" alt="Avant le coaching" loading="lazy" />
+              <img :src="t.photoAfter" alt="Après le coaching" loading="lazy" />
+            </template>
+            <template v-else>
+              <div v-for="label in ['Avant', 'Après']" :key="label" class="tcard__ph" aria-hidden="true">
+                <svg class="tcard__ph-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="3" width="18" height="18" rx="2" />
+                  <circle cx="8.5" cy="8.5" r="1.5" />
+                  <polyline points="21 15 16 10 5 21" />
+                </svg>
+                <span class="label-mono">{{ label }}</span>
+              </div>
+            </template>
           </div>
 
-          <div v-if="t.photoBefore && t.photoAfter" class="tcard__photos">
-            <img :src="t.photoBefore" alt="Avant le coaching" loading="lazy" />
-            <img :src="t.photoAfter" alt="Après le coaching" loading="lazy" />
+          <div class="tcard__body">
+            <div class="tcard__meta">
+              <span class="label-mono tcard__num">Spécimen {{ specimen(i) }}</span>
+              <span
+                v-if="t.rating"
+                class="stars"
+                role="img"
+                :aria-label="`Note : ${t.rating} sur 5`"
+              >
+                <svg
+              v-for="n in 5"
+              :key="n"
+              class="stars__icon"
+              :class="{ 'stars__icon--on': n <= t.rating }"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <path d="M12 2.5l2.9 6.1 6.6.8-4.9 4.6 1.3 6.6L12 17.3 6.1 20.6l1.3-6.6L2.5 9.4l6.6-.8z" />
+            </svg>
+              </span>
+            </div>
+
+            <svg class="tcard__glyph" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M6 17h3l2-4V7H5v6h3zm8 0h3l2-4V7h-6v6h3z" />
+            </svg>
+
+            <blockquote class="tcard__quote" :class="{ 'tcard__quote--clamped': isLong(t) }">
+              <p>{{ t.citation }}</p>
+            </blockquote>
+            <button
+              v-if="isLong(t)"
+              type="button"
+              class="tcard__more"
+              aria-haspopup="dialog"
+              @click="openReview(t, i, $event)"
+            >
+              Lire la suite
+            </button>
+
+            <div
+              v-if="t.avant && t.apres"
+              class="tcard__strates"
+              :aria-label="`Passé de ${t.avant} à ${t.apres}`"
+            >
+              <span class="strate strate--avant">{{ t.avant }}</span>
+              <span class="tcard__arrow" aria-hidden="true">→</span>
+              <span class="strate strate--apres">{{ t.apres }}</span>
+            </div>
+
+            <figcaption class="tcard__foot">
+              <span class="chip label-mono">{{ t.nom }}</span>
+              <template v-if="detail(t)">
+                <span class="tcard__dot" aria-hidden="true">·</span>
+                <span class="chip label-mono">{{ detail(t) }}</span>
+              </template>
+              <span v-if="t.source === 'google'" class="tcard__source label-mono">Avis Google</span>
+            </figcaption>
           </div>
-
-          <p
-            v-if="t.rating"
-            class="tcard__rating"
-            role="img"
-            :aria-label="`Note : ${t.rating} sur 5`"
-          >
-            <span aria-hidden="true">{{ '★'.repeat(t.rating) }}{{ '☆'.repeat(5 - t.rating) }}</span>
-          </p>
-
-          <blockquote class="tcard__quote" :class="{ 'tcard__quote--clamped': isLong(t) }">
-            <p>{{ t.citation }}</p>
-          </blockquote>
-          <button
-            v-if="isLong(t)"
-            type="button"
-            class="tcard__more"
-            aria-haspopup="dialog"
-            @click="openReview(t, $event)"
-          >
-            Lire la suite
-          </button>
-
-          <figcaption class="tcard__who">
-            <span class="tcard__name">{{ t.nom }}</span>
-            <span class="tcard__offre">{{ t.offre }}</span>
-          </figcaption>
         </figure>
       </div>
 
@@ -112,8 +142,19 @@ function onDialogClick(event) {
       >
         <p v-if="site.googleRating" class="google__score">
           <span class="google__note">{{ site.googleRating }}/5</span>
-          <span aria-hidden="true" class="google__stars">★★★★★</span>
-          <span class="google__count">
+          <span class="stars" aria-hidden="true">
+            <svg
+              v-for="n in 5"
+              :key="n"
+              class="stars__icon"
+              :class="{ 'stars__icon--on': n <= Math.round(Number(site.googleRating)) }"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <path d="M12 2.5l2.9 6.1 6.6.8-4.9 4.6 1.3 6.6L12 17.3 6.1 20.6l1.3-6.6L2.5 9.4l6.6-.8z" />
+            </svg>
+          </span>
+          <span class="label-mono google__count">
             <template v-if="site.googleReviewCount">{{ site.googleReviewCount }} avis </template
             >sur Google
           </span>
@@ -148,8 +189,8 @@ function onDialogClick(event) {
     >
       <div v-if="opened" class="review__panel">
         <div class="review__head">
-          <p id="review-title" class="review__meta">
-            <span class="tcard__num">Fouille n°{{ opened.num }}</span>
+          <p id="review-title" class="review__meta label-mono">
+            <span class="tcard__num">Spécimen {{ openedLabel }}</span>
             <span v-if="opened.source === 'google'" class="tcard__source">
               Avis Google<template v-if="opened.date"> · {{ opened.date }}</template>
             </span>
@@ -158,23 +199,37 @@ function onDialogClick(event) {
             ✕
           </button>
         </div>
-        <p v-if="opened.rating" class="tcard__rating" role="img" :aria-label="`Note : ${opened.rating} sur 5`">
-          <span aria-hidden="true">{{ '★'.repeat(opened.rating) }}{{ '☆'.repeat(5 - opened.rating) }}</span>
-        </p>
+        <span
+          v-if="opened.rating"
+          class="stars"
+          role="img"
+          :aria-label="`Note : ${opened.rating} sur 5`"
+        >
+          <svg
+              v-for="n in 5"
+              :key="n"
+              class="stars__icon"
+              :class="{ 'stars__icon--on': n <= opened.rating }"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <path d="M12 2.5l2.9 6.1 6.6.8-4.9 4.6 1.3 6.6L12 17.3 6.1 20.6l1.3-6.6L2.5 9.4l6.6-.8z" />
+            </svg>
+        </span>
         <blockquote class="review__quote">
           <p>{{ opened.citation }}</p>
         </blockquote>
-        <p class="tcard__who">
-          <span class="tcard__name">{{ opened.nom }}</span>
-          <span class="tcard__offre">{{ opened.offre }}</span>
+        <p class="review__who">
+          <span class="chip label-mono">{{ opened.nom }}</span>
+          <template v-if="detail(opened)">
+            <span class="tcard__dot" aria-hidden="true">·</span>
+            <span class="chip label-mono">{{ detail(opened) }}</span>
+          </template>
         </p>
       </div>
     </dialog>
   </section>
 </template>
-
-
-
 
 <style scoped>
 .fouilles {
@@ -190,35 +245,95 @@ function onDialogClick(event) {
 }
 .cards {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+  grid-template-columns: 1fr;
   gap: 1rem;
+}
+@media (min-width: 1024px) {
+  .cards {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
 .tcard {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
   margin: 0;
-  padding: 1.5rem;
   border: 1px solid var(--border);
   border-radius: var(--radius);
   background: var(--card);
+  overflow: hidden;
 }
-.tcard__meta,
-.review__meta {
+
+/* Before / after pair (photos or placeholders) */
+.tcard__photos {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border-bottom: 1px solid var(--border);
+}
+.tcard__photos > :nth-child(2) {
+  border-left: 1px dashed var(--border);
+}
+.tcard__photos img {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+}
+.tcard__ph {
   display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-width: 0;
+  aspect-ratio: 1;
+  border: 1px dashed color-mix(in oklab, var(--primary) 35%, transparent);
+  background: repeating-linear-gradient(
+    45deg,
+    var(--card) 0 14px,
+    color-mix(in oklab, var(--card) 94%, white) 14px 28px
+  );
+  color: color-mix(in oklab, var(--primary) 70%, transparent);
+}
+.tcard__ph-icon {
+  width: 1.75rem;
+  height: 1.75rem;
+}
+
+.tcard__body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1.5rem;
+}
+.tcard__meta {
+  display: flex;
+  align-items: center;
   justify-content: space-between;
   gap: 0.75rem;
-  font-family: var(--font-mono);
-  font-size: 0.7rem;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
 }
 .tcard__num {
-  color: var(--primary);
-}
-.tcard__duree,
-.tcard__source {
   color: var(--muted-foreground);
+}
+.tcard__source {
+  font-size: 0.7rem;
+  color: var(--muted-foreground);
+}
+.stars {
+  display: inline-flex;
+  gap: 0.125rem;
+}
+.stars__icon {
+  width: 1rem;
+  height: 1rem;
+  fill: color-mix(in oklab, var(--primary) 25%, transparent);
+}
+.stars__icon--on {
+  fill: var(--primary);
+}
+.tcard__glyph {
+  width: 1.75rem;
+  height: 1.75rem;
+  fill: color-mix(in oklab, var(--foreground) 55%, transparent);
 }
 
 .tcard__strates {
@@ -250,22 +365,6 @@ function onDialogClick(event) {
 .tcard__arrow {
   color: var(--muted-foreground);
 }
-.tcard__photos {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1px;
-  background: var(--border);
-}
-.tcard__photos img {
-  width: 100%;
-  aspect-ratio: 1;
-  object-fit: cover;
-}
-.tcard__rating {
-  margin: 0;
-  color: var(--primary);
-  letter-spacing: 0.15em;
-}
 .tcard__quote {
   margin: 0;
   font-size: 0.9375rem;
@@ -276,8 +375,8 @@ function onDialogClick(event) {
 .tcard__quote--clamped p {
   display: -webkit-box;
   -webkit-box-orient: vertical;
-  -webkit-line-clamp: 7;
-  line-clamp: 7;
+  -webkit-line-clamp: 5;
+  line-clamp: 5;
   overflow: hidden;
 }
 .tcard__more {
@@ -297,11 +396,28 @@ function onDialogClick(event) {
 .tcard__more:hover {
   color: var(--foreground);
 }
-.tcard__who {
+.tcard__foot,
+.review__who {
   display: flex;
-  flex-direction: column;
-  gap: 0.125rem;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0;
+}
+.tcard__foot {
   margin-top: auto;
+  padding-top: 0.5rem;
+}
+.chip {
+  padding: 0.3rem 0.6rem;
+  border: 1px dashed color-mix(in oklab, var(--primary) 50%, transparent);
+  border-radius: 2px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--primary);
+}
+.tcard__dot {
+  color: var(--muted-foreground);
 }
 
 /* Full review dialog */
@@ -333,6 +449,7 @@ function onDialogClick(event) {
   gap: 1rem;
 }
 .review__meta {
+  display: flex;
   flex-wrap: wrap;
   gap: 0.25rem 1rem;
   margin: 0;
@@ -360,16 +477,6 @@ function onDialogClick(event) {
   margin: 0;
   white-space: pre-line;
 }
-.tcard__name {
-  font-weight: 600;
-}
-.tcard__offre {
-  font-family: var(--font-mono);
-  font-size: 0.7rem;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--muted-foreground);
-}
 @media (hover: hover) and (prefers-reduced-motion: no-preference) {
   .tcard {
     transition: translate 0.3s;
@@ -384,13 +491,22 @@ function onDialogClick(event) {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   gap: 1rem 2rem;
+  padding: 1.5rem 2rem;
+  border: 1px dashed color-mix(in oklab, var(--primary) 50%, transparent);
+  border-radius: var(--radius);
+  background: repeating-linear-gradient(
+    45deg,
+    var(--card) 0 14px,
+    color-mix(in oklab, var(--card) 94%, white) 14px 28px
+  );
 }
 .google__score {
   display: flex;
   flex-wrap: wrap;
-  align-items: baseline;
+  align-items: center;
+  justify-content: center;
   gap: 0.375rem 0.75rem;
   margin: 0;
 }
@@ -400,20 +516,13 @@ function onDialogClick(event) {
   font-weight: 800;
   line-height: 1;
 }
-.google__stars {
-  color: var(--primary);
-  letter-spacing: 0.15em;
-}
 .google__count {
-  font-family: var(--font-mono);
-  font-size: 0.7rem;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
   color: var(--muted-foreground);
 }
 .google__actions {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   gap: 0.75rem;
 }
 </style>

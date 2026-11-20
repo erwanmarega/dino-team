@@ -110,7 +110,7 @@ export const legal = {
     {
       heading: 'Données collectées',
       paragraphs: [
-        'Prise de contact : les données que vous nous communiquez par e-mail, téléphone ou message sur les réseaux sociaux (identité, coordonnées, contenu du message).',
+        'Prise de contact : les données que vous nous communiquez par le formulaire de contact du site, par e-mail, téléphone ou message sur les réseaux sociaux (identité, coordonnées, contenu du message).',
         'Réservation : lorsque vous réservez via Calendly, les informations saisies (nom, e-mail, créneau, éventuelles réponses aux questions) sont collectées par ce service.',
       ],
     },
@@ -129,7 +129,7 @@ export const legal = {
     {
       heading: 'Destinataires et sous-traitants',
       paragraphs: [
-        'Vos données sont accessibles au Coach et à ses sous-traitants : l’hébergeur du site ([HÉBERGEUR]), Calendly pour la réservation, et la boutique en ligne externe ([BOUTIQUE]) pour les achats de produits. [À COMPLÉTER : localisation des données et garanties en cas de transfert hors UE].',
+        'Vos données sont accessibles au Coach et à ses sous-traitants : l’hébergeur du site ([HÉBERGEUR]), Calendly pour la réservation, et la boutique en ligne externe ([BOUTIQUE]) pour les achats de produits. Les messages envoyés via le formulaire de contact sont transmis par e-mail grâce au service Resend (Resend, Inc., États-Unis), et le site est hébergé par Vercel. [À COMPLÉTER : localisation des données et garanties en cas de transfert hors UE].',
       ],
     },
     {

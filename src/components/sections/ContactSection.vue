@@ -1,29 +1,69 @@
 <script setup>
-import { reactive, ref } from 'vue'
+import { onMounted, reactive, ref } from 'vue'
 import BookingLink from '../BookingLink.vue'
 import { site } from '../../config/site'
 
 const hasBooking = Boolean(site.bookingUrl || site.discoveryUrl)
 
-const form = reactive({ name: '', email: '', message: '' })
-const status = ref('')
+const form = reactive({ name: '', email: '', message: '', website: '' })
+// 'idle' | 'sending' | 'success' | 'error'
+const status = ref('idle')
+const errorKind = ref('')
+const startedAt = ref(0)
 
-// No backend: the form opens the visitor's mail client addressed to the coach.
-const submit = () => {
-  if (!site.email) {
-    status.value = 'Formulaire bientôt disponible — utilise Instagram en attendant.'
-    return
+onMounted(() => {
+  startedAt.value = Date.now()
+})
+
+const submit = async () => {
+  if (status.value === 'sending') return
+  status.value = 'sending'
+  errorKind.value = ''
+
+  const controller = new AbortController()
+  const timer = setTimeout(() => controller.abort(), 12000)
+  try {
+    const res = await fetch('/api/contact', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name: form.name,
+        email: form.email,
+        message: form.message,
+        website: form.website,
+        startedAt: startedAt.value,
+      }),
+      signal: controller.signal,
+    })
+    const data = await res.json().catch(() => ({}))
+    if (res.ok && data.ok === true) {
+      form.name = ''
+      form.email = ''
+      form.message = ''
+      form.website = ''
+      startedAt.value = Date.now()
+      status.value = 'success'
+    } else {
+      errorKind.value = ['invalid', 'retry'].includes(data.error) ? data.error : 'failed'
+      // A stale or too-fast submission: restart the timer so a retry passes.
+      if (data.error === 'retry') startedAt.value = Date.now() - 60000
+      status.value = 'error'
+    }
+  } catch {
+    errorKind.value = 'failed'
+    status.value = 'error'
+  } finally {
+    clearTimeout(timer)
   }
-  const body = encodeURIComponent(`${form.message}\n\n— ${form.name} (${form.email})`)
-  const subject = encodeURIComponent('Contact DinoTeam')
-  window.location.href = `mailto:${site.email}?subject=${subject}&body=${body}`
-  status.value = ''
 }
 </script>
 
 <template>
   <section id="contact" class="contact">
-    <form class="contact__form card" @submit.prevent="submit">
+    <form class="contact__form card"
+      :aria-busy="status === 'sending'"
+      @submit.prevent="submit"
+    >
       <h2 class="contact__title font-display">Écris-nous</h2>
 
       <div class="field">
@@ -67,8 +107,47 @@ const submit = () => {
         ></textarea>
       </div>
 
-      <button type="submit" class="btn btn--leaf btn--xl contact__submit">Envoyer</button>
-      <p v-if="status" class="contact__note" role="status">{{ status }}</p>
+      <div class="contact__hp" aria-hidden="true">
+        <!-- Honeypot: name chosen so browsers and password managers don't autofill it -->
+        <label for="contact-hp">Ne pas remplir</label>
+        <input
+          id="contact-hp"
+          v-model="form.website"
+          type="text"
+          name="contact_url_confirm"
+          autocomplete="off"
+          tabindex="-1"
+        />
+      </div>
+
+      <button
+        type="submit"
+        class="btn btn--leaf btn--xl contact__submit"
+        :disabled="status === 'sending'"
+      >
+        {{ status === 'sending' ? 'Envoi…' : 'Envoyer' }}
+      </button>
+
+      <p v-if="status === 'success'" class="contact__msg contact__msg--success" role="status" aria-live="polite">
+        Message envoyé ✓ {{ site.coachFirstName }} te répond rapidement.
+      </p>
+      <p v-else-if="status === 'error' && errorKind === 'retry'" class="contact__msg contact__msg--error" role="alert">
+        Petit souci, renvoie ton message dans quelques secondes.
+      </p>
+      <p v-else-if="status === 'error' && errorKind === 'invalid'" class="contact__msg contact__msg--error" role="alert">
+        Vérifie les champs : un nom, un e-mail valide et ton message.
+      </p>
+      <p v-else-if="status === 'error'" class="contact__msg contact__msg--error" role="alert">
+        L'envoi a échoué. Écris directement à
+        <template v-if="site.email"><a :href="`mailto:${site.email}`">{{ site.email }}</a></template>
+        <template v-else>l'adresse indiquée sur le site</template>
+        ou sur Instagram.
+      </p>
+
+      <p class="contact__privacy">
+        Tes informations servent uniquement à te répondre.
+        <RouterLink :to="{ name: 'confidentialite' }">Politique de confidentialité</RouterLink>
+      </p>
     </form>
 
     <div class="contact__actions">
@@ -131,6 +210,36 @@ textarea.field__input {
 }
 .contact__submit {
   width: 100%;
+}
+.contact__hp {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+.contact__msg {
+  margin: 0;
+  font-size: 0.875rem;
+}
+.contact__msg--success {
+  color: var(--primary);
+}
+.contact__msg--error {
+  color: var(--destructive);
+}
+.contact__msg a {
+  color: inherit;
+  text-decoration: underline;
+}
+.contact__privacy {
+  margin: 0;
+  font-size: 0.75rem;
+  color: var(--muted-foreground);
+}
+.contact__privacy a {
+  color: inherit;
+  text-decoration: underline;
 }
 .contact__actions {
   display: flex;
