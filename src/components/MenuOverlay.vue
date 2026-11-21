@@ -87,8 +87,6 @@ onBeforeUnmount(release)
 </script>
 
 <template>
-  <!-- Dims the page left visible beside the panel on wide screens; click closes. -->
-  <div class="menu-backdrop" :class="{ 'is-open': open }" aria-hidden="true" @click="emit('close')"></div>
   <div
     ref="root"
     class="menu"
@@ -171,21 +169,6 @@ onBeforeUnmount(release)
 </template>
 
 <style scoped>
-.menu-backdrop {
-  position: fixed;
-  inset: 0;
-  z-index: 69;
-  background: color-mix(in oklab, var(--background) 60%, transparent);
-  visibility: hidden;
-  opacity: 0;
-  transition:
-    opacity 0.5s ease,
-    visibility 0.5s;
-}
-.menu-backdrop.is-open {
-  visibility: visible;
-  opacity: 1;
-}
 .menu {
   position: fixed;
   inset: 0;
@@ -334,12 +317,9 @@ onBeforeUnmount(release)
 }
 
 @media (min-width: 768px) {
-  /* Side panel about 30% narrower than the viewport, anchored under the burger. */
+  /* Full screen: links on the left, the rubric's scene photo bleeding to the right edge. */
   .menu {
-    right: auto;
-    width: 70vw;
     grid-template-columns: 1.1fr 1fr;
-    border-right: 1px solid var(--border);
   }
   .menu__main {
     padding: 1.25rem 2.5rem 2rem;
@@ -353,7 +333,6 @@ onBeforeUnmount(release)
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .menu-backdrop,
   .menu,
   .menu__item,
   .menu__img {
