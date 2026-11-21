@@ -64,7 +64,7 @@ const currentCategory = computed(() => categories.find((c) => c.id === selected.
 
     <section class="directory">
       <div class="container">
-        <SectionHeading kicker="Les spécimens partenaires" title="Explorer par métier" />
+        <SectionHeading kicker="Les partenaires" title="Explorer par métier" />
 
         <div class="filters" role="group" aria-label="Filtrer par catégorie">
           <button
@@ -83,7 +83,7 @@ const currentCategory = computed(() => categories.find((c) => c.id === selected.
         <p v-if="currentCategory" class="examples text-muted">{{ currentCategory.examples }}</p>
 
         <p class="label-mono text-muted count" aria-live="polite">
-          {{ visible.length }} spécimen{{ visible.length > 1 ? 's' : '' }}
+          {{ visible.length }} partenaire{{ visible.length > 1 ? 's' : '' }}
         </p>
 
         <div v-if="visible.length" class="grid">
@@ -103,7 +103,7 @@ const currentCategory = computed(() => categories.find((c) => c.id === selected.
         </div>
         <template v-else>
           <p class="empty text-muted">
-            Aucun spécimen répertorié dans cette catégorie pour l'instant.
+            Aucun partenaire répertorié dans cette catégorie pour l'instant.
           </p>
           <RouterLink to="/faq#contact" class="btn btn--leaf btn--xl">Prendre contact</RouterLink>
         </template>

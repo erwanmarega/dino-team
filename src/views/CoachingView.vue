@@ -15,8 +15,6 @@ import TestimonialsSection from '../components/sections/TestimonialsSection.vue'
     <CoachingSection />
     <!-- III: témoignages et évolutions -->
     <TestimonialsSection />
-    <!-- Habitat (salle privée) retiré temporairement : la salle n'existe pas encore.
-         Strates and Archives are also unmounted, pending the client's decision.
-         The contact band lives on the FAQ page (/faq#contact). -->
+    <!-- The contact band lives on the FAQ page (/faq#contact). -->
   </div>
 </template>

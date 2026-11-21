@@ -12,7 +12,7 @@ export const training = {
   intro: '',
   stats: [
     { label: 'Séances coachées', value: '' },
-    { label: 'Spécimens accompagnés', value: '' },
+    { label: 'Clients accompagnés', value: '' },
     { label: "Années d'expérience", value: '' },
   ],
 }

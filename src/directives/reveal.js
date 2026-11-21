@@ -5,8 +5,7 @@
  *   v-reveal="200"                 → idem, avec 200 ms de retard
  *   v-reveal="{ variant: 'left', delay: 100 }"
  *
- * Variantes : up (défaut), left, right, fade, slam (gros titres),
- * wipe (bandeaux verts .brush, peints de gauche à droite).
+ * Variantes : up (défaut), left, right, fade, slam (gros titres).
  * Les styles sont dans style.css (.reveal…). Sans IntersectionObserver,
  * rien n'est masqué.
  */

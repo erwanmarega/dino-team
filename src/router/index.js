@@ -10,7 +10,7 @@ const routes = [
     meta: {
       title: 'Coach sportif à domicile et en salle – DinoTeam',
       description:
-        'DinoTeam : coaching sportif personnalisé à domicile et en salle avec Enzo. Réserve ton bilan ou ta séance découverte et lance-toi à ton rythme.',
+        'DinoTeam : coaching sportif personnalisé à domicile et en salle avec Enzo. Réserve ton bilan gratuit et lance-toi à ton rythme.',
       rubric: '00',
     },
   },

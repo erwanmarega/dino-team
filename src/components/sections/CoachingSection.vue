@@ -17,9 +17,9 @@ import { fiches, options, infos } from '../../data/offers'
       <div class="fiches">
         <article
           v-for="(fiche, i) in fiches"
-          v-reveal="i * 140"
-          :key="fiche.num"
           :id="`fiche-${fiche.num}`"
+          :key="fiche.num"
+          v-reveal="i * 140"
           class="fiche"
           :class="{
             'fiche--featured shadow-glow': fiche.featured,

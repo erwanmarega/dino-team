@@ -22,7 +22,6 @@ export const transition = reactive({
 })
 
 let closePromise = null
-let closeTimer = 0
 let openTimer = 0
 let idleTimer = 0
 let watchdog = 0
@@ -41,7 +40,7 @@ function closeCurtain() {
   if (transition.phase === 'closing' && closePromise) return closePromise
   transition.phase = 'closing'
   closePromise = new Promise((resolve) => {
-    closeTimer = setTimeout(() => {
+    setTimeout(() => {
       transition.phase = 'closed'
       closePromise = null
       // Safety net: never leave the page hidden if a navigation never completes.

@@ -31,7 +31,7 @@ const socials = computed(() =>
 <template>
   <article class="spec glass shadow-card">
     <div class="spec__head">
-      <span class="label-mono text-primary">Spécimen {{ partner.num }}</span>
+      <span class="label-mono text-primary">Partenaire {{ partner.num }}</span>
       <span class="label-mono text-muted">{{ code }}</span>
     </div>
 

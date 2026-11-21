@@ -7,6 +7,7 @@ const SEND_TIMEOUT_MS = 8000
 // No separators/quotes so a single address only reaches reply_to.
 const EMAIL_RE = /^[^\s@,;<>()"'\\]+@[^\s@,;<>()"'\\]+\.[^\s@,;<>()"'\\]+$/
 // Control characters (incl. CR/LF and Unicode line separators)
+// eslint-disable-next-line no-control-regex -- matching control characters is the point
 const CONTROL_RE = /[\u0000-\u001f\u007f\u2028\u2029]/
 
 function send(res, status, payload) {

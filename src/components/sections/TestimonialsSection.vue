@@ -17,8 +17,8 @@ const visible = testimonials
 const LONG_REVIEW = 320
 const isLong = (t) => (t.citation || '').length > LONG_REVIEW
 
-// Display label derived from the card position: E-01, E-02...
-const specimen = (i) => `E-${String(i + 1).padStart(2, '0')}`
+// Display label derived from the card position: Avis 01, Avis 02...
+const reviewLabel = (i) => `Avis ${String(i + 1).padStart(2, '0')}`
 // Second footer chip: follow-up duration, else offer, else review date
 const detail = (t) => t.duree || t.offre || t.date
 
@@ -29,7 +29,7 @@ let opener = null
 function openReview(t, i, event) {
   opener = event.currentTarget
   opened.value = t
-  openedLabel.value = specimen(i)
+  openedLabel.value = reviewLabel(i)
   dialog.value?.showModal()
 }
 function closeReview() {
@@ -49,7 +49,7 @@ function onDialogClick(event) {
   <section id="temoignages" class="fouilles bg-forest-gradient">
     <div class="container fouilles__inner">
       <SectionHeading v-reveal kicker="III · Témoignages">
-        <template #title>Spécimens en <span class="text-primary">pleine évolution</span></template>
+        <template #title>Ils évoluent <span class="text-primary">à leur rythme</span></template>
         Avis clients (Google) et évolutions partagées avec autorisation.
       </SectionHeading>
 
@@ -77,7 +77,7 @@ function onDialogClick(event) {
 
           <div class="tcard__body">
             <div class="tcard__meta">
-              <span class="label-mono tcard__num">Spécimen {{ specimen(i) }}</span>
+              <span class="label-mono tcard__num">{{ reviewLabel(i) }}</span>
               <span
                 v-if="t.rating"
                 class="stars"
@@ -190,7 +190,7 @@ function onDialogClick(event) {
       <div v-if="opened" class="review__panel">
         <div class="review__head">
           <p id="review-title" class="review__meta label-mono">
-            <span class="tcard__num">Spécimen {{ openedLabel }}</span>
+            <span class="tcard__num">{{ openedLabel }}</span>
             <span v-if="opened.source === 'google'" class="tcard__source">
               Avis Google<template v-if="opened.date"> · {{ opened.date }}</template>
             </span>

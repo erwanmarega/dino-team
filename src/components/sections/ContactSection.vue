@@ -152,8 +152,7 @@ const submit = async () => {
 
     <div class="contact__actions">
       <template v-if="hasBooking">
-        <BookingLink class="btn btn--leaf">Réserver mon bilan</BookingLink>
-        <BookingLink kind="discovery" class="btn btn--trail">Réserver ma séance découverte</BookingLink>
+        <BookingLink class="btn btn--leaf">Réserver mon bilan gratuit</BookingLink>
       </template>
       <p v-else class="contact__note">
         Réservation en ligne bientôt disponible — écris-nous en attendant.

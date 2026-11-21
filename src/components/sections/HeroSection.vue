@@ -86,12 +86,9 @@ const goals = [
         </ul>
         <div class="hero__cta">
           <div class="hero__actions">
-            <BookingLink class="btn btn--leaf btn--xl">Réserver mon bilan</BookingLink>
-            <BookingLink kind="discovery" class="btn btn--trail btn--xl">
-              Réserver ma séance découverte
-            </BookingLink>
+            <BookingLink class="btn btn--leaf btn--xl">Réserver mon bilan gratuit</BookingLink>
           </div>
-          <p class="label-mono text-muted">1er bilan offert</p>
+          <p class="label-mono text-muted">Sans engagement · 30 min</p>
         </div>
         <dl class="hero__creds">
           <div v-for="c in creds" :key="c.term" class="glass cred">
