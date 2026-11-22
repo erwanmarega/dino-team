@@ -56,14 +56,14 @@ const phoneHref = computed(() => `tel:${site.phone.replace(/\s+/g, '')}`)
           <rect x="3" y="5" width="18" height="14" rx="2" />
           <path d="m3 7 9 6 9-6" />
         </svg>
-        <a v-if="site.email" :href="`mailto:${site.email}`">{{ site.email }}</a>
+        <a v-if="site.email" :href="`mailto:${site.email}`" class="soc__chip label-mono">{{ site.email }}</a>
         <span v-else>[EMAIL]</span>
       </li>
       <li>
         <svg class="soc__lico" viewBox="0 0 24 24" aria-hidden="true">
           <path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z" />
         </svg>
-        <a v-if="site.phone" :href="phoneHref">{{ site.phone }}</a>
+        <a v-if="site.phone" :href="phoneHref" class="soc__chip label-mono">{{ site.phone }}</a>
         <span v-else>[TÉLÉPHONE]</span>
       </li>
     </ul>
@@ -128,8 +128,7 @@ const phoneHref = computed(() => `tel:${site.phone.replace(/\s+/g, '')}`)
   padding: 1rem;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-  font-size: 0.875rem;
+  gap: 0.75rem;
 }
 .soc__lines li {
   display: flex;
@@ -137,15 +136,31 @@ const phoneHref = computed(() => `tel:${site.phone.replace(/\s+/g, '')}`)
   gap: 0.75rem;
   min-width: 0;
 }
-.soc__lines a {
-  overflow-wrap: anywhere;
-}
-.soc__lines a:hover {
+/* Green dashed tag, same family as the review chips */
+.soc__chip {
+  min-width: 0;
+  padding: 0.4rem 0.75rem;
+  border: 1px dashed color-mix(in oklab, var(--primary) 50%, transparent);
+  border-radius: 2px;
+  background: repeating-linear-gradient(
+    135deg,
+    color-mix(in oklab, var(--primary) 5%, transparent) 0 10px,
+    transparent 10px 20px
+  );
   color: var(--primary);
+  font-size: 0.8rem;
+  overflow-wrap: anywhere;
+  transition:
+    border-color 0.2s,
+    background-color 0.2s;
+}
+.soc__chip:hover {
+  border-color: var(--primary);
+  background-color: color-mix(in oklab, var(--primary) 10%, transparent);
 }
 .soc__lico {
-  width: 1rem;
-  height: 1rem;
+  width: 1.25rem;
+  height: 1.25rem;
   flex-shrink: 0;
   fill: none;
   stroke: var(--primary);
