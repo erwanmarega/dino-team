@@ -64,8 +64,7 @@ watch(
       </RouterLink>
 
       <div class="header__right">
-        <span v-if="current" class="pill pill--num glass label-mono">{{ current.num }}</span>
-        <RouterLink to="/faq#reseaux" class="pill pill--contact glass label-mono">Contact</RouterLink>
+        <RouterLink to="/faq#contact" class="pill pill--contact glass label-mono">Contact</RouterLink>
       </div>
     </div>
   </header>
@@ -167,11 +166,8 @@ watch(
   height: 0.75rem;
   background: var(--border);
 }
-.pill--num {
-  padding: 0.375rem 0.75rem;
-}
 .pill--contact {
-  display: none;
+  display: inline-flex;
   padding: 0.5rem 1rem;
   transition:
     border-color 0.2s,
@@ -209,16 +205,10 @@ watch(
   .pill--rubric {
     display: flex;
   }
-  .pill--num {
-    display: none;
-  }
 }
 @media (min-width: 768px) {
   .header__inner {
     padding: 0 2rem;
-  }
-  .pill--contact {
-    display: inline-flex;
   }
 }
 </style>

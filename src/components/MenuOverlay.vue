@@ -1,10 +1,7 @@
 <script setup>
 import { nextTick, onBeforeUnmount, ref, watch } from 'vue'
 import SiteLogo from './SiteLogo.vue'
-import forestRails from '../assets/scenes/forest-rails.jpg'
-import boutique from '../assets/scenes/boutique-studio.jpg'
-import river from '../assets/scenes/river-tent.jpg'
-import clearing from '../assets/scenes/clearing.jpg'
+import { forestRails, boutique, river, clearing } from '../assets/scenes'
 import { site } from '../config/site'
 
 const props = defineProps({
@@ -24,6 +21,8 @@ const blurbs = {
 }
 
 const hover = ref(props.current || '00')
+// Scene photos are only fetched once the menu has been opened
+const primed = ref(false)
 const closeBtn = ref(null)
 const root = ref(null)
 let opener = null
@@ -68,6 +67,7 @@ watch(
   () => props.open,
   async (isOpen) => {
     if (isOpen) {
+      primed.value = true
       opener = document.activeElement
       restoreFocus = true
       hover.value = props.current || '00'
@@ -153,11 +153,12 @@ onBeforeUnmount(release)
 
     <div class="menu__side" aria-hidden="true">
       <img
-        v-for="r in site.rubrics"
+        v-for="r in primed ? site.rubrics : []"
         :key="r.num"
-        :src="scenes[r.num]"
+        :src="scenes[r.num].src"
+        :srcset="scenes[r.num].srcset"
+        sizes="50vw"
         alt=""
-        loading="lazy"
         width="1920"
         height="1088"
         class="menu__img"

@@ -3,7 +3,7 @@ import SceneSection from '../components/SceneSection.vue'
 import FaqSection from '../components/sections/FaqSection.vue'
 import SocialsSection from '../components/sections/SocialsSection.vue'
 import ContactSection from '../components/sections/ContactSection.vue'
-import clearing from '../assets/scenes/clearing.jpg'
+import { clearing } from '../assets/scenes'
 </script>
 
 <template>

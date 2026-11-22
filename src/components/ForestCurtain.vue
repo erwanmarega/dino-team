@@ -1,10 +1,7 @@
 <script setup>
 import { computed, onMounted, ref, watch } from 'vue'
 import { CLOSE_MS, HOLD_MS, OPEN_MS, transition } from '../composables/useRouteTransition'
-import forestRails from '../assets/scenes/forest-rails.jpg'
-import boutique from '../assets/scenes/boutique-studio.jpg'
-import river from '../assets/scenes/river-tent.jpg'
-import clearing from '../assets/scenes/clearing.jpg'
+import { SCENE_SIZES, forestRails, boutique, river, clearing, preloadScene } from '../assets/scenes'
 import nearLeaves from '../assets/transition/foliage-near.webp'
 
 // "Rail journey" between two rubrics, played over the page while the route swaps.
@@ -26,7 +23,7 @@ const scenes = {
   '03': { image: clearing },
 }
 
-// Vanishing point of the rails in forest-rails.jpg (1920×1088), as a fraction of the image
+// Vanishing point of the rails in the forest-rails scene (1920×1088), as a fraction of the image
 const RAILS_VP = { x: 0.503, y: 0.602 }
 const IMG = { w: 1920, h: 1088 }
 // Page backgrounds are slightly zoomed (drift animation), the layers end at the same scale
@@ -54,12 +51,26 @@ watch(
   },
 )
 
-// Preload the scenes so the new rubric appears without a blank frame
+// Preload the scenes so the new rubric appears without a blank frame, but only
+// once the page has fully loaded and the browser is idle: the current page's
+// hero and coach photo come first. Skipped when the visitor asked to save data.
+function preloadScenes() {
+  if (navigator.connection?.saveData) return
+  for (const s of Object.values(scenes)) preloadScene(s.image)
+}
+
 onMounted(() => {
   measure()
-  for (const s of Object.values(scenes)) new Image().src = s.image
-  new Image().src = nearLeaves
+  const idle = () =>
+    'requestIdleCallback' in window
+      ? requestIdleCallback(preloadScenes, { timeout: 3000 })
+      : setTimeout(preloadScenes, 1000)
+  if (document.readyState === 'complete') idle()
+  else window.addEventListener('load', idle, { once: true })
 })
+
+// <img> attributes for a scene (same file the page hero picks)
+const sceneAttrs = (s) => ({ src: s.src, srcset: s.srcset, sizes: SCENE_SIZES })
 
 const back = computed(() => transition.direction === 'out')
 const fromScene = computed(() => scenes[transition.from] ?? null)
@@ -90,26 +101,26 @@ const parts = computed(() => {
   >
     <!-- The rails, always at the heart of the journey -->
     <div class="layer track">
-      <img :src="forestRails" alt="" decoding="async" />
+      <img v-bind="sceneAttrs(forestRails)" alt="" decoding="async" fetchpriority="low" />
       <div class="shade bg-canopy"></div>
       <div class="shade bg-side-fade"></div>
     </div>
     <div class="glow"></div>
 
     <!-- Leaves brushing past the lens (flying out when diving, back in when backing out) -->
-    <div class="layer leaves leaves--a"><img :src="nearLeaves" alt="" decoding="async" /></div>
-    <div class="layer leaves leaves--b"><img :src="nearLeaves" alt="" decoding="async" /></div>
+    <div class="layer leaves leaves--a"><img :src="nearLeaves" alt="" decoding="async" fetchpriority="low" /></div>
+    <div class="layer leaves leaves--b"><img :src="nearLeaves" alt="" decoding="async" fetchpriority="low" /></div>
 
     <template v-if="back">
       <!-- The previous scene comes back over the rails (not when returning to Coaching: the rails are its scene) -->
       <div v-if="toScene && transition.to !== '00'" class="layer scene scene--return">
-        <img :src="toScene.image" alt="" decoding="async" :class="{ 'is-mirror': toScene.mirror }" />
+        <img v-bind="sceneAttrs(toScene.image)" alt="" decoding="async" :class="{ 'is-mirror': toScene.mirror }" />
         <div class="shade bg-canopy"></div>
         <div class="shade bg-side-fade" :class="{ 'is-mirror': toScene.mirror }"></div>
       </div>
       <!-- The scene we leave sinks into the depth of the rails -->
       <div v-if="fromScene" class="layer scene scene--leave">
-        <img :src="fromScene.image" alt="" decoding="async" :class="{ 'is-mirror': fromScene.mirror }" />
+        <img v-bind="sceneAttrs(fromScene.image)" alt="" decoding="async" :class="{ 'is-mirror': fromScene.mirror }" />
         <div class="shade bg-canopy"></div>
         <div class="shade bg-side-fade" :class="{ 'is-mirror': fromScene.mirror }"></div>
       </div>
@@ -118,13 +129,13 @@ const parts = computed(() => {
     <template v-if="!back">
       <!-- Not leaving Coaching: the current scene fades away to reveal the rails -->
       <div v-if="fromScene && transition.from !== '00'" class="layer scene scene--from">
-        <img :src="fromScene.image" alt="" decoding="async" :class="{ 'is-mirror': fromScene.mirror }" />
+        <img v-bind="sceneAttrs(fromScene.image)" alt="" decoding="async" :class="{ 'is-mirror': fromScene.mirror }" />
         <div class="shade bg-canopy"></div>
         <div class="shade bg-side-fade" :class="{ 'is-mirror': fromScene.mirror }"></div>
       </div>
       <!-- The new scene opens up from the vanishing point -->
       <div v-if="toScene" class="layer scene scene--arrive">
-        <img :src="toScene.image" alt="" decoding="async" :class="{ 'is-mirror': toScene.mirror }" />
+        <img v-bind="sceneAttrs(toScene.image)" alt="" decoding="async" :class="{ 'is-mirror': toScene.mirror }" />
         <div class="shade bg-canopy"></div>
         <div class="shade bg-side-fade" :class="{ 'is-mirror': toScene.mirror }"></div>
       </div>

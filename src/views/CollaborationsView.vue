@@ -3,7 +3,7 @@ import { computed, ref } from 'vue'
 import SceneSection from '../components/SceneSection.vue'
 import SectionHeading from '../components/SectionHeading.vue'
 import SpecimenCard from '../components/SpecimenCard.vue'
-import riverImg from '../assets/scenes/river-tent.jpg'
+import { river as riverImg } from '../assets/scenes'
 import { categories, partners } from '../data/partners'
 
 const criteria = [

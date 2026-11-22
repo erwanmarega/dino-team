@@ -2,7 +2,7 @@
 import { computed } from 'vue'
 import SceneSection from '../SceneSection.vue'
 import SectionHeading from '../SectionHeading.vue'
-import boutiqueImg from '../../assets/scenes/boutique-studio.jpg'
+import { boutique as boutiqueImg } from '../../assets/scenes'
 import { site } from '../../config/site'
 import { products } from '../../data/products'
 

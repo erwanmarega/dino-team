@@ -4,7 +4,7 @@ import BookingLink from '../BookingLink.vue'
 
 import { site } from '../../config/site'
 import coachPhoto from '../../assets/coach/enzo-hero.webp'
-import forestRails from '../../assets/scenes/forest-rails.jpg'
+import { forestRails } from '../../assets/scenes'
 
 const firstName = site.coachFirstName
 const fullName = [site.coachFirstName, site.coachLastName].filter(Boolean).join(' ')

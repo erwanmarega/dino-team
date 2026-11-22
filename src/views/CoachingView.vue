@@ -3,6 +3,7 @@ import HeroSection from '../components/sections/HeroSection.vue'
 import TrainingSection from '../components/sections/TrainingSection.vue'
 import CoachingSection from '../components/sections/CoachingSection.vue'
 import TestimonialsSection from '../components/sections/TestimonialsSection.vue'
+import BookingBand from '../components/sections/BookingBand.vue'
 </script>
 
 <template>
@@ -15,6 +16,7 @@ import TestimonialsSection from '../components/sections/TestimonialsSection.vue'
     <CoachingSection />
     <!-- III: témoignages et évolutions -->
     <TestimonialsSection />
-    <!-- The contact band lives on the FAQ page (/faq#contact). -->
+    <!-- Closing call-to-action before the footer (the contact form lives on /faq#contact) -->
+    <BookingBand />
   </div>
 </template>

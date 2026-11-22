@@ -1,5 +1,6 @@
 <script setup>
 import SectionHeading from '../SectionHeading.vue'
+import BookingLink from '../BookingLink.vue'
 import { fiches, options, infos } from '../../data/offers'
 </script>
 
@@ -62,6 +63,12 @@ import { fiches, options, infos } from '../../data/offers'
             · {{ term }} : {{ value }}
           </template>
         </p>
+      </div>
+
+      <div v-reveal class="coaching__cta">
+        <p class="coaching__cta-text">Tout commence par un bilan, offert.</p>
+        <BookingLink class="btn btn--leaf btn--xl">Réserver mon bilan gratuit</BookingLink>
+        <p class="label-mono text-muted">Sans engagement · 30 min</p>
       </div>
     </div>
   </section>
@@ -223,5 +230,18 @@ import { fiches, options, infos } from '../../data/offers'
 }
 .options__infos strong {
   color: var(--foreground);
+}
+.coaching__cta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.875rem;
+  margin-top: 3.5rem;
+  text-align: center;
+}
+.coaching__cta-text {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 700;
 }
 </style>
