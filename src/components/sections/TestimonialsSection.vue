@@ -50,29 +50,15 @@ function onDialogClick(event) {
     <div class="container fouilles__inner">
       <SectionHeading v-reveal kicker="III · Témoignages">
         <template #title>Ils évoluent <span class="text-primary">à leur rythme</span></template>
-        Avis clients (Google) et évolutions partagées avec autorisation.
+        Ce que les clients disent de leur accompagnement, en avis Google.
       </SectionHeading>
 
       <div class="cards">
         <figure v-for="(t, i) in visible" :key="t.num" v-reveal="i * 140" class="tcard">
-          <div
-            class="tcard__photos"
-            :aria-label="t.photoBefore && t.photoAfter ? undefined : 'Photos avant / après à venir'"
-          >
-            <template v-if="t.photoBefore && t.photoAfter">
-              <img :src="t.photoBefore" alt="Avant le coaching" loading="lazy" />
-              <img :src="t.photoAfter" alt="Après le coaching" loading="lazy" />
-            </template>
-            <template v-else>
-              <div v-for="label in ['Avant', 'Après']" :key="label" class="tcard__ph" aria-hidden="true">
-                <svg class="tcard__ph-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-                  <rect x="3" y="3" width="18" height="18" rx="2" />
-                  <circle cx="8.5" cy="8.5" r="1.5" />
-                  <polyline points="21 15 16 10 5 21" />
-                </svg>
-                <span class="label-mono">{{ label }}</span>
-              </div>
-            </template>
+          <!-- Before / after pair, only when both photos are provided -->
+          <div v-if="t.photoBefore && t.photoAfter" class="tcard__photos">
+            <img :src="t.photoBefore" alt="Avant le coaching" loading="lazy" />
+            <img :src="t.photoAfter" alt="Après le coaching" loading="lazy" />
           </div>
 
           <div class="tcard__body">
@@ -263,7 +249,7 @@ function onDialogClick(event) {
   overflow: hidden;
 }
 
-/* Before / after pair (photos or placeholders) */
+/* Before / after photo pair */
 .tcard__photos {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -277,27 +263,6 @@ function onDialogClick(event) {
   aspect-ratio: 1;
   object-fit: cover;
 }
-.tcard__ph {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  min-width: 0;
-  aspect-ratio: 1;
-  border: 1px dashed color-mix(in oklab, var(--primary) 35%, transparent);
-  background: repeating-linear-gradient(
-    45deg,
-    var(--card) 0 14px,
-    color-mix(in oklab, var(--card) 94%, white) 14px 28px
-  );
-  color: color-mix(in oklab, var(--primary) 70%, transparent);
-}
-.tcard__ph-icon {
-  width: 1.75rem;
-  height: 1.75rem;
-}
-
 .tcard__body {
   display: flex;
   flex: 1;
