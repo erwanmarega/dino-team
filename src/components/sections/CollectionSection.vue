@@ -12,7 +12,7 @@ const productCategories = computed(() => [...new Set(products.map((p) => p.categ
 
 <template>
   <div>
-    <SceneSection :image="boutiqueImg" alt="Vêtements DinoTeam dans un décor sombre" class="hero">
+    <SceneSection :image="boutiqueImg" alt="Cabane en bois dans la jungle, vêtements DinoTeam suspendus à l'intérieur" class="hero">
       <div class="container hero__inner">
         <div class="hero__content animate-rise">
           <p class="label-mono text-primary">01 — Boutique</p>
@@ -41,7 +41,7 @@ const productCategories = computed(() => [...new Set(products.map((p) => p.categ
     <section id="collection" class="collection">
       <div class="container">
         <div class="collection__head">
-          <SectionHeading kicker="Aperçu" title="Pièces de collection" />
+          <SectionHeading kicker="Aperçu" title="Vêtements &amp; accessoires" />
           <ul class="pills" aria-label="Catégories">
             <li v-for="c in productCategories" :key="c" class="pill label-mono">{{ c }}</li>
           </ul>
@@ -49,18 +49,71 @@ const productCategories = computed(() => [...new Set(products.map((p) => p.categ
 
         <div class="items">
           <article v-for="item in products" :key="item.num" v-reveal class="item">
-            <div class="item__photo">
-              <img v-if="item.photo" :src="item.photo" :alt="item.name" loading="lazy" />
-              <span v-else class="label-mono">[PHOTO]</span>
+            <div class="item__photo" :class="{ 'placeholder-zone': !item.photo }">
+              <img
+                v-if="item.photo"
+                :src="item.photo"
+                :alt="item.name || item.category"
+                loading="lazy"
+              />
+              <span v-else class="item__placeholder label-mono">
+                <svg
+                  viewBox="0 0 24 24"
+                  width="28"
+                  height="28"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <rect x="3" y="3" width="18" height="18" rx="2" />
+                  <circle cx="9" cy="9" r="2" />
+                  <path d="m21 15-5-5L5 21" />
+                </svg>
+                Photo produit
+              </span>
             </div>
             <div class="item__meta">
-              <div>
-                <p class="label-mono text-muted">{{ item.category }}</p>
-                <h3 class="item__name">{{ item.num }} — {{ item.name }}</h3>
-              </div>
-              <span class="item__price">{{ item.price || '[PRIX]' }} €</span>
+              <p class="label-mono text-muted">{{ item.category }}</p>
+              <span class="item__price">{{ item.price || '—' }} €</span>
             </div>
+            <h3 class="item__name label-mono">{{ item.name || 'Nom du produit' }}</h3>
           </article>
+        </div>
+
+        <div v-reveal class="cta bg-forest-gradient">
+          <div>
+            <h2 class="cta__title">Tailles, prix, panier</h2>
+            <p class="cta__text text-muted">La boutique complète s'ouvre dans un nouvel onglet.</p>
+          </div>
+          <a
+            v-if="site.shopUrl"
+            :href="site.shopUrl"
+            target="_blank"
+            rel="noopener"
+            class="btn btn--leaf btn--xl cta__btn"
+          >
+            Accéder à la boutique
+            <svg
+              viewBox="0 0 24 24"
+              width="18"
+              height="18"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M7 17 17 7M8 7h9v9" />
+            </svg>
+            <span class="sr-only">(nouvel onglet)</span>
+          </a>
+          <span v-else class="btn btn--trail btn--xl is-off" aria-disabled="true"
+            >Boutique bientôt en ligne</span
+          >
         </div>
       </div>
     </section>
@@ -137,7 +190,7 @@ const productCategories = computed(() => [...new Set(products.map((p) => p.categ
 .items {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1rem;
+  gap: 2rem 1rem;
   margin-top: 2.5rem;
 }
 .item__photo {
@@ -152,6 +205,23 @@ const productCategories = computed(() => [...new Set(products.map((p) => p.categ
   color: var(--muted-foreground);
   transition: border-color 0.3s ease;
 }
+/* Empty slot: dashed green striped "to be filled" box. Mirrors the global
+   .placeholder-zone, which the scoped .item__photo rule would otherwise override. */
+.item__photo.placeholder-zone {
+  border: 1px dashed oklch(0.86 0.15 132 / 0.45);
+  border-radius: 2px;
+  background:
+    repeating-linear-gradient(135deg, oklch(0.86 0.15 132 / 0.05) 0 10px, transparent 10px 20px),
+    oklch(0.17 0.012 155 / 0.7);
+  color: oklch(0.86 0.15 132 / 0.85);
+}
+.item__placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  text-align: center;
+}
 .item__photo img {
   width: 100%;
   height: 100%;
@@ -160,17 +230,32 @@ const productCategories = computed(() => [...new Set(products.map((p) => p.categ
 .item:hover .item__photo {
   border-color: var(--primary);
 }
+.item:hover .item__photo.placeholder-zone {
+  border-color: oklch(0.86 0.15 132 / 0.9);
+}
 .item__meta {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
   gap: 0.5rem;
-  margin-top: 0.75rem;
+  margin-top: 1rem;
 }
+/* Product name as a green dashed tag, same family as the contact chips */
 .item__name {
-  margin-top: 0.25rem;
-  font-size: 0.875rem;
-  font-weight: 600;
+  display: inline-block;
+  max-width: 100%;
+  margin-top: 0.5rem;
+  padding: 0.3rem 0.6rem;
+  border: 1px dashed color-mix(in oklab, var(--primary) 50%, transparent);
+  border-radius: 2px;
+  background: repeating-linear-gradient(
+    135deg,
+    color-mix(in oklab, var(--primary) 5%, transparent) 0 10px,
+    transparent 10px 20px
+  );
+  color: var(--primary);
+  font-weight: 700;
+  overflow-wrap: anywhere;
 }
 .item__price {
   font-family: var(--font-display);
@@ -179,9 +264,52 @@ const productCategories = computed(() => [...new Set(products.map((p) => p.categ
   white-space: nowrap;
 }
 
+.cta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  margin-top: 4rem;
+  padding: 2rem 1.5rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  text-align: center;
+}
+.cta__title {
+  font-size: 2.25rem;
+  font-weight: 800;
+}
+.cta__text {
+  margin-top: 0.5rem;
+  font-size: 1rem;
+}
+.cta__btn {
+  gap: 0.75rem;
+}
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+@media (min-width: 768px) {
+  .cta {
+    flex-direction: row;
+    padding: 3rem;
+    text-align: left;
+  }
+  .cta__title {
+    font-size: 2.75rem;
+  }
+}
 @media (min-width: 1024px) {
   .items {
     grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 2rem;
   }
 }
 </style>

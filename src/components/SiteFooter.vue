@@ -46,17 +46,6 @@ const legal = [
         </p>
       </div>
 
-      <nav aria-label="Rubriques">
-        <h2 class="footer__title label-mono text-primary">Rubriques</h2>
-        <ul class="footer__list">
-          <li v-for="r in site.rubrics" :key="r.num">
-            <RouterLink :to="r.to" class="footer__link">
-              <span class="label-mono footer__num">{{ r.num }}</span>{{ r.label }}
-            </RouterLink>
-          </li>
-        </ul>
-      </nav>
-
       <div>
         <h2 class="footer__title label-mono text-primary">Contact</h2>
         <ul class="footer__list footer__list--contact">
@@ -172,10 +161,6 @@ const legal = [
 .footer__link:hover {
   color: var(--foreground);
 }
-.footer__num {
-  margin-right: 0.5rem;
-  font-size: 0.6rem;
-}
 .footer__contact {
   display: flex;
   align-items: center;
@@ -220,7 +205,7 @@ const legal = [
 }
 @media (min-width: 768px) {
   .footer__grid {
-    grid-template-columns: 1.4fr 1fr 1fr 1fr;
+    grid-template-columns: 1.4fr 1fr 1fr;
     padding-left: 2rem;
     padding-right: 2rem;
   }

@@ -332,6 +332,13 @@ onBeforeUnmount(release)
     display: block;
   }
 }
+@media (min-width: 1024px) {
+  /* Narrower link column (about a third less than at tablet width) so the
+     scene photo takes most of the screen. */
+  .menu {
+    grid-template-columns: minmax(0, 0.6fr) 1fr;
+  }
+}
 
 @media (prefers-reduced-motion: reduce) {
   .menu,

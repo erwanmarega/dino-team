@@ -32,7 +32,7 @@ const goals = [
   <SceneSection id="top" :image="forestRails" alt="Rails envahis par la jungle" class="hero">
     <div class="container hero__grid">
       <div class="hero__copy animate-rise">
-        <p class="label-mono text-primary">I. Spécimen n°001 — {{ firstName }}, coach sportif</p>
+        <p class="label-mono text-primary">00 — Coaching sportif · Entrée dans l'univers DinoTeam</p>
         <h1 class="hero__title">
           Évolue<br /><span class="text-primary">à ton</span> rythme.
         </h1>
@@ -318,8 +318,13 @@ const goals = [
   filter: saturate(0.7) brightness(0.82) contrast(1.08);
 }
 .specimen {
-  position: relative;
-  margin: -6rem 0 0 1.5rem;
+  /* Sits inside the bottom of the photo with the same inset on every side, so
+     its edges line up with the frame instead of sticking out of it. */
+  position: absolute;
+  right: 1rem;
+  bottom: 1rem;
+  left: 1rem;
+  margin: 0;
   padding: 1rem 1.125rem;
   border: 1px solid color-mix(in oklab, var(--primary) 30%, transparent);
   border-radius: var(--radius);
@@ -375,9 +380,6 @@ const goals = [
   }
   .hero__title {
     font-size: 8.5rem;
-  }
-  .specimen {
-    margin-left: -3rem;
   }
 }
 @media (prefers-reduced-motion: reduce) {
